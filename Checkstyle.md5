@@ -1,0 +1,12 @@
+Код форматується згідно з Google code style. Налаштування IDE ( https://github.com/google/styleguide ):
+IntelliJ IDEA https://github.com/google/styleguide/blob/gh-pages/intellij-java-google-style.xml
+як імпортувати: https://www.jetbrains.com/help/idea/copying-code-style-settings.html
+
+1. Виконати mvn clean package - білд впаде.
+2. Подивитися в target/checkstyle-result.xml
+3. Виконати mvn checkstyle:checkstyle
+4. Подивитися в консолі список помилок.
+5. Відкрити файл target/site/scheckstyle.html це місце, де можна побачити усі помилки.
+6. Виправити всі зауваження плагіна, повторити 3-5 білд повинен проходити без проблем.
+
+Створивши pull-request переконайся на вкладці Checks (на Github) що всі перевірки пройшли успішно
