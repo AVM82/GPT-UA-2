@@ -1,0 +1,25 @@
+Проект GPT-UA-2 - є модульним проектом.
+
+Складається:
+  1. Модуль front - фронтенд на angular2+
+  2. Модуль gpt_ua - бекенд на java Spring-boot, з телеграм-ботом
+
+Проект має перевірку стиля кода - описан Checkstyle.md5
+
+Проект збирається maven (mvn clean install),
+після клонування з гітхаба треба зробити збірку проекта.
+Точкою входа(пусковим файлом) в проект є  gpt_ua/src/main/java/com/group/gptua/GptUaApplication.java
+Для запуска проекта(точніше телеграм-бота) потрібно вказати Environment variable:
+BOT_TOKEN, BOT_NAME - значення можна запитати в чаті діскорта.
+
+Телеграм бот:
+Им'я бота - GPT-UA-bot
+userName: @comand_gpt_ua_bot
+
+Фронтенд відповідає: http://localhost:8080
+REST API(echo): http://localhost:8080/bot?mess=...
+
+При розробці:
+1. НЕ ЗМІНЮВАТИ в корені проекта pom.xml, а також ./front/pom.xml
+2. Вся розробка по java в ./gpt_ua/src/main/java/com/group/gptua
+3. Всі необхідні для розробки залежності додавати ./gpt_ua/pom.xml
