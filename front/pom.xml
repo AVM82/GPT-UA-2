@@ -48,10 +48,11 @@
           </execution>
         </executions>
       </plugin>
+
     </plugins>
     <resources>
       <resource>
-        <directory>target/frontend</directory>
+        <directory>target/front</directory>
         <targetPath>static</targetPath>
       </resource>
     </resources>

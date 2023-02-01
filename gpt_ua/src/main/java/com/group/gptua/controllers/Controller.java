@@ -24,7 +24,9 @@ public class Controller {
   @GetMapping
   public ResponseEntity<?> index(@RequestParam(name = "mess", required = false) String message) {
     log.info("Message: {} ",message);
-    bot.sendTextMessage(Bot.chatIDLast, message);
+    if (Bot.chatIDLast != null) {
+      bot.sendTextMessage(Bot.chatIDLast, message);
+    }
     return ResponseEntity.ok(message);
   }
 

@@ -35,6 +35,13 @@
       <optional>true</optional>
     </dependency>
 
+    <dependency>
+      <groupId>com.group</groupId>
+      <artifactId>front</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -43,6 +50,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
+          <mainClass>com.group.gptua.GptUaApplication</mainClass>
           <excludes>
             <exclude>
               <groupId>org.projectlombok</groupId>
