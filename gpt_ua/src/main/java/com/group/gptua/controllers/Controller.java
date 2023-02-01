@@ -1,7 +1,6 @@
-package com.group.gpt_ua.controllers;
+package com.group.gptua.controllers;
 
-
-import com.group.gpt_ua.bot.Bot;
+import com.group.gptua.bot.Bot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +16,8 @@ public class Controller {
   @Autowired
   Bot bot;
 
-
   /**
-   * The method for GET mapping
+   * The method for GET mapping.
    * @param message the message
    * @return string
    */

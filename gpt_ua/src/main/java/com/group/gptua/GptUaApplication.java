@@ -1,4 +1,4 @@
-package com.group.gpt_ua;
+package com.group.gptua;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.group.gpt_ua.bot;
+package com.group.gptua.bot;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +39,7 @@ public class Bot extends TelegramLongPollingBot {
   }
 
   /**
-   * Method for sending text mess
+   * Method for sending text mess.
    * @param chatId the id chat for response
    * @param mess the message
    */
