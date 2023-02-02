@@ -36,7 +36,7 @@ public class Controller {
     if (Bot.chatIDLast != null) {
       bot.sendTextMessage(Bot.chatIDLast, message);
     }
-    return ResponseEntity.ok(message);
+    return ResponseEntity.ok(new DtoMessage(message));
   }
 
 }
