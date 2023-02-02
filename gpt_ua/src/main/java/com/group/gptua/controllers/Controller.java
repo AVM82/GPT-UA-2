@@ -1,6 +1,7 @@
 package com.group.gptua.controllers;
 
 import com.group.gptua.bot.Bot;
+import com.group.gptua.dto.DtoMessage;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
