@@ -16,8 +16,8 @@ BOT_TOKEN, BOT_NAME - значення можна запитати в чаті �
 Им'я бота - GPT-UA-bot
 userName: @comand_gpt_ua_bot
 
-Фронтенд відповідає: http://localhost:8080
-REST API(echo): http://localhost:8080/bot?mess=...
+Фронтенд відповідає: http://localhost:5000
+REST API(echo): http://localhost:5000/bot?mess=...
 
 При розробці:
 1. НЕ ЗМІНЮВАТИ в корені проекта pom.xml, а також ./front/pom.xml

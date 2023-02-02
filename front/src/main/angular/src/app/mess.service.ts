@@ -8,7 +8,7 @@ import {DtoMess} from "../dto/dto.mess";
 })
 export class MessService {
 
-  private defaultApi: string = `http://localhost:8080/bot?mess=`;
+  private defaultApi: string = `http://localhost:5000/bot?mess=`;
 
   constructor(private http:HttpClient) { }
 
