@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @Slf4j
 @Component
 public class Bot extends TelegramLongPollingBot {
+
   public static String chatIDLast;
 
   @Value("${bot.token}")
@@ -40,8 +41,9 @@ public class Bot extends TelegramLongPollingBot {
 
   /**
    * Method for sending text mess.
+   *
    * @param chatId the id chat for response
-   * @param mess the message
+   * @param mess   the message
    */
   public void sendTextMessage(String chatId, String mess) {
     SendMessage sendMessage = new SendMessage();
@@ -51,8 +53,7 @@ public class Bot extends TelegramLongPollingBot {
     try {
       execute(sendMessage);
     } catch (TelegramApiException e) {
-      log.error("Send Message error",e);
+      log.error("Send Message error", e);
     }
   }
-
 }
