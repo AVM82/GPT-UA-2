@@ -1,10 +1,6 @@
-<div>
-  <h2>Enter you question!</h2>
-  <textarea name="text" cols="50" rows="5"  [(ngModel)]="title" ></textarea>
-  <br/>
-  <button name="send" (click)="send()">Send</button>
+<div class="btn-block" style="background-color: #BDD041; text-align: center">
+  <button class="btn btn-outline-success ui-menu-item " name="chat" (click)="chat()" routerLink="/chat">Chat</button>
+  <button class="btn btn-outline-success ui-menu-item " name="history" (click)="history()"  routerLink="/history">History</button>
+  <button class="btn btn-outline-success ui-menu-item " name="auth" (click)="auth()" routerLink="/auth" >User profile</button>
 </div>
-<hr/>
-<div>
-  <pre neme="response">{{response}}</pre>
-</div>
+<router-outlet></router-outlet>

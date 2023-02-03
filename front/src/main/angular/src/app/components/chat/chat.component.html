@@ -1,0 +1,12 @@
+<div style="background-color: #56B8DE">
+  <div>
+    <h2 style="text-align: center">Enter you question!</h2>
+    <textarea name="text" cols="150" rows="5"  [(ngModel)]="inMess" ></textarea>
+    <br/>
+    <button class="btn btn-primary" name="send" (click)="send()">Send</button>
+  </div>
+  <hr/>
+  <div style="background-color: #b5d592">
+    <pre neme="response">{{response}}</pre>
+  </div>
+</div>
