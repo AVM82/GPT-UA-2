@@ -1,8 +1,5 @@
 package com.group.gptua.service;
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.group.gptua.dto.ResponseDto;
 import java.io.IOException;
 import java.rmi.UnexpectedException;
 import lombok.NoArgsConstructor;
@@ -25,37 +22,33 @@ public class OpenAIClient {
    * Authorization: Bearer YOUR_API_KEY
    */
 
-  public Response getModels() throws IOException {
+  public String getModels() throws IOException {
     log.info(" Start getModels method ... ");
     Request request = new Request.Builder()
         .url("https://api.openai.com/v1/models")
         .header("Authorization", "Bearer " + apiKey)
         .get()
         .build();
-    return getResponse(request);
-  }
-
-  public Response firstResponse(ResponseDto message) throws Exception {
-//    RequestBody requestBody = RequestBody.create(JSON, "{\"prompt\":\"" + prompt + "\"}");
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.writeValueAsString(message);
-    RequestBody requestBody = RequestBody.create(mapper.writeValueAsString(message),
-        json);
-    log.info(" Start firstResponse method ... ");
-    Request request = new Request.Builder()
-        .url("https://api.openai.com/v1/completions")
-        .header("Authorization", "Bearer " + apiKey)
-        .post(requestBody)
-        .build();
-    return getResponse(request);
-  }
-
-  private Response getResponse(Request request) throws IOException {
     try (Response response = httpClient.newCall(request).execute()) {
       if (!response.isSuccessful()) {
         throw new UnexpectedException("Unexpected code " + response);
       }
-      return response;
+      return response.body().string();
+    }
+  }
+
+  public String getModel(String model) throws IOException {
+    log.info(" Start getModel name is {} method ... ", model);
+    Request request = new Request.Builder()
+        .url("https://api.openai.com/v1/models/" + model)
+        .header("Authorization", "Bearer " + apiKey)
+        .get()
+        .build();
+    try (Response response = httpClient.newCall(request).execute()) {
+      if (!response.isSuccessful()) {
+        throw new UnexpectedException("Unexpected code " + response);
+      }
+      return response.body().string();
     }
   }
 

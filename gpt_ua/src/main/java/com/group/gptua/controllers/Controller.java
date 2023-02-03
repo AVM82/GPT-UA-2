@@ -2,7 +2,6 @@ package com.group.gptua.controllers;
 
 import com.group.gptua.bot.Bot;
 import com.group.gptua.dto.DtoMessage;
-import com.group.gptua.dto.ResponseDto;
 import com.group.gptua.service.OpenAIClient;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,21 +52,31 @@ public class Controller {
     return ResponseEntity.ok(new DtoMessage(message));
   }
 
-  // Метод повертає всі моделі з якими працює API
+  /**
+   * Lists the currently available models, and provides basic information about each one such as the
+   * owner and availability.
+   *
+   * @return - list of all available models
+   * @throws IOException -
+   */
   @GetMapping("/models")
+  @Operation(summary = "getAllModels method", description = "this method return all models from api")
   public ResponseEntity<String> getAllModels() throws IOException {
-    return ResponseEntity.ok(openAIClient.getModels().body().string());
+    return ResponseEntity.ok(openAIClient.getModels());
   }
 
-  // Метод повертає конкретну модель з якою працює API
+  /**
+   * Retrieves a model instance, providing basic information about the model such as the owner and
+   * permissioning. The list of available models can be obtained from the following endpoint:
+   * /models
+   *
+   * @param model - available model
+   * @return -
+   * @throws IOException -
+   */
   @GetMapping("/models/{model}")
-  public ResponseEntity<String> getAllModels(@PathVariable Integer model) {
-    return ResponseEntity.ok(" Model number is : " + model);
+  @Operation(summary = "getModel method", description = "this method return available model from api")
+  public ResponseEntity<String> getModel(@PathVariable String model) throws IOException {
+    return ResponseEntity.ok(openAIClient.getModel(model));
   }
-
-  @PostMapping("/test")
-  public ResponseEntity<String> getRequest(@RequestBody ResponseDto message) throws Exception {
-    return ResponseEntity.ok(openAIClient.firstResponse(message).body().string());
-  }
-
 }
