@@ -1,3 +1,17 @@
-<div style="background-color: #56B8DE">
-  auth works!
+<div style="background-color: #56B8DE; text-align: center " >
+  <label>Name</label>
+  <br/>
+  <input type="text" name="name" [(ngModel)]="name"/>
+  <br/>
+  <label>Login</label>
+  <br/>
+  <input type="text" name="login" [(ngModel)]="login"/>
+  <br/>
+  <label>Password</label>
+  <br/>
+  <input type="password" name="password" [(ngModel)]="password"/>
+  <br/>
+  <br/>
+  <input type="submit" (click)="getUser()" value="Create User"/>
+
 </div>
