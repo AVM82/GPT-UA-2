@@ -16,6 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RequestBodyDto {
+
   @NotEmpty
   private String model;
   @NotEmpty
@@ -30,11 +31,11 @@ public class RequestBodyDto {
 
   @Override
   public String toString() {
-    return "ResponseDto{" +
-        "model='" + model + '\'' +
-        ", prompt='" + prompt + '\'' +
-        ", maxTokens=" + maxTokens +
-        ", temperature=" + temperature +
-        '}';
+    return "ResponseDto{"
+        + "model='" + model + '\''
+        + ", prompt='" + prompt + '\''
+        + ", maxTokens=" + maxTokens
+        + ", temperature=" + temperature
+        + '}';
   }
 }

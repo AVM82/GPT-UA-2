@@ -3,12 +3,11 @@ package com.group.gptua.controllers;
 import com.group.gptua.bot.Bot;
 import com.group.gptua.dto.DtoMessage;
 import com.group.gptua.dto.RequestBodyDto;
-import com.group.gptua.service.OpenAIClient;
+import com.group.gptua.service.OpenAiClient;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,11 +31,11 @@ public class Controller {
   @Autowired
   Bot bot;
 
-  private final OpenAIClient openAIClient;
+  private final OpenAiClient openAiClient;
 
   @Autowired
-  public Controller(OpenAIClient openAIClient) {
-    this.openAIClient = openAIClient;
+  public Controller(OpenAiClient openAiClient) {
+    this.openAiClient = openAiClient;
   }
 
   /**
@@ -62,9 +61,9 @@ public class Controller {
    * @return - list of all available models
    */
   @GetMapping("/models")
-  @Operation(summary = "getAllModels method", description = "this method return all models from api")
+  @Operation(summary = "getAllModels method", description = "this method return all models")
   public ResponseEntity<String> getAllModels() {
-    return ResponseEntity.ok(openAIClient.getModels());
+    return ResponseEntity.ok(openAiClient.getModels());
   }
 
   /**
@@ -76,9 +75,9 @@ public class Controller {
    * @return - string
    */
   @GetMapping("/models/{model}")
-  @Operation(summary = "getModel method", description = "this method return available model from api")
+  @Operation(summary = "getModel method", description = "this method return available model")
   public ResponseEntity<String> getModel(@PathVariable String model) {
-    return ResponseEntity.ok(openAIClient.getModel(model));
+    return ResponseEntity.ok(openAiClient.getModel(model));
   }
 
   /**
@@ -89,8 +88,9 @@ public class Controller {
    * @return - string
    */
   @PostMapping("/completions")
-  @Operation(summary = "getResponse method", description = "this method return one or more predicted completions")
+  @Operation(summary = "getResponse method",
+      description = "this method return one or more predicted completions")
   public ResponseEntity<String> getResponse(@RequestBody RequestBodyDto bodyDto) {
-    return ResponseEntity.ok(openAIClient.getResponse(bodyDto));
+    return ResponseEntity.ok(openAiClient.getResponse(bodyDto));
   }
 }

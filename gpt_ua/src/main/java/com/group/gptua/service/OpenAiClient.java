@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @NoArgsConstructor
-public class OpenAIClient {
+public class OpenAiClient {
 
   private final OkHttpClient httpClient = new OkHttpClient();
   private final MediaType json = MediaType.get("application/json; charset=utf-8");
@@ -27,18 +27,38 @@ public class OpenAIClient {
    * Authorization: Bearer YOUR_API_KEY
    */
 
+  /**
+   * Lists the currently available models, and provides basic information about each one such as the
+   * owner and availability.
+   *
+   * @return - string of response
+   */
   public String getModels() {
     log.info(" Start getModels method ... ");
     Request request = createGetRequest(URI_MODELS);
     return createResponse(request);
   }
 
+  /**
+   * Retrieves a model instance, providing basic information about the model such as the owner and
+   * permissioning.
+   *
+   * @param model - name of model instance
+   * @return - string of list of models
+   */
   public String getModel(String model) {
     log.info(" Start getModels method ... ");
     Request request = createGetRequest(URI_MODELS + "/" + model);
     return createResponse(request);
   }
 
+  /**
+   * Given a prompt, the model will return one or more predicted completions, and can also return
+   * the probabilities of alternative tokens at each position.
+   *
+   * @param requestBodyDto - request body in dto
+   * @return - string of model with basic information
+   */
   public String getResponse(RequestBodyDto requestBodyDto) {
     log.info(" Start getResponce method with requestBodyDTO is {} ... ", requestBodyDto);
     String requestJson;
