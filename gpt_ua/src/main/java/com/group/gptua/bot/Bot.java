@@ -13,7 +13,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class Bot extends TelegramLongPollingBot {
 
   public static String chatIDLast;
-
   @Value("${bot.token}")
   private String botToken;
   @Value("${bot.name}")
@@ -31,12 +30,12 @@ public class Bot extends TelegramLongPollingBot {
 
   @Override
   public void onUpdateReceived(Update update) {
+
     if (update.hasMessage()) {
       log.info("Bot: {}: {}", update.getMessage().getChatId(), update.getMessage().getText());
       sendTextMessage(update.getMessage().getChatId().toString(), update.getMessage().getText());
       chatIDLast = update.getMessage().getChatId().toString();
     }
-
   }
 
   /**

@@ -3,12 +3,13 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {DtoMess} from "../dto/dto.mess";
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class MessService {
 
-  private defaultApi: string = `http://localhost:5000/bot?mess=`;
+  private defaultApi: string = `http://gptua-env.eba-kmwv8wpt.eu-central-1.elasticbeanstalk.com/bot?mess=`;
 
   constructor(private http:HttpClient) { }
 
