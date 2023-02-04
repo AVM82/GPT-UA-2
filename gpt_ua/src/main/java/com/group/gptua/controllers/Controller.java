@@ -3,7 +3,7 @@ package com.group.gptua.controllers;
 import com.group.gptua.bot.Bot;
 import com.group.gptua.dto.DtoMessage;
 import com.group.gptua.dto.RequestBodyDto;
-import com.group.gptua.service.OpenAiClient;
+import com.group.gptua.service.OpenAiService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -31,10 +31,10 @@ public class Controller {
   @Autowired
   Bot bot;
 
-  private final OpenAiClient openAiClient;
+  private final OpenAiService openAiClient;
 
   @Autowired
-  public Controller(OpenAiClient openAiClient) {
+  public Controller(OpenAiService openAiClient) {
     this.openAiClient = openAiClient;
   }
 

@@ -3,6 +3,7 @@ package com.group.gptua.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group.gptua.dto.RequestBodyDto;
+import com.group.gptua.model.GptUri;
 import java.io.IOException;
 import java.rmi.UnexpectedException;
 import lombok.NoArgsConstructor;
@@ -18,12 +19,10 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @NoArgsConstructor
-public class OpenAiClient {
+public class OpenAiService {
 
   private final OkHttpClient httpClient = new OkHttpClient();
   private final MediaType json = MediaType.get("application/json; charset=utf-8");
-  private static final String URI_MODELS = "https://api.openai.com/v1/models";
-  private static final String URI_COMPLETIONS = "https://api.openai.com/v1/completions";
   @Value("${gpt.token}")
   private String apiKey;
 
@@ -39,7 +38,7 @@ public class OpenAiClient {
    */
   public String getModels() {
     log.info(" Start getModels method ... ");
-    Request request = createGetRequest(URI_MODELS);
+    Request request = createGetRequest(GptUri.URI_MODELS.getUri());
     return createResponse(request);
   }
 
@@ -52,7 +51,7 @@ public class OpenAiClient {
    */
   public String getModel(String model) {
     log.info(" Start getModels method ... ");
-    Request request = createGetRequest(URI_MODELS + "/" + model);
+    Request request = createGetRequest(GptUri.URI_MODEL.getUri() + model);
     return createResponse(request);
   }
 
@@ -72,7 +71,7 @@ public class OpenAiClient {
       throw new RuntimeException(e);
     }
     RequestBody requestBody = RequestBody.create(requestJson, json);
-    Request request = createPostRequest(URI_COMPLETIONS, requestBody);
+    Request request = createPostRequest(GptUri.URI_COMPLETIONS.getUri(), requestBody);
     return createResponse(request);
   }
 
