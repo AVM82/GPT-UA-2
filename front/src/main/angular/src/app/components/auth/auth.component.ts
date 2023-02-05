@@ -13,11 +13,11 @@ export class AuthComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {  }
 
   getUser() {
     let user = new DtoUser(this.name,this.login,this.password);
     console.log(user.toString())
+
   }
 }
