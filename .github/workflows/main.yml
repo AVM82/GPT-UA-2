@@ -19,16 +19,33 @@ jobs:
           java-version: 17
     - name: Build with Maven
       run: mvn -B clean install --file pom.xml -Dmaven.test.skip=true
-
-  
       
-    - name: Deploy to EB
-      uses: einaregilsson/beanstalk-deploy@v4
+    - name: Upload JAR
+      uses: actions/upload-artifact@v2
       with:
-        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        application_name: GPT-UA
-        environment_name: Gptua-env
-        version_label: ${{ github.sha }}-test
-        region: eu-central-1
-        deployment_package: gpt_ua/target/gpt_ua-0.0.1.jar
+          name: artifact
+          path: target/gpt_ua-0.0.1.jar
+
+  deploy:
+    needs: build
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download JAR
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v4
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          use_existing_version_if_available: false
+          application_name: GPT-UA
+          environment_name: Gptua-env
+          version_label: ${{ github.sha }}-test
+          region: eu-central-1
+          deployment_package: gpt_ua-0.0.1.jar
+        
+        
