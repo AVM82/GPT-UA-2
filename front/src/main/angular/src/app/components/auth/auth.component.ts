@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {DtoUser} from "../../../dto/dto.user";
+import {UserService} from "../../services/user.services";
 
 @Component({
   selector: 'app-auth',
@@ -11,13 +12,15 @@ export class AuthComponent implements OnInit {
   login: any;
   password: any;
 
-  constructor() { }
+  constructor(private userService:UserService) { }
 
   ngOnInit(): void {  }
 
   getUser() {
     let user = new DtoUser(this.name,this.login,this.password);
+    this.userService.createUsers(user).subscribe(dto => {
+      user = dto;
+    });
     console.log(user.toString())
-
   }
 }

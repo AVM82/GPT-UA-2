@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MessService} from "../../mess.service";
+import {MessService} from "../../services/mess.service";
 
 @Component({
   selector: 'app-chat',

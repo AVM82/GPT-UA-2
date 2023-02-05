@@ -21,6 +21,11 @@ public class UserController {
     this.userService = userService;
   }
 
+  /**
+   * Method for create an User.
+   * @param userDto the userDto got to front
+   * @return the userDto after saved on DB.
+   */
   @PostMapping
   public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
     var entity = userService.create(UserDtoParser.dtoToEntity(userDto));

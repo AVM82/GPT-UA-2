@@ -5,11 +5,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
-import {MessService} from "./mess.service";
+import {MessService} from "./services/mess.service";
 import { ChatComponent } from './components/chat/chat.component';
 import { AuthComponent } from './components/auth/auth.component';
 import { HistoryComponent } from './components/history/history.component';
 import {RouterModule, Routes} from "@angular/router";
+import {UserService} from "./services/user.services";
 
 const appRoutes: Routes = [
   {path: 'chat', component: ChatComponent},
@@ -32,7 +33,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [MessService],
+  providers: [MessService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
