@@ -18,7 +18,7 @@ jobs:
       with:
           java-version: 17
     - name: Build with Maven
-      run: mvn -B clean install --file pom.xml -Dmaven.test.skip=true
+      run: mvn clean install
       
     - name: Upload JAR
       uses: actions/upload-artifact@v2
