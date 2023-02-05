@@ -7,10 +7,11 @@ import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {MessService} from "./services/mess.service";
 import { ChatComponent } from './components/chat/chat.component';
-import { AuthComponent } from './components/auth/auth.component';
 import { HistoryComponent } from './components/history/history.component';
 import {RouterModule, Routes} from "@angular/router";
 import {UserService} from "./services/user.services";
+import {AuthComponent} from "./auth.modul/auth.component";
+import {AuthModule} from "./auth.modul/auth.module";
 
 const appRoutes: Routes = [
   {path: 'chat', component: ChatComponent},
@@ -23,10 +24,10 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     ChatComponent,
-    AuthComponent,
     HistoryComponent
   ],
   imports: [
+    AuthModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,

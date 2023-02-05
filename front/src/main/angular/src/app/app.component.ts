@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {DtoUser} from "../dto/dto.user";
 
 
 @Component({
@@ -7,6 +8,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  user: string = '';
+
 
   chat() {
 
@@ -18,5 +21,10 @@ export class AppComponent {
 
   auth() {
 
+  }
+
+
+    setUser(user:DtoUser):void {
+    this.user = 'Login as '+user.name;
   }
 }

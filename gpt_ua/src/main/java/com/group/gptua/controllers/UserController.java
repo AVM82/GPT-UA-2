@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-  private UserService userService;
+  private final UserService userService;
 
   @Autowired
   public UserController(UserService userService) {
@@ -29,6 +29,18 @@ public class UserController {
   @PostMapping
   public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
     var entity = userService.create(UserDtoParser.dtoToEntity(userDto));
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(UserDtoParser.entityToDto(entity));
+  }
+
+  /**
+   * Method for create an User.
+   * @param userDto the userDto got to front
+   * @return the userDto after saved on DB.
+   */
+  @PostMapping("/login")
+  public ResponseEntity<?> loginUser(@RequestBody UserDto userDto) {
+    var entity = userService.findByLoginAndPassword(userDto.getLogin(),userDto.getPassword());
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(UserDtoParser.entityToDto(entity));
   }

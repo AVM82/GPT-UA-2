@@ -15,4 +15,8 @@ export class UserService {
   createUsers(dtoUser:DtoUser):Observable<DtoUser>{
     return this.http.post<DtoUser>(this.defaultApi,dtoUser);
   }
+
+  loginUser(dtoUser:DtoUser):Observable<DtoUser>{
+    return this.http.post<DtoUser>(this.defaultApi+'/login',dtoUser);
+  }
 }
