@@ -1,6 +1,7 @@
 package com.group.gptua.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.group.gptua.utils.Models;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -15,27 +16,18 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestBodyDto {
+public class ApiDto {
 
   @NotEmpty
-  private String model;
+  private Models model;
   @NotEmpty
   private String prompt;
-  @Min(0)
-  @Max(10)
-  @JsonProperty(value = "max_tokens")
-  private int maxTokens;
-  @Min(0)
-  @Max(10)
-  private int temperature;
 
   @Override
   public String toString() {
-    return "ResponseDto{"
-        + "model='" + model + '\''
+    return "ApiDto{"
+        + "model=" + model
         + ", prompt='" + prompt + '\''
-        + ", maxTokens=" + maxTokens
-        + ", temperature=" + temperature
         + '}';
   }
 }

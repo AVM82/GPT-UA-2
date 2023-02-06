@@ -2,10 +2,17 @@ package com.group.gptua.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.group.gptua.dto.RequestBodyDto;
+import com.group.gptua.dto.RequestDto;
+import com.group.gptua.dto.responsegpt.Choice;
+import com.group.gptua.dto.responsegpt.ResponseDto;
 import com.group.gptua.model.GptUri;
+import com.group.gptua.repository.OpenAiInt;
+import com.group.gptua.utils.Models;
 import java.io.IOException;
 import java.rmi.UnexpectedException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
@@ -16,19 +23,19 @@ import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/**
+ * All API requests should include your API key in an Authorization HTTP header as follows:
+ * Authorization: Bearer YOUR_API_KEY.
+ */
 @Service
 @Slf4j
 @NoArgsConstructor
-public class OpenAiService {
+public class OpenAiService implements OpenAiInt {
 
   private final OkHttpClient httpClient = new OkHttpClient();
   private final MediaType json = MediaType.get("application/json; charset=utf-8");
   @Value("${gpt.token}")
   private String apiKey;
-
-  /* All API requests should include your API key in an Authorization HTTP header as follows:
-   * Authorization: Bearer YOUR_API_KEY
-   */
 
   /**
    * Lists the currently available models, and provides basic information about each one such as the
@@ -36,7 +43,7 @@ public class OpenAiService {
    *
    * @return - string of response
    */
-  public String getModels() {
+  public String getAllModels() {
     log.info(" Start getModels method ... ");
     Request request = createGetRequest(GptUri.URI_MODELS.getUri());
     return createResponse(request);
@@ -52,26 +59,6 @@ public class OpenAiService {
   public String getModel(String model) {
     log.info(" Start getModels method ... ");
     Request request = createGetRequest(GptUri.URI_MODEL.getUri() + model);
-    return createResponse(request);
-  }
-
-  /**
-   * Given a prompt, the model will return one or more predicted completions, and can also return
-   * the probabilities of alternative tokens at each position.
-   *
-   * @param requestBodyDto - request body in dto
-   * @return - string of model with basic information
-   */
-  public String getResponse(RequestBodyDto requestBodyDto) {
-    log.info(" Start getResponce method with requestBodyDTO is {} ... ", requestBodyDto);
-    String requestJson;
-    try {
-      requestJson = new ObjectMapper().writeValueAsString(requestBodyDto);
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
-    }
-    RequestBody requestBody = RequestBody.create(requestJson, json);
-    Request request = createPostRequest(GptUri.URI_COMPLETIONS.getUri(), requestBody);
     return createResponse(request);
   }
 
@@ -101,6 +88,76 @@ public class OpenAiService {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  /**
+   * The method sends a request to the GPT Chat URI and returns a text response
+   * temperature and max_tokens are set by default. temperature - What sampling temperature to use.
+   * Higher values means the model will take more risks. Try 0.9 for more creative applications, and
+   * 0 (argmax sampling) for ones with a well-defined answer (We generally recommend altering this
+   * or top_p but not both). max_tokens - The maximum number of tokens to generate in the
+   * completion.
+   * The token count of your prompt plus max_tokens cannot exceed the model's context length. Most
+   * models have a context length of 2048 tokens (except for the newest models, which support
+   * 4096).
+   *
+   * @param model    - available models to use
+   * @param question - questions to AI
+   * @return - answer from the GPT Chat
+   */
+  @Override
+  public String getTextMessage(Models model, String question) {
+    log.info("Start getTextMessage method with {} and {} ", model, question);
+    RequestDto requestDto = RequestDto.builder()
+        .model(model.getModelName())
+        .prompt(question)
+        .temperature(0.9)
+        .maxTokens(50).build();
+    String requestJson = toStringFromDto(requestDto);
+    RequestBody requestBody = RequestBody.create(requestJson, json);
+    Request request = createPostRequest(GptUri.URI_COMPLETIONS.getUri(), requestBody);
+    String answer = createResponse(request);
+    ResponseDto responseDto = getResponse(answer);
+    return getFirsAnswer(responseDto);
+  }
+
+  private String toStringFromDto(RequestDto requestBodyDto) {
+    try {
+      return new ObjectMapper().writeValueAsString(requestBodyDto);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private ResponseDto getResponse(String answer) {
+    try {
+      return new ObjectMapper().readValue(answer, ResponseDto.class);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private List<String> getAnswers(ResponseDto responseDto) {
+    List<Choice> choices = responseDto.getChoices();
+    List<String> answers = new ArrayList<>();
+    for (Choice choice : choices) {
+      answers.add(choice.getText());
+    }
+    return answers;
+  }
+
+  private String getFirsAnswer(ResponseDto responseDto) {
+    return getAnswers(responseDto).get(0);
+  }
+
+  /**
+   * The method returns a list of available models.
+   *
+   * @return - a list of available models
+   */
+  @Override
+  public List<Models> getModels() {
+    return Arrays.asList(Models.values());
   }
 }
 

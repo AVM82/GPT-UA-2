@@ -1,16 +1,19 @@
 package com.group.gptua.controllers;
 
 import com.group.gptua.bot.Bot;
+import com.group.gptua.dto.ApiDto;
 import com.group.gptua.dto.DtoMessage;
-import com.group.gptua.dto.RequestBodyDto;
 import com.group.gptua.service.OpenAiService;
+import com.group.gptua.utils.Models;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +36,6 @@ public class Controller {
 
   private final OpenAiService openAiClient;
 
-  @Autowired
   public Controller(OpenAiService openAiClient) {
     this.openAiClient = openAiClient;
   }
@@ -63,7 +65,7 @@ public class Controller {
   @GetMapping("/models")
   @Operation(summary = "getAllModels method", description = "this method return all models")
   public ResponseEntity<String> getAllModels() {
-    return ResponseEntity.ok(openAiClient.getModels());
+    return ResponseEntity.ok(openAiClient.getAllModels());
   }
 
   /**
@@ -81,16 +83,30 @@ public class Controller {
   }
 
   /**
-   * Given a prompt, the model will return one or more predicted completions, and can also return
-   * the probabilities of alternative tokens at each position.
+   * The method returns the base models for the user.
    *
-   * @param bodyDto - RequestBodyDto
-   * @return - string
+   * @return - base models for the user
+   */
+  @GetMapping("/basic_models")
+  public ResponseEntity<List<Models>> getBasicModels() {
+    return ResponseEntity.ok(openAiClient.getModels());
+  }
+
+  /**
+   * The method sends a request to GPT Chat from the API and returns a response.
+   *
+   * @param apiDto        - DTO that includes a request model and a question
+   * @param bindingResult - object containing validation errors
+   * @return - response from GPT Chat
    */
   @PostMapping("/completions")
-  @Operation(summary = "getResponse method",
-      description = "this method return one or more predicted completions")
-  public ResponseEntity<String> getResponse(@RequestBody RequestBodyDto bodyDto) {
-    return ResponseEntity.ok(openAiClient.getResponse(bodyDto));
+  @Operation(summary = "get response from GPT Chat",
+      description = "this method return text response from GPT Chat")
+  public ResponseEntity<String> getAnswer(@RequestBody ApiDto apiDto, BindingResult bindingResult) {
+    if (bindingResult.hasErrors()) {
+      return ResponseEntity.badRequest().body("BAD REQUEST! Please input valid ApiDto");
+    }
+    return ResponseEntity.ok(openAiClient.getTextMessage(apiDto.getModel(),
+        apiDto.getPrompt()));
   }
 }
