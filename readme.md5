@@ -23,3 +23,7 @@ REST API(echo): http://localhost:5000/bot?mess=...
 1. НЕ ЗМІНЮВАТИ в корені проекта pom.xml, а також ./front/pom.xml
 2. Вся розробка по java в ./gpt_ua/src/main/java/com/group/gptua
 3. Всі необхідні для розробки залежності додавати ./gpt_ua/pom.xml
+4. Фронтенд налаштован по замовченнню на localhost:5000 - перед деплоем
+   в файлі front/src/main/angular/angular.json змінити в 58 рядку змінити
+   слово 'local' на 'prod' - тоді буде використана адреса API вказана
+   в файлі front/src/main/angular/src/environments/environment.prod.ts

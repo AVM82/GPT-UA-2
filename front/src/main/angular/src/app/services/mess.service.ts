@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {DtoMess} from "../../dto/dto.mess";
+import {environment} from "../../environments/environment";
 
 
 @Injectable({
@@ -9,7 +10,7 @@ import {DtoMess} from "../../dto/dto.mess";
 })
 export class MessService {
 
-  private defaultApi: string = `http://gptua-env.eba-kmwv8wpt.eu-central-1.elasticbeanstalk.com/bot?mess=`;
+  private defaultApi: string = environment.appApi+"/bot?mess="
 
   constructor(private http:HttpClient) { }
 

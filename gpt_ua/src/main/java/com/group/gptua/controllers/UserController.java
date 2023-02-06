@@ -28,7 +28,10 @@ public class UserController {
    */
   @PostMapping
   public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
-    var entity = userService.create(UserDtoParser.dtoToEntity(userDto));
+    var dbEntity = userService.findByLoginAndPassword(userDto.getLogin(),userDto.getPassword());
+    var entity = dbEntity == null
+        ? userService.create(UserDtoParser.dtoToEntity(userDto)) :
+        dbEntity;
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(UserDtoParser.entityToDto(entity));
   }

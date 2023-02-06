@@ -3,12 +3,13 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {DtoMess} from "../../dto/dto.mess";
 import {DtoUser} from "../../dto/dto.user";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private defaultApi: string = `http://gptua-env.eba-kmwv8wpt.eu-central-1.elasticbeanstalk.com/users`;
+  private defaultApi: string = environment.appApi+'/users'
 
   constructor(private http:HttpClient) { }
 
