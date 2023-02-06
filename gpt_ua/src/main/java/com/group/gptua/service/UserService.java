@@ -32,7 +32,7 @@ public class UserService {
    * @param id user id
    * @return user entity
    */
-  public UserEntity findById(Long id) {
+  public UserEntity findById(String id) {
     return userRepository.findById(id).orElseThrow();
   }
 
@@ -78,7 +78,7 @@ public class UserService {
    * @param userEntity user entity with new fields
    * @return updated user entity
    */
-  public UserEntity update(Long id, UserEntity userEntity) {
+  public UserEntity update(String id, UserEntity userEntity) {
     log.info("User update: {}", userEntity);
     UserEntity updatedUser = userRepository.findById(id).orElseThrow();
     updatedUser.setName(userEntity.getName());
