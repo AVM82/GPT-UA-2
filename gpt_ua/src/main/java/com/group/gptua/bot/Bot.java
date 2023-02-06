@@ -112,11 +112,13 @@ public class Bot extends TelegramLongPollingBot {
     replyKeyboardMarkup.setOneTimeKeyboard(false);
 
     List<KeyboardRow> keyboard = new ArrayList<>();
-    KeyboardRow keyboardRow;
+    KeyboardRow keyboardRow = new KeyboardRow();
     for (String name:names) {
-      keyboardRow = new KeyboardRow();
       keyboardRow.add(new KeyboardButton(name));
-      keyboard.add(keyboardRow);
+      if (keyboardRow.size() == 2) {
+        keyboard.add(keyboardRow);
+        keyboardRow = new KeyboardRow();
+      }
     }
 
     replyKeyboardMarkup.setKeyboard(keyboard);
