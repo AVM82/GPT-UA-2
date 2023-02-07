@@ -1,11 +1,14 @@
 package com.group.gptua.bot;
 
+import com.group.gptua.service.OpenAiInt;
 import com.group.gptua.utils.Models;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.WeakHashMap;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -20,6 +23,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @Component
 public class Bot extends TelegramLongPollingBot {
 
+  @Qualifier("openAiService")
+  @Autowired
+  OpenAiInt openAi;
   private static final String START_MESS = "Hello! Select model GPT-chat, and ask your questions!";
   private static final String WRONG_COMMAND = "<b><i>Command is wrong, try again!</i></b>";
 
@@ -62,8 +68,9 @@ public class Bot extends TelegramLongPollingBot {
   }
 
   private void userResponse(String chatId, String text) {
-    sendTextMessage(chatId, "<i>" + text + "\n"
-        + "used model: " + modelsCash.get(chatId) + "</i>");
+    Models model = modelsCash.get(chatId);
+    sendTextMessage(chatId, openAi.getTextMessage(model, text) + "\n<i>"
+        + "used model: " + model + "</i>");
   }
 
   private void startCommand(String chatId) {

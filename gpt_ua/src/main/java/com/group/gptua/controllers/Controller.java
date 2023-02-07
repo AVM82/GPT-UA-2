@@ -3,6 +3,7 @@ package com.group.gptua.controllers;
 import com.group.gptua.bot.Bot;
 import com.group.gptua.dto.ApiDto;
 import com.group.gptua.dto.DtoMessage;
+import com.group.gptua.service.OpenAiInt;
 import com.group.gptua.service.OpenAiService;
 import com.group.gptua.utils.Models;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +36,10 @@ public class Controller {
   @Autowired
   Bot bot;
 
+  @Qualifier("openAiService")
+  @Autowired
+  OpenAiInt openAi;
+
   private final OpenAiService openAiClient;
 
   public Controller(OpenAiService openAiClient) {
@@ -50,10 +56,7 @@ public class Controller {
   @Operation(summary = "getEcho-method", description = "this method tests controller")
   public ResponseEntity<?> index(@RequestParam(name = "mess", required = false) String message) {
     log.info("Message: {} ", message);
-    if (Bot.chatIDLast != null) {
-      bot.sendTextMessage(Bot.chatIDLast, message);
-    }
-    return ResponseEntity.ok(new DtoMessage(message));
+    return ResponseEntity.ok(new DtoMessage(openAi.getTextMessage(Models.ADA,message)));
   }
 
   /**

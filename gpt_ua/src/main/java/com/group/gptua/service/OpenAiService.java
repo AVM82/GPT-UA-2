@@ -6,7 +6,6 @@ import com.group.gptua.dto.RequestDto;
 import com.group.gptua.dto.responsegpt.Choice;
 import com.group.gptua.dto.responsegpt.ResponseDto;
 import com.group.gptua.model.GptUri;
-import com.group.gptua.repository.OpenAiInt;
 import com.group.gptua.utils.Models;
 import java.io.IOException;
 import java.rmi.UnexpectedException;
