@@ -10,4 +10,6 @@ public interface UserRepository extends MongoRepository<UserEntity, String> {
 
   Optional<UserEntity> findByLoginAndPassword(String login, String password);
 
+  Optional<UserEntity> findByHash(String hash);
+
 }
