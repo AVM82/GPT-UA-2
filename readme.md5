@@ -26,4 +26,4 @@ REST API(echo): http://localhost:5000/bot?mess=...
 4. Фронтенд налаштован по замовченнню на beanstalk - для використання на
    localhost в файлі front/src/main/angular/angular.json змінити в 58 рядку
    слово 'prod' на 'local' - тоді буде використана адреса API вказана
-   в файлі front/src/main/angular/src/environments/environment.prod.ts
+   в файлі front/src/main/angular/src/environments/environment.local.ts
