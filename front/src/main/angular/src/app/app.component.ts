@@ -25,6 +25,6 @@ export class AppComponent {
 
 
     setUser(user:DtoUser):void {
-    this.user = 'Login as '+user.name;
+    this.user = 'Login as '+user.hash;
   }
 }
