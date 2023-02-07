@@ -58,6 +58,16 @@ public class UserService {
   }
 
   /**
+   * Gets user entity by hash.
+   *
+   * @param hash hash of user
+   * @return user entity
+   */
+  public UserEntity findByHash(String hash) {
+    return userRepository.findByHash(hash).orElseThrow();
+  }
+
+  /**
    * Creates new user entity.
    *
    * @param userEntity user entity
