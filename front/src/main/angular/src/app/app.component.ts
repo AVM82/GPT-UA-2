@@ -8,23 +8,8 @@ import {DtoUser} from "../dto/dto.user";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  user: string = '';
-
-
-  chat() {
-
-  }
-
-  history() {
-
-  }
-
-  auth() {
-
-  }
-
-
+  user: any;
     setUser(user:DtoUser):void {
-    this.user = 'Login as '+user.hash;
+    this.user = user;
   }
 }
