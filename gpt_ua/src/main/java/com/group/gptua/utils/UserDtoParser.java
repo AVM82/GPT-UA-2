@@ -12,9 +12,7 @@ public class UserDtoParser {
    */
   public static UserEntity dtoToEntity(UserDto userDto) {
     var entity = new UserEntity();
-    entity.setName(userDto.getName());
-    entity.setPassword(userDto.getPassword());
-    entity.setLogin(userDto.getLogin());
+    entity.setHash(userDto.getHash());
     return entity;
   }
 
@@ -24,7 +22,7 @@ public class UserDtoParser {
    * @return the userDto.
    */
   public static UserDto entityToDto(UserEntity entity) {
-    return new UserDto(entity.getName(), entity.getLogin(), entity.getPassword());
+    return new UserDto(entity.getHash());
   }
 
 }

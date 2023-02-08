@@ -28,14 +28,18 @@ public class RequestDto {
   @Min(0)
   @Max(1)
   private double temperature;
+  @Min(0)
+  @Max(1)
+  @JsonProperty(value = "top_p")
+  private double topP;
+  @Min(0)
+  @Max(1)
+  @JsonProperty(value = "frequency_penalty")
+  private double frequencyPenalty;
+  @Min(0)
+  @Max(1)
+  @JsonProperty(value = "presence_penalty")
+  private double presencePenalty;
+  private String[] stop;
 
-  @Override
-  public String toString() {
-    return "ResponseDto{"
-        + "model='" + model + '\''
-        + ", prompt='" + prompt + '\''
-        + ", maxTokens=" + maxTokens
-        + ", temperature=" + temperature
-        + '}';
-  }
 }

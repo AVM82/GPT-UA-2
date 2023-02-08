@@ -28,7 +28,7 @@ public class UserController {
    */
   @PostMapping
   public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
-    var dbEntity = userService.findByLoginAndPassword(userDto.getLogin(),userDto.getPassword());
+    var dbEntity = userService.findByHash(userDto.getHash());
     var entity = dbEntity == null
         ? userService.create(UserDtoParser.dtoToEntity(userDto)) :
         dbEntity;
@@ -43,7 +43,7 @@ public class UserController {
    */
   @PostMapping("/login")
   public ResponseEntity<?> loginUser(@RequestBody UserDto userDto) {
-    var entity = userService.findByLoginAndPassword(userDto.getLogin(),userDto.getPassword());
+    var entity = userService.findByHash(userDto.getHash());
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(UserDtoParser.entityToDto(entity));
   }

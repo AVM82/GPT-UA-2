@@ -10,13 +10,11 @@ import { ChatComponent } from './components/chat/chat.component';
 import { HistoryComponent } from './components/history/history.component';
 import {RouterModule, Routes} from "@angular/router";
 import {UserService} from "./services/user.services";
-import {AuthComponent} from "./auth.modul/auth.component";
-import {AuthModule} from "./auth.modul/auth.module";
 
 const appRoutes: Routes = [
   {path: 'chat', component: ChatComponent},
-  {path: 'history', component: HistoryComponent},
-  {path: 'auth', component: AuthComponent}
+  {path: 'history', component: HistoryComponent}
+
 ]
 
 
@@ -27,7 +25,6 @@ const appRoutes: Routes = [
     HistoryComponent
   ],
   imports: [
-    AuthModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
