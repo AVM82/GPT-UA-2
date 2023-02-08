@@ -62,10 +62,8 @@ public class Controller {
   public ResponseEntity<?> index(@RequestParam(name = "mess", required = false) String message,
       HttpServletRequest request) {
     log.info("Message: {} ", message);
-    request.getHeaderNames().asIterator().forEachRemaining(log::info);
     log.info("REQUST: {} ", request.getHeader("referer"));
-    return ResponseEntity.ok(new DtoMessage(message));
-    //openAi.getTextMessage(Models.ADA,message)));
+    return ResponseEntity.ok(new DtoMessage(openAi.getTextMessage(Models.ADA,message)));
   }
 
   /**
