@@ -6,6 +6,7 @@ import com.group.gptua.dto.DtoMessage;
 import com.group.gptua.service.OpenAiInt;
 import com.group.gptua.service.OpenAiService;
 import com.group.gptua.utils.Models;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -14,6 +15,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -105,11 +107,16 @@ public class Controller {
   @PostMapping("/completions")
   @Operation(summary = "get response from GPT Chat",
       description = "this method return text response from GPT Chat")
+  @RateLimiter(name = "testEndpoint",fallbackMethod = "fallBackResponse")
   public ResponseEntity<String> getAnswer(@RequestBody ApiDto apiDto, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       return ResponseEntity.badRequest().body("BAD REQUEST! Please input valid ApiDto");
     }
     return ResponseEntity.ok(openAiClient.getTextMessage(apiDto.getModel(),
         apiDto.getPrompt()));
+  }
+
+  private ResponseEntity<String> fallBackResponse(Exception e){
+      return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("To many requests, please wait!");
   }
 }
