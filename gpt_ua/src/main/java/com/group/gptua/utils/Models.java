@@ -1,10 +1,10 @@
 package com.group.gptua.utils;
 
 public enum Models {
-  BABBAGE("babbage"),
-  ADA("ada"),
-  CURIE("curie"),
-  DAVINCI("davinci");
+  BABBAGE("text-babbage-001"),
+  ADA("text-ada-001"),
+  CURIE("text-curie-001"),
+  DAVINCI("text-davinci-003");
 
   private final String modelName;
 

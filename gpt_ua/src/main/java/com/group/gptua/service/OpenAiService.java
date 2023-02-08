@@ -19,6 +19,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,8 @@ public class OpenAiService implements OpenAiInt {
   private final MediaType json = MediaType.get("application/json; charset=utf-8");
   @Value("${gpt.token}")
   private String apiKey;
+  @Autowired
+  RequestDtoPropertiesService propertiesService;
 
   /**
    * Lists the currently available models, and provides basic information about each one such as the
@@ -90,13 +93,12 @@ public class OpenAiService implements OpenAiInt {
   }
 
   /**
-   * The method sends a request to the GPT Chat URI and returns a text response
-   * temperature and max_tokens are set by default. temperature - What sampling temperature to use.
-   * Higher values means the model will take more risks. Try 0.9 for more creative applications, and
-   * 0 (argmax sampling) for ones with a well-defined answer (We generally recommend altering this
-   * or top_p but not both). max_tokens - The maximum number of tokens to generate in the
-   * completion.
-   * The token count of your prompt plus max_tokens cannot exceed the model's context length. Most
+   * The method sends a request to the GPT Chat URI and returns a text response temperature and
+   * max_tokens are set by default. temperature - What sampling temperature to use. Higher values
+   * means the model will take more risks. Try 0.9 for more creative applications, and 0 (argmax
+   * sampling) for ones with a well-defined answer (We generally recommend altering this or top_p
+   * but not both). max_tokens - The maximum number of tokens to generate in the completion. The
+   * token count of your prompt plus max_tokens cannot exceed the model's context length. Most
    * models have a context length of 2048 tokens (except for the newest models, which support
    * 4096).
    *
@@ -107,17 +109,27 @@ public class OpenAiService implements OpenAiInt {
   @Override
   public String getTextMessage(Models model, String question) {
     log.info("Start getTextMessage method with {} and {} ", model, question);
-    RequestDto requestDto = RequestDto.builder()
-        .model(model.getModelName())
-        .prompt(question)
-        .temperature(0.9)
-        .maxTokens(50).build();
+    RequestDto requestDto = createRequestDto(model, question);
+    log.info("get requestDTO : {} ", requestDto);
     String requestJson = toStringFromDto(requestDto);
     RequestBody requestBody = RequestBody.create(requestJson, json);
     Request request = createPostRequest(GptUri.URI_COMPLETIONS.getUri(), requestBody);
     String answer = createResponse(request);
     ResponseDto responseDto = getResponse(answer);
     return getFirsAnswer(responseDto);
+  }
+
+  private RequestDto createRequestDto(Models model, String question) {
+    return RequestDto.builder()
+        .model(model.getModelName())
+        .prompt(question)
+        .maxTokens(propertiesService.getMaxTokens())
+        .topP(propertiesService.getTopP())
+        .temperature(propertiesService.getTemperature())
+        .frequencyPenalty(propertiesService.getFrequencyPenalty())
+        .presencePenalty(propertiesService.getPresencePenalty())
+        .stop(propertiesService.getStop())
+        .build();
   }
 
   private String toStringFromDto(RequestDto requestBodyDto) {
