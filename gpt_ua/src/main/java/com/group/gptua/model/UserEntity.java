@@ -1,19 +1,15 @@
 package com.group.gptua.model;
 
 import java.time.LocalDateTime;
-import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@Deprecated
 @Entity
-@Table(name = "app_users")
 @Getter
 @Setter
 @ToString
@@ -34,8 +30,5 @@ public class UserEntity {
   private String hash;
 
   private LocalDateTime createdAt;
-
-  @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
-  Set<UserRequestEntity> userRequestEntities;
 
 }
