@@ -60,13 +60,13 @@ public class Controller {
     log.info("Message: {} ", message);
     return ResponseEntity.ok(new DtoMessage(openAi.getTextMessage(Models.ADA,message)));
   }
-
   /**
    * Lists the currently available models, and provides basic information about each one such as the
    * owner and availability.
    *
    * @return - list of all available models
    */
+
   @GetMapping("/models")
   @Operation(summary = "getAllModels method", description = "this method return all models")
   public ResponseEntity<String> getAllModels() {
@@ -116,7 +116,8 @@ public class Controller {
         apiDto.getPrompt()));
   }
 
-  private ResponseEntity<String> fallBackResponse(Exception e){
-      return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("To many requests, please wait!");
+  private ResponseEntity<String> fallBackResponse(Exception e) {
+    return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+            .body("To many requests, please wait!");
   }
 }
