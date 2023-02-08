@@ -4,5 +4,5 @@ public interface GptTokenServiceInt {
 
   String getToken();
 
-  void giveBackToken(String token);
+  void giveBackToken(String token) throws Exception;
 }
