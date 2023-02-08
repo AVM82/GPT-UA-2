@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +13,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class GptTokenService {
 
-  @Value("${gpt.token}")
-  private String apiKey;
   private final HashSet<String> currentTokens = new HashSet<>();
   private final Queue<String> poolTokens = new ConcurrentLinkedDeque<>();
 
-  public GptTokenService() {
+  @Autowired
+  public GptTokenService(@Value("${gpt.token}") String apiKey) {
     currentTokens.addAll(Arrays.stream(apiKey.split(" ")).toList());
     poolTokens.addAll(currentTokens);
   }
