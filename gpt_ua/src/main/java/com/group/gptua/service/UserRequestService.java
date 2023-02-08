@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class UserRequestService {
+public class UserRequestService implements UserRequestServiceInt {
 
   private final UserRequestRepository userRequestRepository;
 

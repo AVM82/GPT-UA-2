@@ -6,6 +6,7 @@ import com.group.gptua.dto.RequestDto;
 import com.group.gptua.dto.responsegpt.Choice;
 import com.group.gptua.dto.responsegpt.ResponseDto;
 import com.group.gptua.model.GptUri;
+import com.group.gptua.model.UserRequestEntity;
 import com.group.gptua.utils.Models;
 import java.io.IOException;
 import java.rmi.UnexpectedException;
@@ -20,6 +21,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +40,10 @@ public class OpenAiService implements OpenAiInt {
   private String apiKey;
   @Autowired
   RequestDtoPropertiesService propertiesService;
+
+  @Qualifier("userRequestService")
+  @Autowired
+  UserRequestServiceInt userRequestService;
 
   /**
    * Lists the currently available models, and provides basic information about each one such as the
@@ -116,7 +122,26 @@ public class OpenAiService implements OpenAiInt {
     Request request = createPostRequest(GptUri.URI_COMPLETIONS.getUri(), requestBody);
     String answer = createResponse(request);
     ResponseDto responseDto = getResponse(answer);
+    saveRequest("", model, question, getFirsAnswer(responseDto));
     return getFirsAnswer(responseDto);
+  }
+
+  /**
+   * Saves request.
+   */
+  private void saveRequest(String hashUser, Models model, String question, String answer) {
+    UserRequestEntity userRequestEntity = new UserRequestEntity();
+    userRequestEntity.setHashUser(hashUser);
+    userRequestEntity.setModel(model);
+    userRequestEntity.setRequest(question);
+    userRequestEntity.setResponse(answer.trim());
+    log.info("Start save request: {}", userRequestEntity);
+    try {
+      userRequestService.create(userRequestEntity);
+      log.info("Success save request");
+    } catch (Exception e) {
+      log.error("Error {}: {}", e.getMessage(), e.getStackTrace());
+    }
   }
 
   private RequestDto createRequestDto(Models model, String question) {
