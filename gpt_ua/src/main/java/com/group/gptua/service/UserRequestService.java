@@ -60,7 +60,8 @@ public class UserRequestService {
   public UserRequestEntity update(String id, UserRequestEntity userRequestEntity) {
     log.info("User request update: {}", userRequestEntity);
     UserRequestEntity updatedUserRequest = userRequestRepository.findById(id).orElseThrow();
-    updatedUserRequest.setUserEntity(userRequestEntity.getUserEntity());
+    updatedUserRequest.setHashUser(userRequestEntity.getHashUser());
+    updatedUserRequest.setModel(userRequestEntity.getModel());
     updatedUserRequest.setRequest(userRequestEntity.getRequest());
     updatedUserRequest.setResponse(userRequestEntity.getResponse());
     log.info("Set fields for user request: {}", updatedUserRequest);
