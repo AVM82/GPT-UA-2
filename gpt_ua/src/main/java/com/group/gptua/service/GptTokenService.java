@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class GptTokenService {
+public class GptTokenService implements GptTokenServiceInt {
 
   private final HashSet<String> currentTokens = new HashSet<>();
   private final Queue<String> poolTokens = new ConcurrentLinkedDeque<>();
