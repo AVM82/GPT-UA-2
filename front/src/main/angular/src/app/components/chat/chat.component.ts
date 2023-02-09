@@ -9,7 +9,7 @@ import {MessService} from "../../services/mess.service";
 export class ChatComponent implements OnInit {
   inMess = 'I\'d ....' ;
   response:string = "Field for response";
-
+  userHash:string = "";
   constructor(private messageServices:MessService) {
   }
 
@@ -19,7 +19,9 @@ export class ChatComponent implements OnInit {
     this.messageServices.getMessageResponse(this.inMess).subscribe(
       resp => {
         this.response = resp.message;
+        this.userHash = resp.headers.get('user-hash').toString();
       });
+    console.log(this.userHash)
   }
 
   ngOnInit(): void {
