@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.LocalTime;
+import java.util.Base64;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -64,8 +66,14 @@ public class Controller {
   public ResponseEntity<?> index(@RequestParam(name = "mess", required = false) String message,
       HttpServletRequest request) {
     log.info("Message: {} ", message);
-    log.info("REQUST: {} ", request.getHeader("referer"));
-    return ResponseEntity.ok(new DtoMessage(openAi.getTextMessage(Models.ADA,message)));
+    String userHash = Base64.getEncoder().encodeToString(
+        (LocalTime.now().getNano() + "{|}" + request.getHeader("referer")
+        + "{|}" + request.getHeader("user-agent"))
+            .replaceAll(" ","").getBytes());
+    log.info("UserHash: {} ", userHash);
+    return ResponseEntity.status(HttpStatus.OK)
+        .header("Set-Cookie","userHash=" + userHash)
+        .body(new DtoMessage(openAi.getTextMessage(Models.ADA,message)));
   }
   /**
    * Lists the currently available models, and provides basic information about each one such as the

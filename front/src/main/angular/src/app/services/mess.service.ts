@@ -14,8 +14,8 @@ export class MessService {
 
   constructor(private http:HttpClient) { }
 
-  getMessageResponse(mess:string):Observable<DtoMess>{
-    return this.http.get<DtoMess>(this.defaultApi + mess);
+  getMessageResponse(mess:string):Observable<any>{
+    return this.http.get<any>(this.defaultApi + mess);
   }
 
 

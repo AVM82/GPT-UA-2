@@ -10,7 +10,6 @@ export class ChatComponent implements OnInit {
   inMess = 'I\'d ....' ;
   response:string = "Field for response";
 
-
   constructor(private messageServices:MessService) {
   }
 
