@@ -26,15 +26,14 @@ public class GptMessageService implements GptMessageServiceInt {
    * @return A dtoMessage with model and response
    */
   @Override
-  public DtoMessage getAnswer(DtoMessage dtoMessage) {
+  public DtoMessage getAnswer(String userHash, DtoMessage dtoMessage) {
     String request = dtoMessage.getMessage();
     Models model = dtoMessage.getModel();
-    String userHash = dtoMessage.getUserHash();
     String response = openAiClient.getTextMessage(model, request);
 
     saveRequest(model, userHash, request, response);
 
-    return new DtoMessage(response, model, userHash);
+    return new DtoMessage(response, model);
   }
 
   /**

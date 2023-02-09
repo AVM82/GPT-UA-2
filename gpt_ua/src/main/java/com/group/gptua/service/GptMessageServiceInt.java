@@ -4,6 +4,6 @@ import com.group.gptua.dto.DtoMessage;
 
 public interface GptMessageServiceInt {
 
-  DtoMessage getAnswer(DtoMessage dtoMessage);
+  DtoMessage getAnswer(String userHash, DtoMessage dtoMessage);
 
 }
