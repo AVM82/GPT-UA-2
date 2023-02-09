@@ -1,15 +1,11 @@
 export class DtoUser{
-  name:string;
-  login:string;
-  password:string;
+  hash:string;
 
+  constructor(hash: string) {
+    this.hash = hash;
 
-  constructor(name: string, login: string, password: string) {
-    this.name = name;
-    this.login = login;
-    this.password = password;
   }
   toString():string{
-    return 'user{name:'+this.name+', login:'+this.login+'}'
+    return 'user{hash:'+this.hash+'}'
   }
 }

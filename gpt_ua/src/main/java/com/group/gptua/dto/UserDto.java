@@ -11,10 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
-  private String name;
+
   @NotNull
-  private String login;
-  @NotNull
-  private String password;
+  private String hash;
+
 
 }

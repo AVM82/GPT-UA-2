@@ -1,30 +1,22 @@
-import { Component } from '@angular/core';
-import {DtoUser} from "../dto/dto.user";
-
+import {Component, OnInit} from '@angular/core';
+import {DeviceDetectorService} from "ngx-device-detector";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  user: string = '';
-
-
-  chat() {
-
+export class AppComponent implements OnInit{
+  constructor(private deviceDetectorService:DeviceDetectorService) {
   }
 
-  history() {
-
-  }
-
-  auth() {
-
-  }
+  ngOnInit(): void {
+    let devInfo = this.deviceDetectorService.getDeviceInfo()
+    console.log(devInfo.userAgent)
+    console.log(devInfo.device)
+    console.log(devInfo.os_version)
 
 
-    setUser(user:DtoUser):void {
-    this.user = 'Login as '+user.name;
+
   }
 }
