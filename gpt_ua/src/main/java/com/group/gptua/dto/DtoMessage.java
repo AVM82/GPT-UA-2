@@ -1,5 +1,6 @@
 package com.group.gptua.dto;
 
+import com.group.gptua.utils.Models;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,6 @@ import lombok.ToString;
 @ToString
 public class DtoMessage {
   private String message;
-
+  private Models model;
+  private String hashUser;
 }

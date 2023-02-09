@@ -65,7 +65,8 @@ public class Controller {
       HttpServletRequest request) {
     log.info("Message: {} ", message);
     log.info("REQUST: {} ", request.getHeader("referer"));
-    return ResponseEntity.ok(new DtoMessage(openAi.getTextMessage(Models.ADA,message)));
+    return ResponseEntity.ok(
+        new DtoMessage(openAi.getTextMessage(Models.ADA,message),Models.ADA,""));
   }
   /**
    * Lists the currently available models, and provides basic information about each one such as the
