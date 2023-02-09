@@ -29,22 +29,22 @@ public class GptMessageService implements GptMessageServiceInt {
   public DtoMessage getAnswer(DtoMessage dtoMessage) {
     String request = dtoMessage.getMessage();
     Models model = dtoMessage.getModel();
-    String hashUser = dtoMessage.getHashUser();
+    String userHash = dtoMessage.getUserHash();
     String response = openAiClient.getTextMessage(model, request);
 
-    saveRequest(model, hashUser, request, response);
+    saveRequest(model, userHash, request, response);
 
-    return new DtoMessage(response, model, hashUser);
+    return new DtoMessage(response, model, userHash);
   }
 
   /**
    * Saves request.
    */
-  private void saveRequest(Models model, String hashUser, String request, String response) {
+  private void saveRequest(Models model, String userHash, String request, String response) {
     UserRequestEntity userRequest = new UserRequestEntity();
     userRequest.setRequest(request);
     userRequest.setModel(model);
-    userRequest.setHashUser(hashUser);
+    userRequest.setUserHash(userHash);
     userRequest.setResponse(response);
     log.info("Start save request: {}", userRequest);
     try {

@@ -21,7 +21,7 @@ public class UserRequestEntity {
   @Id
   private String id;
 
-  private String hashUser;
+  private String userHash;
 
   private Models model;
 

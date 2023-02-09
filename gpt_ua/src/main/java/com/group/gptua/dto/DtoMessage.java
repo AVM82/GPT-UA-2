@@ -15,5 +15,5 @@ import lombok.ToString;
 public class DtoMessage {
   private String message;
   private Models model;
-  private String hashUser;
+  private String userHash;
 }
