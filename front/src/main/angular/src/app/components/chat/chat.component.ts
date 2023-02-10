@@ -18,8 +18,8 @@ export class ChatComponent implements OnInit {
     this.messageServices.getMessageResponse(this.inMess).subscribe(
       resp => {
         this.response = resp.body.message;
-          console.log(resp.headers.get('user-hash'))
-          localStorage.setItem('user-hash', resp.headers.get('user-hash'));
+        console.log(resp.headers.get('user-hash'))
+        localStorage.setItem('user-hash', resp.headers.get('user-hash'));
       });
 
   }
