@@ -63,7 +63,7 @@ public class Controller {
     log.info("Message: {} ", message);
     String userHash = request.getHeader("user-hash");
     log.info("UserHash getting: {} ", userHash);
-    if (userHash.isEmpty()) {
+    if (userHash == null || userHash.isEmpty()) {
       userHash = Base64.getEncoder().encodeToString(
           (LocalTime.now().getNano() + "{|}" + request.getHeader("referer")
               + "{|}" + request.getHeader("user-agent"))
