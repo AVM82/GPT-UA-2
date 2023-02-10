@@ -21,7 +21,6 @@ export class ChatComponent implements OnInit {
         if (localStorage.getItem('user-hash') != null) {
           console.log(resp.headers.get('user-hash'))
           localStorage.setItem('user-hash', resp.headers.get('user-hash'));
-
         }
       });
 
