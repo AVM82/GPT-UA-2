@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {DeviceDetectorService} from "ngx-device-detector";
+
 
 @Component({
   selector: 'app-root',
@@ -7,14 +7,11 @@ import {DeviceDetectorService} from "ngx-device-detector";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
-  constructor(private deviceDetectorService:DeviceDetectorService) {
+  constructor() {
   }
 
   ngOnInit(): void {
-    let devInfo = this.deviceDetectorService.getDeviceInfo()
-    console.log(devInfo.userAgent)
-    console.log(devInfo.device)
-    console.log(devInfo.os_version)
+
 
 
 
