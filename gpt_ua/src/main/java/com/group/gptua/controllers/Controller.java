@@ -62,7 +62,6 @@ public class Controller {
   public ResponseEntity<?> getMessage(@RequestBody DtoMessage message,
       HttpServletRequest request) {
     log.info("Message: {} ", message);
-
     String userHash = request.getHeader("user-hash");
     log.info("UserHash getting: {} ", userHash);
     if (userHash.isEmpty()) {
@@ -71,7 +70,7 @@ public class Controller {
               + "{|}" + request.getHeader("user-agent"))
               .replaceAll(" ", "").getBytes());
     }
-    log.info("UserHash: {} ", userHash);
+    log.info("UserHash for response: {} ", userHash);
     return ResponseEntity.status(HttpStatus.OK)
         .header("user-hash",userHash)
         .body(new DtoMessage(openAi.getTextMessage(Models.ADA,message.getMessage())));
