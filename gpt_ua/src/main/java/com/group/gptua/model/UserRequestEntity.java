@@ -1,37 +1,34 @@
 package com.group.gptua.model;
 
+import com.group.gptua.utils.Models;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "app_user_requests")
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserRequestEntity {
 
   @Id
   private String id;
 
-  @ManyToOne(optional = false)
-  @JoinColumn(name = "user_id")
-  private UserEntity userEntity;
+  private String userHash;
+
+  private Models model;
 
   private String request;
+
   private String response;
+
   private LocalDateTime createdAt;
 
-  public void setUserEntity(UserEntity userEntity) {
-    this.userEntity = userEntity;
-    userEntity.getUserRequestEntities().add(this);
-  }
 }

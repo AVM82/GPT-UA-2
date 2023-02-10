@@ -27,13 +27,12 @@ public class UserRequestService {
   }
 
   /**
-   * Finds user request entity by id.
+   * Get user request entities by user hash.
    *
-   * @param id id of user request entity
-   * @return user request entity
+   * @return list of user request entities
    */
-  public UserRequestEntity findById(String id) {
-    return userRequestRepository.findById(id).orElseThrow();
+  public List<UserRequestEntity> findByUserHash(String userHash) {
+    return userRequestRepository.findByUserHash(userHash);
   }
 
   /**
@@ -47,25 +46,6 @@ public class UserRequestService {
     userRequestEntity.setCreatedAt(LocalDateTime.now());
     UserRequestEntity result = userRequestRepository.save(userRequestEntity);
     log.info("User request created successfully: {}", result);
-    return result;
-  }
-
-  /**
-   * Updates user request entity.
-   *
-   * @param id                id of user request entity
-   * @param userRequestEntity user request entity
-   * @return updated user request entity
-   */
-  public UserRequestEntity update(String id, UserRequestEntity userRequestEntity) {
-    log.info("User request update: {}", userRequestEntity);
-    UserRequestEntity updatedUserRequest = userRequestRepository.findById(id).orElseThrow();
-    updatedUserRequest.setUserEntity(userRequestEntity.getUserEntity());
-    updatedUserRequest.setRequest(userRequestEntity.getRequest());
-    updatedUserRequest.setResponse(userRequestEntity.getResponse());
-    log.info("Set fields for user request: {}", updatedUserRequest);
-    UserRequestEntity result = userRequestRepository.save(updatedUserRequest);
-    log.info("User request updated successfully: {}", result);
     return result;
   }
 
