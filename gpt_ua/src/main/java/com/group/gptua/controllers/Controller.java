@@ -73,7 +73,7 @@ public class Controller {
     log.info("UserHash for response: {} ", userHash);
     return ResponseEntity.status(HttpStatus.OK)
         .header("user-hash",userHash)
-        .body(new DtoMessage(openAi.getTextMessage(Models.ADA,message.getMessage())));
+        .body(new DtoMessage(openAi.getTextMessage(Models.ADA,message.getMessage()),Models.ADA));
   }
   /**
    * Lists the currently available models, and provides basic information about each one such as the
