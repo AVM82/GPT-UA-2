@@ -62,10 +62,10 @@ public class Controller {
   public ResponseEntity<?> getMessage(@RequestBody DtoMessage message,
       HttpServletRequest request) {
     log.info("Message: {} ", message);
-    request.getHeaderNames().asIterator().forEachRemaining(log::info);
+
     String userHash = request.getHeader("user-hash");
     log.info("UserHash getting: {} ", userHash);
-    if (userHash.equals("first")) {
+    if (userHash.isEmpty()) {
       userHash = Base64.getEncoder().encodeToString(
           (LocalTime.now().getNano() + "{|}" + request.getHeader("referer")
               + "{|}" + request.getHeader("user-agent"))

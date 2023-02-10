@@ -10,15 +10,17 @@ import {environment} from "../../environments/environment";
 })
 export class MessService {
 
+  userHash:any;
+
   private defaultApi: string = environment.appApi+"/bot?mess="
 
   constructor(private http:HttpClient) { }
 
   getMessageResponse(mess:string):Observable<any>{
     let messBody = new DtoMess(mess,"");
-    let userHash = localStorage.getItem('user-hash') || 'first';
-    const myHeader = new HttpHeaders().set('user-hash', userHash);
-    console.log('Get from localStorage: \n' + userHash);
+    this.userHash = localStorage.getItem('user-hash');
+    const myHeader = new HttpHeaders().set('user-hash', this.userHash);
+    console.log('Get from localStorage: \n' + this.userHash);
     return this.http.post<any>(this.defaultApi, messBody, {headers: myHeader, observe: 'response'
        });
   }
