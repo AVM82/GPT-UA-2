@@ -12,12 +12,14 @@ export class MessService {
 
   userHash:any;
 
-  private defaultApi: string = environment.appApi+"/bot?mess="
+
+  private defaultApi: string = environment.appApi+"/bot"
+
 
   constructor(private http:HttpClient) { }
 
   getMessageResponse(mess:string):Observable<any>{
-    let messBody = new DtoMess(mess,"");
+    let messBody = new DtoMess(mess,"ADA");
     this.userHash = localStorage.getItem('user-hash');
     const myHeader = new HttpHeaders().set('user-hash', this.userHash);
     console.log('Get from localStorage: \n' + this.userHash);
