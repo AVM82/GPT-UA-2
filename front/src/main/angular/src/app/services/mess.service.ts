@@ -12,7 +12,7 @@ export class MessService {
 
   userHash:any;
 
-  private defaultApi: string = environment.appApi+"/bot?mess="
+  private defaultApi: string = environment.appApi+"/bot"
 
   constructor(private http:HttpClient) { }
 
