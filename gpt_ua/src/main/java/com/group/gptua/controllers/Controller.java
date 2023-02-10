@@ -3,7 +3,7 @@ package com.group.gptua.controllers;
 import com.group.gptua.bot.Bot;
 import com.group.gptua.dto.ApiDto;
 import com.group.gptua.dto.DtoMessage;
-import com.group.gptua.service.OpenAiInt;
+import com.group.gptua.service.GptMessageServiceInt;
 import com.group.gptua.service.OpenAiService;
 import com.group.gptua.utils.Models;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
@@ -41,9 +41,9 @@ public class Controller {
   @Autowired
   Bot bot;
 
-  @Qualifier("openAiService")
+  @Qualifier("gptMessageService")
   @Autowired
-  OpenAiInt openAi;
+  GptMessageServiceInt gptMessageService;
 
   private final OpenAiService openAiClient;
 
@@ -73,7 +73,7 @@ public class Controller {
     log.info("UserHash for response: {} ", userHash);
     return ResponseEntity.status(HttpStatus.OK)
         .header("user-hash",userHash)
-        .body(new DtoMessage(openAi.getTextMessage(Models.ADA,message.getMessage()),Models.ADA));
+        .body(gptMessageService.getAnswer(userHash, new DtoMessage(message.getMessage(), Models.ADA)));
   }
   /**
    * Lists the currently available models, and provides basic information about each one such as the
