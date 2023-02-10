@@ -18,10 +18,13 @@ export class ChatComponent implements OnInit {
     this.response = 'Wait...'
     this.messageServices.getMessageResponse(this.inMess).subscribe(
       resp => {
-        this.response = resp.message;
-        this.userHash = resp.headers.get('user-hash').toString();
+        this.response = resp.body.message;
+        this.userHash = resp.headers.get('user-hash');
       });
-    console.log(this.userHash)
+    if (this.userHash != null) {
+      console.log(this.userHash)
+      localStorage.setItem('user-hash', this.userHash);
+    }
   }
 
   ngOnInit(): void {

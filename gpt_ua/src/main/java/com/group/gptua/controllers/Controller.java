@@ -57,19 +57,24 @@ public class Controller {
    * @param message the message
    * @return string
    */
-  @GetMapping
+  @PostMapping
   @Operation(summary = "getEcho-method", description = "this method tests controller")
-  public ResponseEntity<?> index(@RequestParam(name = "mess", required = false) String message,
+  public ResponseEntity<?> getMessage(@RequestBody DtoMessage message,
       HttpServletRequest request) {
     log.info("Message: {} ", message);
-    String userHash = Base64.getEncoder().encodeToString(
-        (LocalTime.now().getNano() + "{|}" + request.getHeader("referer")
-        + "{|}" + request.getHeader("user-agent"))
-            .replaceAll(" ","").getBytes());
+    request.getHeaderNames().asIterator().forEachRemaining(log::info);
+    String userHash = request.getHeader("user-hash");
+    log.info("UserHash getting: {} ", userHash);
+    if (userHash.equals("first")) {
+      userHash = Base64.getEncoder().encodeToString(
+          (LocalTime.now().getNano() + "{|}" + request.getHeader("referer")
+              + "{|}" + request.getHeader("user-agent"))
+              .replaceAll(" ", "").getBytes());
+    }
     log.info("UserHash: {} ", userHash);
     return ResponseEntity.status(HttpStatus.OK)
         .header("user-hash",userHash)
-        .body(new DtoMessage(openAi.getTextMessage(Models.ADA,message)));
+        .body(new DtoMessage(openAi.getTextMessage(Models.ADA,message.getMessage())));
   }
   /**
    * Lists the currently available models, and provides basic information about each one such as the
