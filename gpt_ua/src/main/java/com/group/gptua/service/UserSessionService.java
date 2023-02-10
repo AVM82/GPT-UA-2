@@ -59,7 +59,7 @@ public class UserSessionService implements UserSessionServiceInt {
   /**
    * Runs a scheduled task for finish sessions by time limit.
    */
-  @Scheduled(fixedRate = 5000)
+  @Scheduled(cron = "${user.session.time.limit.cron}")
   private void finishSessionsByTimeLimit() {
 
     userSessions.entrySet().stream()
