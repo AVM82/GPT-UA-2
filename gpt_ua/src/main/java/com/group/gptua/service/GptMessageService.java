@@ -32,9 +32,9 @@ public class GptMessageService implements GptMessageServiceInt {
     String request = dtoMessage.getMessage();
     Models model = dtoMessage.getModel();
     String response = openAiClient.getTextMessage(model, request);
-
-    saveRequest(model, userHash, request, response);
-
+    if (!userHash.isEmpty()) {
+      saveRequest(model, userHash, request, response);
+    }
     return new DtoMessage(response, model);
   }
 

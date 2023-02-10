@@ -1,9 +1,9 @@
 export class DtoMess{
   message:string;
-  model:string;
+  model:any;
 
 
-  constructor(message: string, model: string) {
+  constructor(message: string, model: any) {
     this.message = message;
     this.model = model;
   }
