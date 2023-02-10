@@ -53,8 +53,12 @@ public class GptTokenService implements GptTokenServiceInt {
    */
   public void giveBackToken(GptToken token) throws Exception {
     if (currentTokens.contains(token)) {
-      log.info("give back token to poolTokens");
-      poolTokens.add(token);
+      if (token != defaultToken) {
+        log.info("give back token to poolTokens");
+        poolTokens.add(token);
+      } else {
+        log.info("give back default token");
+      }
     } else {
       log.warn("default token");
       throw new Exception("This token is not present");
