@@ -26,7 +26,6 @@ const appRoutes: Routes = [
     HistoryComponent
   ],
   imports: [
-
     BrowserModule,
     AppRoutingModule,
     FormsModule,

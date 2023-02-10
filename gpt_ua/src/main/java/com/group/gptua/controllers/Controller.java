@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.LocalTime;
+import java.util.Base64;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +26,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -55,16 +56,26 @@ public class Controller {
    * @param message the message
    * @return string
    */
-  @GetMapping
+  @PostMapping
   @Operation(summary = "getEcho-method", description = "this method tests controller")
-  public ResponseEntity<?> index(@RequestParam(name = "mess", required = false) String message,
+  public ResponseEntity<?> getMessage(@RequestBody DtoMessage message,
       HttpServletRequest request) {
     log.info("Message: {} ", message);
-    log.info("REQUST: {} ", request.getHeader("referer"));
-    String userHash = "";
-    return ResponseEntity.ok(
-        gptMessageService.getAnswer(userHash, new DtoMessage(message, Models.ADA)));
+    String userHash = request.getHeader("user-hash");
+    log.info("UserHash getting: {} ", userHash);
+    if (userHash.isEmpty()) {
+      userHash = Base64.getEncoder().encodeToString(
+          (LocalTime.now().getNano() + "{|}" + request.getHeader("referer")
+              + "{|}" + request.getHeader("user-agent"))
+              .replaceAll(" ", "").getBytes());
+    }
+    log.info("UserHash for response: {} ", userHash);
+    return ResponseEntity.status(HttpStatus.OK)
+        .header("user-hash",userHash)
+        .body(gptMessageService.getAnswer(userHash,
+            new DtoMessage(message.getMessage(), Models.ADA)));
   }
+
   /**
    * Lists the currently available models, and provides basic information about each one such as the
    * owner and availability.
