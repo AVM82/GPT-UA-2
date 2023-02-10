@@ -74,6 +74,7 @@ public class Controller {
         .header("user-hash",userHash)
         .body(gptMessageService.getAnswer(userHash,
             new DtoMessage(message.getMessage(), message.getModel())));
+
   }
 
   /**
