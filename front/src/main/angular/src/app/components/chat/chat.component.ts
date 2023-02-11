@@ -10,7 +10,7 @@ export class ChatComponent implements OnInit {
   inMess = 'I\'d ....';
   response: string = "Field for response";
   models: string[] = [];
-  modelSelect:any;
+  modelSelect:string = "DAVINCI";
 
   constructor(private messageServices: MessService) {
   }
