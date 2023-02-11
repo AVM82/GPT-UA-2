@@ -19,8 +19,8 @@ export class MessService {
   constructor(private http:HttpClient) { }
 
 
-  getMessageResponse(mess:string):Observable<any>{
-    let messBody = new DtoMess(mess,"ADA");
+  getMessageResponse(mess:string,model:string):Observable<any>{
+    let messBody = new DtoMess(mess,model);
     this.userHash = localStorage.getItem('user-hash') || '';
     const myHeader = new HttpHeaders().set('user-hash', this.userHash);
     console.log('Get from localStorage: \n' + this.userHash);
@@ -28,5 +28,7 @@ export class MessService {
        });
   }
 
-
+  getModels():Observable<any>{
+    return this.http.get<any>(this.defaultApi+'/basic_models');
+  }
 }

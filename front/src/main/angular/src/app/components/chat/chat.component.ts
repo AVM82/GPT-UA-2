@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MessService} from "../../services/mess.service";
 
 @Component({
@@ -7,15 +7,19 @@ import {MessService} from "../../services/mess.service";
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
-  inMess = 'I\'d ....' ;
-  response:string = "Field for response";
-  constructor(private messageServices:MessService) {
+  inMess = 'I\'d ....';
+  response: string = "Field for response";
+  models: string[] = [];
+  modelSelect:any;
+
+  constructor(private messageServices: MessService) {
   }
 
   send() {
-    console.log(this.inMess)
+    console.log(this.inMess);
+    console.log("MODEL {}", this.modelSelect);
     this.response = 'Wait...'
-    this.messageServices.getMessageResponse(this.inMess).subscribe(
+    this.messageServices.getMessageResponse(this.inMess, this.modelSelect).subscribe(
       resp => {
         this.response = resp.body.message;
         console.log(resp.headers.get('user-hash'))
@@ -24,6 +28,12 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.messageServices.getModels().subscribe(response => {
+      this.models=response;
+      console.log('get response {}', this.models);
+    })
   }
 
+  checkModel(): void{
+  }
 }

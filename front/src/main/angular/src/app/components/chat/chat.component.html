@@ -1,11 +1,17 @@
 <div style="background-color: #56B8DE">
   <div style="text-align: center">
     <h2 style="text-align: center">Enter you question!</h2>
-    <textarea name="text" style="width: 80%;" rows="5"  [(ngModel)]="inMess" ></textarea>
+    <textarea name="text" style="width: 80%;" rows="5" [(ngModel)]="inMess"></textarea>
     <br/>
+    <label>Select model:</label>
+    <select name="models" style="margin-right: 10%" [(ngModel)]="modelSelect">
+      <option *ngFor="let model of models" [value]="model">{{model}}</option>
+    </select>
+
     <button class="btn btn-primary" name="send" (click)="send()">Send</button>
   </div>
   <div class="text-center mt-auto text-lg-start">
-    <pre style="background-color: #b5d592; word-wrap: normal; text-align: center" neme="response">{{response}}</pre>
+    <pre style="background-color: #b5d592; word-wrap: normal; text-align: center"
+         name="response">{{response}}</pre>
   </div>
 </div>
