@@ -17,7 +17,8 @@ export class HistoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http.get('archive/')
+   // this.http.get('archive/')
+    this.http.get('archive/filter?model=ADA&text=is&date=10.02.2023')
     .subscribe({next:(data:any) => this.requests=data});
   }
 }

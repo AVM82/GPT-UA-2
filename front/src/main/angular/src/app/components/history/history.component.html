@@ -1,24 +1,18 @@
-<div style="background-color: #decc56">
-  <table border="3" width=100%>
-    <!--       <caption>Request Archive</caption>-->
-    <thead>
-    <tr>
-<!--      <th>userHash</th>-->
+<div>
+  <table width="100%" border="1">
+    <tr bgcolor="#3cb371">
+      <!--      <th>userHash</th>-->
       <th>model</th>
       <th>request</th>
       <th>response</th>
       <th>createdAt</th>
     </tr>
-    </thead>
-
-    <tbody class="details-table">
-    <tr *ngFor="let request of requests">
-<!--      <td> {{request.userHash}}</td>-->
+    <tr bgcolor="#ffe87c" *ngFor="let request of requests">
+      <!--      <td> {{request.userHash}}</td>-->
       <td> {{request.model}}</td>
       <td> {{request.request}}</td>
       <td> {{request.response}}</td>
       <td> {{request.createdAt|date}}</td>
     </tr>
-    </tbody>
   </table>
 </div>
