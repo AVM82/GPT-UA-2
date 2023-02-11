@@ -10,6 +10,8 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class GptTokenServiceTest {
@@ -18,6 +20,7 @@ class GptTokenServiceTest {
   private static final GptTokenService gptTokenService = new GptTokenService(API_KEYS);
   private static final List<GptToken> receivedTokens = new ArrayList<>();
   private static final int poolTokensSize = gptTokenService.getPoolTokensSize();
+  private static final Logger log = LoggerFactory.getLogger(GptTokenServiceTest.class);
 
   @Test
   @Order(1)
@@ -25,17 +28,17 @@ class GptTokenServiceTest {
     String[] arrayTokens = API_KEYS.split(" ");
     // default token
     String defaultToken = arrayTokens[0];
-    // adds tokens to pool
+    log.info("start to add tokens to pool");
     for (int i = 1; i < arrayTokens.length + 5; i++) {
       receivedTokens.add(gptTokenService.getToken());
     }
-    // checks tokens
+    log.info("start to check tokens");
     for (int i = 0; i < receivedTokens.size() - 1; i++) {
       if (i < arrayTokens.length - 1) {
-        // token is in pool
+        // is token in pool
         assertEquals(arrayTokens[i + 1], receivedTokens.get(i).getToken());
       } else {
-        // token is default
+        // is token default
         assertEquals(defaultToken, receivedTokens.get(i).getToken());
       }
 
@@ -45,6 +48,7 @@ class GptTokenServiceTest {
   @Test
   @Order(2)
   void giveBackToken() {
+    log.info("start check giveBackToken");
     for (int i = 0; i < receivedTokens.size() - 1; i++) {
       try {
         gptTokenService.giveBackToken(receivedTokens.get(i));
@@ -53,13 +57,14 @@ class GptTokenServiceTest {
         fail();
       }
     }
-    // checks pool size after giving back tokens
+    log.info("checks pool size after giving back tokens");
     assertEquals(poolTokensSize, gptTokenService.getPoolTokensSize());
   }
 
   @Test
   @Order(3)
   void giveBackInvalidToken() {
+    log.info("start check giveBackInvalidToken");
     assertThrows(Exception.class,
         () -> gptTokenService.giveBackToken(new GptToken("Invalid", new GptAccount(""))));
   }
