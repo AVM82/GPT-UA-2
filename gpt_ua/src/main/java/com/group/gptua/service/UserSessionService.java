@@ -36,7 +36,13 @@ public class UserSessionService implements UserSessionServiceInt {
   @Override
   public UserSession getUserSession(String userHash) {
 
-    return userSessions.getOrDefault(userHash, createSession(userHash));
+    UserSession userSession = userSessions.get(userHash);
+    if (userSession == null) {
+      userSession = createSession(userHash);
+    } else {
+      userSession.setStartAt(LocalDateTime.now());
+    }
+    return userSession;
 
   }
 
@@ -51,7 +57,7 @@ public class UserSessionService implements UserSessionServiceInt {
     UserSession userSession = new UserSession(userHash, gptTokenService.getToken(),
         LocalDateTime.now());
     userSessions.put(userHash, userSession);
-    log.info("Create new user session for user hash {} at {}",userHash, userSession.getStartAt());
+    log.info("Create new user session for user hash {} at {}", userHash, userSession.getStartAt());
     return userSession;
 
   }

@@ -12,4 +12,8 @@ public class UserSession {
   GptToken token;
   LocalDateTime startAt;
 
+  public void setStartAt(LocalDateTime startAt) {
+    this.startAt = startAt;
+  }
+
 }
