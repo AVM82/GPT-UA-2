@@ -29,6 +29,13 @@ public class RequestController {
    */
   @GetMapping("/filter")
   public List<UserRequestEntity> getFilteredTasks(FilterParamDto filter) {
+    System.out.println("****************************************************");
+        System.out.println(filter.getUserHash()==null);
+    System.out.println(filter.getModel()==null);
+        System.out.println(filter.getText()==null);
+    System.out.println(filter.getDate()==null);
+
+
 
     List<UserRequestEntity> list = new ArrayList<>();
     requestService.getAll()
@@ -39,20 +46,23 @@ public class RequestController {
     return list;
   }
 
-  /** This method.
+  /**
+   * This method.
    *
    * @param request request
-   * @param filter filter
+   * @param filter  filter
    * @return boolean
    */
   private boolean hasFilterParams(UserRequestEntity request, FilterParamDto filter) {
+    boolean user = filter.getUserHash() == null || filter.getUserHash().equals("")
+        || request.getUserHash().equals(filter.getUserHash());
     boolean model = filter.getModel() == null
         || request.getModel().equals(filter.getModel());
-    boolean text = filter.getText() == null
+    boolean text = filter.getText() == null || filter.getText().equals("")
         || request.getRequest().contains(filter.getText());
     boolean date = filter.getDate() == null
         || request.getCreatedAt().toLocalDate().equals(filter.getDate());
-    return model && text && date;
+    return user && model && text && date;
   }
 
   /**

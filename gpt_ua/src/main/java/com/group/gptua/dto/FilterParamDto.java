@@ -14,7 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class FilterParamDto {
-
+  String userHash;
   Models model;
   String text;
   LocalDate date;
