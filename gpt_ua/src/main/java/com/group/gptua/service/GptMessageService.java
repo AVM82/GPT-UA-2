@@ -4,19 +4,21 @@ import com.group.gptua.dto.DtoMessage;
 import com.group.gptua.model.UserRequestEntity;
 import com.group.gptua.utils.Models;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
 public class GptMessageService implements GptMessageServiceInt {
 
-  private final OpenAiService openAiClient;
+  private final OpenAiInt openAiClient;
 
   private final UserRequestService userRequestService;
 
-  public GptMessageService(OpenAiService openAiClient, UserRequestService userRequestService) {
-    this.openAiClient = openAiClient;
+  public GptMessageService(UserRequestService userRequestService,
+      @Qualifier("openAiService") OpenAiInt openAiClient) {
     this.userRequestService = userRequestService;
+    this.openAiClient = openAiClient;
   }
 
   /**
@@ -30,9 +32,9 @@ public class GptMessageService implements GptMessageServiceInt {
     String request = dtoMessage.getMessage();
     Models model = dtoMessage.getModel();
     String response = openAiClient.getTextMessage(model, request);
-
-    saveRequest(model, userHash, request, response);
-
+    if (!userHash.isEmpty()) {
+      saveRequest(model, userHash, request, response);
+    }
     return new DtoMessage(response, model);
   }
 

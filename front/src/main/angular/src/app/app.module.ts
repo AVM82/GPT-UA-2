@@ -9,8 +9,7 @@ import {MessService} from "./services/mess.service";
 import { ChatComponent } from './components/chat/chat.component';
 import { HistoryComponent } from './components/history/history.component';
 import {RouterModule, Routes} from "@angular/router";
-import {UserService} from "./services/user.services";
-import {DeviceDetectorService} from "ngx-device-detector";
+
 
 const appRoutes: Routes = [
   {path: 'chat', component: ChatComponent},
@@ -26,14 +25,13 @@ const appRoutes: Routes = [
     HistoryComponent
   ],
   imports: [
-
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [MessService, UserService, DeviceDetectorService],
+  providers: [MessService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

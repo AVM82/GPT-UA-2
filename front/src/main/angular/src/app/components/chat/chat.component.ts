@@ -9,8 +9,6 @@ import {MessService} from "../../services/mess.service";
 export class ChatComponent implements OnInit {
   inMess = 'I\'d ....' ;
   response:string = "Field for response";
-
-
   constructor(private messageServices:MessService) {
   }
 
@@ -19,7 +17,9 @@ export class ChatComponent implements OnInit {
     this.response = 'Wait...'
     this.messageServices.getMessageResponse(this.inMess).subscribe(
       resp => {
-        this.response = resp.message;
+        this.response = resp.body.message;
+        console.log(resp.headers.get('user-hash'))
+        localStorage.setItem('user-hash', resp.headers.get('user-hash'));
       });
   }
 
