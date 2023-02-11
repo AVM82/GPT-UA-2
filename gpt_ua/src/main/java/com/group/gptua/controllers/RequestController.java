@@ -29,14 +29,6 @@ public class RequestController {
    */
   @GetMapping("/filter")
   public List<UserRequestEntity> getFilteredTasks(FilterParamDto filter) {
-    System.out.println("****************************************************");
-        System.out.println(filter.getUserHash()==null);
-    System.out.println(filter.getModel()==null);
-        System.out.println(filter.getText()==null);
-    System.out.println(filter.getDate()==null);
-
-
-
     List<UserRequestEntity> list = new ArrayList<>();
     requestService.getAll()
         .stream()
