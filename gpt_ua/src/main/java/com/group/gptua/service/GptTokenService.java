@@ -4,8 +4,9 @@ import com.group.gptua.model.GptAccount;
 import com.group.gptua.model.GptToken;
 import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Queue;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class GptTokenService implements GptTokenServiceInt {
 
-  private final HashSet<GptToken> currentTokens = new HashSet<>();
+  private final Set<GptToken> currentTokens = new LinkedHashSet<>();
   private final Queue<GptToken> poolTokens = new ArrayDeque<>();
   private final GptToken defaultToken;
 
@@ -60,9 +61,13 @@ public class GptTokenService implements GptTokenServiceInt {
         log.info("give back default token");
       }
     } else {
-      log.warn("default token");
+      log.warn("This token is not present");
       throw new Exception("This token is not present");
     }
+  }
+
+  public int getPoolTokensSize() {
+    return poolTokens.size();
   }
 
 }
