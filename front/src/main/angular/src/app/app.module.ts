@@ -9,7 +9,6 @@ import {MessService} from "./services/mess.service";
 import { ChatComponent } from './components/chat/chat.component';
 import { HistoryComponent } from './components/history/history.component';
 import {RouterModule, Routes} from "@angular/router";
-import {UserService} from "./services/user.services";
 
 
 const appRoutes: Routes = [
@@ -32,7 +31,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [MessService, UserService],
+  providers: [MessService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -51,8 +51,7 @@ public class Controller {
   }
 
   /**
-   * The method for GET mapping.
-   *
+   * The method for Post mapping for messages.
    * @param message the message
    * @return string
    */
