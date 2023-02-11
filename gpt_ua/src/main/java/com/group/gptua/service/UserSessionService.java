@@ -94,4 +94,13 @@ public class UserSessionService implements UserSessionServiceInt {
 
   }
 
+  /**
+   * Returns count of user sessions.
+   *
+   * @return A count of user sessions
+   */
+  public int getUserSessionCount() {
+    return userSessions.size();
+  }
+
 }
