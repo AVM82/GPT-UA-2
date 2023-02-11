@@ -1,10 +1,12 @@
 package com.group.gptua.service;
 
+import com.group.gptua.model.GptAccount;
+import com.group.gptua.model.GptToken;
 import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,17 +16,19 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class GptTokenService implements GptTokenServiceInt {
 
-  private final HashSet<String> currentTokens = new HashSet<>();
-  private final Queue<String> poolTokens = new ArrayDeque<>();
-  private String defaultToken;
+  private final Set<GptToken> currentTokens = new LinkedHashSet<>();
+  private final Queue<GptToken> poolTokens = new ArrayDeque<>();
+  private final GptToken defaultToken;
 
   /**
    * Constructor for initialisation variables.
+   *
    * @param apiKey tokens in variable
    */
   @Autowired
   public GptTokenService(@Value("${gpt.token}") String apiKey) {
-    currentTokens.addAll(Arrays.stream(apiKey.split(" ")).toList());
+    currentTokens.addAll(Arrays.stream(apiKey.split(" "))
+        .map(token -> new GptToken(token, new GptAccount(""))).toList());
     poolTokens.addAll(currentTokens);
     defaultToken = poolTokens.poll();
   }
@@ -34,7 +38,7 @@ public class GptTokenService implements GptTokenServiceInt {
    *
    * @return token
    */
-  public String getToken() {
+  public GptToken getToken() {
     if (poolTokens.isEmpty()) {
       log.info("default token");
       return defaultToken;
@@ -48,14 +52,22 @@ public class GptTokenService implements GptTokenServiceInt {
    *
    * @param token token
    */
-  public void giveBackToken(String token) throws Exception {
+  public void giveBackToken(GptToken token) throws Exception {
     if (currentTokens.contains(token)) {
-      log.info("give back token to poolTokens");
-      poolTokens.add(token);
+      if (token != defaultToken) {
+        log.info("give back token to poolTokens");
+        poolTokens.add(token);
+      } else {
+        log.info("give back default token");
+      }
     } else {
-      log.warn("default token");
+      log.warn("This token is not present");
       throw new Exception("This token is not present");
     }
+  }
+
+  public int getPoolTokensSize() {
+    return poolTokens.size();
   }
 
 }
