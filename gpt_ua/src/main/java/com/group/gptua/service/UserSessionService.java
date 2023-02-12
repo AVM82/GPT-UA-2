@@ -4,7 +4,9 @@ import com.group.gptua.model.GptToken;
 import com.group.gptua.model.UserSession;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +43,7 @@ public class UserSessionService implements UserSessionServiceInt {
       userSession = createSession(userHash);
     } else {
       userSession.setStartAt(LocalDateTime.now());
+      log.info("Update user session for user hash {} at {}", userHash, userSession.getStartAt());
     }
     return userSession;
 
@@ -68,10 +71,11 @@ public class UserSessionService implements UserSessionServiceInt {
   @Scheduled(cron = "${user.session.time.limit.cron}")
   private void finishSessionsByTimeLimit() {
 
-    userSessions.entrySet().stream()
+    List<Entry<String, UserSession>> entries = userSessions.entrySet().stream()
         .filter(entry -> entry.getValue().getStartAt().plusSeconds(sessionTimeLimit)
-            .isAfter(LocalDateTime.now()))
-        .forEach(entry -> finishSession(entry.getKey(), entry.getValue().getToken()));
+            .isBefore(LocalDateTime.now()))
+        .toList();
+    entries.forEach(entry -> finishSession(entry.getKey(), entry.getValue().getToken()));
 
   }
 
