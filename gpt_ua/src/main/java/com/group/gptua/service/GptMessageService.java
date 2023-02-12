@@ -14,11 +14,17 @@ public class GptMessageService implements GptMessageServiceInt {
   private final OpenAiInt openAiClient;
 
   private final UserRequestService userRequestService;
+  private final UserSessionServiceInt userSessionService;
 
+  /**
+   * Constructor.
+   */
   public GptMessageService(UserRequestService userRequestService,
-      @Qualifier("openAiService") OpenAiInt openAiClient) {
+      @Qualifier("openAiService") OpenAiInt openAiClient,
+      @Qualifier("userSessionService") UserSessionServiceInt userSessionService) {
     this.userRequestService = userRequestService;
     this.openAiClient = openAiClient;
+    this.userSessionService = userSessionService;
   }
 
   /**
@@ -31,7 +37,8 @@ public class GptMessageService implements GptMessageServiceInt {
   public DtoMessage getAnswer(String userHash, DtoMessage dtoMessage) {
     String request = dtoMessage.getMessage();
     Models model = dtoMessage.getModel();
-    String response = openAiClient.getTextMessage(model, request);
+    String response = openAiClient
+        .getTextMessage(userSessionService.getUserSession(userHash), model, request);
     if (!userHash.isEmpty()) {
       saveRequest(model, userHash, request, response);
     }

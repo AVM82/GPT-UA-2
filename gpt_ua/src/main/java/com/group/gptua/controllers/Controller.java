@@ -5,6 +5,7 @@ import com.group.gptua.dto.ApiDto;
 import com.group.gptua.dto.DtoMessage;
 import com.group.gptua.service.GptMessageServiceInt;
 import com.group.gptua.service.OpenAiService;
+import com.group.gptua.service.UserSessionServiceInt;
 import com.group.gptua.utils.Models;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -44,6 +45,9 @@ public class Controller {
   @Autowired
   GptMessageServiceInt gptMessageService;
 
+  @Qualifier("userSessionService")
+  @Autowired
+  UserSessionServiceInt userSessionService;
   private final OpenAiService openAiClient;
 
   public Controller(OpenAiService openAiClient) {
@@ -72,7 +76,7 @@ public class Controller {
     return ResponseEntity.status(HttpStatus.OK)
         .header("user-hash",userHash)
         .body(gptMessageService.getAnswer(userHash,
-            new DtoMessage(message.getMessage(), message.getModel())));
+            new DtoMessage(message.getMessage(), message.getModel())).getMessage());
 
   }
 
@@ -86,7 +90,8 @@ public class Controller {
   @GetMapping("/models")
   @Operation(summary = "getAllModels method", description = "this method return all models")
   public ResponseEntity<String> getAllModels() {
-    return ResponseEntity.ok(openAiClient.getAllModels());
+    return ResponseEntity.ok(openAiClient.getAllModels(userSessionService
+        .getUserSession("ControllerGetAllModels")));
   }
 
   /**
@@ -100,7 +105,8 @@ public class Controller {
   @GetMapping("/models/{model}")
   @Operation(summary = "getModel method", description = "this method return available model")
   public ResponseEntity<String> getModel(@PathVariable String model) {
-    return ResponseEntity.ok(openAiClient.getModel(model));
+    return ResponseEntity.ok(openAiClient.getModel(userSessionService
+        .getUserSession("ControllerGetModel"), model));
   }
 
   /**
@@ -128,7 +134,8 @@ public class Controller {
     if (bindingResult.hasErrors()) {
       return ResponseEntity.badRequest().body("BAD REQUEST! Please input valid ApiDto");
     }
-    return ResponseEntity.ok(openAiClient.getTextMessage(apiDto.getModel(),
+    return ResponseEntity.ok(openAiClient.getTextMessage(
+        userSessionService.getUserSession("ControllerGetAnswer"), apiDto.getModel(),
         apiDto.getPrompt()));
   }
 

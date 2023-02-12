@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableJpaRepositories(excludeFilters =
     {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
         value = UserRequestRepository.class)})
+@EnableScheduling
 @SpringBootApplication
 public class GptUaApplication {
 
