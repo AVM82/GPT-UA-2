@@ -1,6 +1,7 @@
 package com.group.gptua.bot;
 
-import com.group.gptua.service.OpenAiInt;
+import com.group.gptua.dto.DtoMessage;
+import com.group.gptua.service.GptMessageServiceInt;
 import com.group.gptua.utils.Models;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,9 +24,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @Component
 public class Bot extends TelegramLongPollingBot {
 
-  @Qualifier("openAiService")
+  @Qualifier("gptMessageService")
   @Autowired
-  OpenAiInt openAi;
+  GptMessageServiceInt gptMessageService;
   private static final String START_MESS = "Hello! Select model GPT-chat, and ask your questions!";
   private static final String WRONG_COMMAND = "<b><i>Command is wrong, try again!</i></b>";
 
@@ -69,7 +70,8 @@ public class Bot extends TelegramLongPollingBot {
 
   private void userResponse(String chatId, String text) {
     Models model = modelsCash.get(chatId);
-    sendTextMessage(chatId, openAi.getTextMessage(model, text) + "\n<i>"
+    sendTextMessage(chatId,
+        gptMessageService.getAnswer(chatId, new DtoMessage(text,model)).getMessage() + "\n<i>"
         + "used model: " + model + "</i>");
   }
 
