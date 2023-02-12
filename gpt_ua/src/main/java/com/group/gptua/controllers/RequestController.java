@@ -46,11 +46,13 @@ public class RequestController {
    * @return boolean
    */
   private boolean hasFilterParams(UserRequestEntity request, FilterParamDto filter) {
-    boolean user = filter.getUserHash() == null || filter.getUserHash().equals("")
+    boolean user = filter.getUserHash() == null
+        || filter.getUserHash().equals("")
         || request.getUserHash().equals(filter.getUserHash());
     boolean model = filter.getModel() == null
         || request.getModel().equals(filter.getModel());
-    boolean text = filter.getText() == null || filter.getText().equals("")
+    boolean text = filter.getText() == null
+        || filter.getText().equals("")
         || request.getRequest().contains(filter.getText());
     boolean date = filter.getDate() == null
         || request.getCreatedAt().toLocalDate().equals(filter.getDate());
