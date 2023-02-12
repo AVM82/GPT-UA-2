@@ -1,7 +1,19 @@
 <div>
   <label for="start">Start date:</label>
   <input type="date" id="start" [(ngModel)]="data" >
+
+
+  <select [(ngModel)]="filteredModel">
+    <option [ngValue]="null" disabled>Select model</option>
+    <option *ngFor="let model of models" [ngValue]="model" >{{model}}</option>
+  </select>
+
+  <input type="text" [(ngModel)]="searchedText">
+
+
   <button class="btn btn-primary" name="filter" (click)="getFilter()">Filter</button>
+  <button class="btn btn-primary" name="get" (click)="sendRequest()">GET!</button>
+
 </div>
 <div style="height: 100%; overflow: scroll">
   <table class="table table-hover table-striped table-bordered border-primary">
