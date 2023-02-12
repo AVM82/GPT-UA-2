@@ -1,3 +1,20 @@
-<div style="background-color: #56B8DE">
-  history works!
+<div>
+  <table class="table table-hover table-striped table-bordered border-primary">
+    <thead bgcolor="#3cb371">
+      <!--      <th>userHash</th>-->
+      <th>model</th>
+      <th>request</th>
+      <th>response</th>
+      <th>createdAt</th>
+    </thead>
+    <tbody>
+      <tr bgcolor="#ffe87c" *ngFor="let request of requests">
+        <!--      <td> {{request.userHash}}</td>-->
+        <td> {{request.model}}</td>
+        <td> {{request.request}}</td>
+        <td> {{request.response}}</td>
+        <td> {{request.createdAt|date}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

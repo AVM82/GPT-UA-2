@@ -1,15 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-history',
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.scss']
 })
+
 export class HistoryComponent implements OnInit {
 
-  constructor() { }
+  requests = [
+    {userHash: '', model: '', request: '', response: '', createdAt: ''}
+  ]
 
-  ngOnInit(): void {
+  constructor(private http: HttpClient) {
   }
 
+  ngOnInit(): void {
+   // this.http.get('archive/')
+    this.http.get('archive/filter?userHash=&model=ADA&text=is&date=11.02.2023')
+    .subscribe({next:(data:any) => this.requests=data});
+  }
 }
