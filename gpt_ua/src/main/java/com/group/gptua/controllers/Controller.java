@@ -76,7 +76,7 @@ public class Controller {
     return ResponseEntity.status(HttpStatus.OK)
         .header("user-hash",userHash)
         .body(gptMessageService.getAnswer(userHash,
-            new DtoMessage(message.getMessage(), message.getModel())).getMessage());
+            new DtoMessage(message.getMessage(), message.getModel())));
 
   }
 
