@@ -6,6 +6,7 @@ import com.group.gptua.dto.RequestDto;
 import com.group.gptua.dto.responsegpt.Choice;
 import com.group.gptua.dto.responsegpt.ResponseDto;
 import com.group.gptua.model.GptUri;
+import com.group.gptua.model.UserSession;
 import com.group.gptua.utils.Models;
 import java.io.IOException;
 import java.rmi.UnexpectedException;
@@ -20,7 +21,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -34,8 +34,7 @@ public class OpenAiService implements OpenAiInt {
 
   private final OkHttpClient httpClient = new OkHttpClient();
   private final MediaType json = MediaType.get("application/json; charset=utf-8");
-  @Value("${gpt.token}")
-  private String apiKey;
+
   @Autowired
   RequestDtoPropertiesService propertiesService;
 
@@ -45,9 +44,9 @@ public class OpenAiService implements OpenAiInt {
    *
    * @return - string of response
    */
-  public String getAllModels() {
+  public String getAllModels(UserSession userSession) {
     log.info(" Start getModels method ... ");
-    Request request = createGetRequest(GptUri.URI_MODELS.getUri());
+    Request request = createGetRequest(userSession, GptUri.URI_MODELS.getUri());
     return createResponse(request);
   }
 
@@ -58,24 +57,24 @@ public class OpenAiService implements OpenAiInt {
    * @param model - name of model instance
    * @return - string of list of models
    */
-  public String getModel(String model) {
+  public String getModel(UserSession userSession, String model) {
     log.info(" Start getModels method ... ");
-    Request request = createGetRequest(GptUri.URI_MODEL.getUri() + model);
+    Request request = createGetRequest(userSession, GptUri.URI_MODEL.getUri() + model);
     return createResponse(request);
   }
 
-  private Request createGetRequest(String uri) {
+  private Request createGetRequest(UserSession userSession, String uri) {
     return new Request.Builder()
         .url(uri)
-        .header("Authorization", "Bearer " + apiKey)
+        .header("Authorization", "Bearer " + userSession.getToken().getToken())
         .get()
         .build();
   }
 
-  private Request createPostRequest(String uri, RequestBody requestBody) {
+  private Request createPostRequest(UserSession userSession, String uri, RequestBody requestBody) {
     return new Request.Builder()
         .url(uri)
-        .header("Authorization", "Bearer " + apiKey)
+        .header("Authorization", "Bearer " + userSession.getToken().getToken())
         .post(requestBody)
         .build();
   }
@@ -107,13 +106,13 @@ public class OpenAiService implements OpenAiInt {
    * @return - answer from the GPT Chat
    */
   @Override
-  public String getTextMessage(Models model, String question) {
+  public String getTextMessage(UserSession userSession, Models model, String question) {
     log.info("Start getTextMessage method with {} and {} ", model, question);
     RequestDto requestDto = createRequestDto(model, question);
     log.info("get requestDTO : {} ", requestDto);
     String requestJson = toStringFromDto(requestDto);
     RequestBody requestBody = RequestBody.create(requestJson, json);
-    Request request = createPostRequest(GptUri.URI_COMPLETIONS.getUri(), requestBody);
+    Request request = createPostRequest(userSession, GptUri.URI_COMPLETIONS.getUri(), requestBody);
     String answer = createResponse(request);
     ResponseDto responseDto = getResponse(answer);
     return getFirsAnswer(responseDto);

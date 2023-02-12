@@ -1,8 +1,10 @@
 package com.group.gptua.service;
 
+import com.group.gptua.model.GptToken;
+
 public interface GptTokenServiceInt {
 
-  String getToken();
+  GptToken getToken();
 
-  void giveBackToken(String token) throws Exception;
+  void giveBackToken(GptToken token) throws Exception;
 }
