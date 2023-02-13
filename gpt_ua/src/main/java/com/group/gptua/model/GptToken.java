@@ -9,7 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class GptToken {
 
-  private String token;
+  private String value;
   private GptAccount account;
 
 }

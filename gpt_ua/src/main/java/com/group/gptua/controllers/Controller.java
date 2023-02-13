@@ -7,6 +7,7 @@ import com.group.gptua.service.GptMessageServiceInt;
 import com.group.gptua.service.OpenAiService;
 import com.group.gptua.service.UserSessionServiceInt;
 import com.group.gptua.utils.Models;
+import com.group.gptua.utils.NoFreeTokenException;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -90,8 +91,12 @@ public class Controller {
   @GetMapping("/models")
   @Operation(summary = "getAllModels method", description = "this method return all models")
   public ResponseEntity<String> getAllModels() {
-    return ResponseEntity.ok(openAiClient.getAllModels(userSessionService
-        .getUserSession("ControllerGetAllModels")));
+    try {
+      return ResponseEntity.ok(openAiClient.getAllModels(userSessionService
+          .getUserSession("ControllerGetAllModels")));
+    } catch (NoFreeTokenException e) {
+      return ResponseEntity.ok(e.getMessage());
+    }
   }
 
   /**
@@ -105,8 +110,12 @@ public class Controller {
   @GetMapping("/models/{model}")
   @Operation(summary = "getModel method", description = "this method return available model")
   public ResponseEntity<String> getModel(@PathVariable String model) {
-    return ResponseEntity.ok(openAiClient.getModel(userSessionService
-        .getUserSession("ControllerGetModel"), model));
+    try {
+      return ResponseEntity.ok(openAiClient.getModel(userSessionService
+          .getUserSession("ControllerGetModel"), model));
+    } catch (NoFreeTokenException e) {
+      return ResponseEntity.ok(e.getMessage());
+    }
   }
 
   /**
@@ -134,9 +143,13 @@ public class Controller {
     if (bindingResult.hasErrors()) {
       return ResponseEntity.badRequest().body("BAD REQUEST! Please input valid ApiDto");
     }
-    return ResponseEntity.ok(openAiClient.getTextMessage(
-        userSessionService.getUserSession("ControllerGetAnswer"), apiDto.getModel(),
-        apiDto.getPrompt()));
+    try {
+      return ResponseEntity.ok(openAiClient.getTextMessage(
+          userSessionService.getUserSession("ControllerGetAnswer"), apiDto.getModel(),
+          apiDto.getPrompt()));
+    } catch (Exception e) {
+      return ResponseEntity.ok(e.getMessage());
+    }
   }
 
   private ResponseEntity<String> fallBackResponse(Exception e) {
