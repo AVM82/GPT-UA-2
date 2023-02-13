@@ -3,6 +3,7 @@ package com.group.gptua.service;
 import com.group.gptua.dto.DtoMessage;
 import com.group.gptua.model.UserRequestEntity;
 import com.group.gptua.utils.Models;
+import com.group.gptua.utils.NoFreeTokenException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -37,8 +38,17 @@ public class GptMessageService implements GptMessageServiceInt {
   public DtoMessage getAnswer(String userHash, DtoMessage dtoMessage) {
     String request = dtoMessage.getMessage();
     Models model = dtoMessage.getModel();
-    String response = openAiClient
-        .getTextMessage(userSessionService.getUserSession(userHash), model, request);
+    String response = null;
+    try {
+      response = openAiClient
+          .getTextMessage(userSessionService.getUserSession(userHash), model, request);
+    } catch (NoFreeTokenException e) {
+      log.info("no free token: {}", e.getMessage());
+      return new DtoMessage(e.getMessage(), model);
+    } catch (Exception e) {
+      log.warn("error on getAnswer(): {}", e.getMessage());
+      throw e;
+    }
     if (!userHash.isEmpty()) {
       saveRequest(model, userHash, request, response);
     }

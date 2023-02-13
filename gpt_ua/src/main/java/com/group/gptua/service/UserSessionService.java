@@ -1,8 +1,12 @@
 package com.group.gptua.service;
 
+import static java.time.LocalDateTime.now;
+
 import com.group.gptua.model.GptToken;
 import com.group.gptua.model.UserSession;
+import com.group.gptua.utils.NoFreeTokenException;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,17 +40,37 @@ public class UserSessionService implements UserSessionServiceInt {
    * @return A user session
    */
   @Override
-  public UserSession getUserSession(String userHash) {
+  public UserSession getUserSession(String userHash) throws NoFreeTokenException {
 
     UserSession userSession = userSessions.get(userHash);
     if (userSession == null) {
-      userSession = createSession(userHash);
+      try {
+        userSession = createSession(userHash);
+      } catch (NoFreeTokenException e) {
+        long timeForNextAttempt = getTimeForNextAttempt();
+        String message = String.format("Немає вільного місця, приходьте через %s хвилин %s секунд",
+            timeForNextAttempt / 60, timeForNextAttempt % 60);
+        log.info(message);
+        throw new NoFreeTokenException(message);
+      }
     } else {
-      userSession.setStartAt(LocalDateTime.now());
+      userSession.setStartAt(now());
       log.info("Update user session for user hash {} at {}", userHash, userSession.getStartAt());
     }
     return userSession;
 
+  }
+
+  /**
+   * Returns time for next attempt.
+   *
+   * @return A time in seconds for next attempt
+   */
+  private long getTimeForNextAttempt() {
+    LocalDateTime timeForNextAttempt = userSessions.values().stream()
+        .map(v -> v.getStartAt().plusSeconds(sessionTimeLimit))
+        .min(LocalDateTime::compareTo).orElse(now());
+    return ChronoUnit.SECONDS.between(now(), timeForNextAttempt);
   }
 
   /**
@@ -55,10 +79,10 @@ public class UserSessionService implements UserSessionServiceInt {
    * @param userHash A user hash
    * @return A new user session
    */
-  private UserSession createSession(String userHash) {
+  private UserSession createSession(String userHash) throws NoFreeTokenException {
 
     UserSession userSession = new UserSession(userHash, gptTokenService.getToken(),
-        LocalDateTime.now());
+        now());
     userSessions.put(userHash, userSession);
     log.info("Create new user session for user hash {} at {}", userHash, userSession.getStartAt());
     return userSession;
@@ -73,7 +97,7 @@ public class UserSessionService implements UserSessionServiceInt {
 
     List<Entry<String, UserSession>> entries = userSessions.entrySet().stream()
         .filter(entry -> entry.getValue().getStartAt().plusSeconds(sessionTimeLimit)
-            .isBefore(LocalDateTime.now()))
+            .isBefore(now()))
         .toList();
     entries.forEach(entry -> finishSession(entry.getKey(), entry.getValue().getToken()));
 
@@ -87,7 +111,7 @@ public class UserSessionService implements UserSessionServiceInt {
    */
   private void finishSession(String key, GptToken token) {
 
-    log.info("Finish user session with hash {}, finished {}", key, LocalDateTime.now());
+    log.info("Finish user session with hash {}, finished {}", key, now());
     userSessions.remove(key);
     try {
       gptTokenService.giveBackToken(token);
