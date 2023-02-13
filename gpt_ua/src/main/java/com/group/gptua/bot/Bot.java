@@ -1,7 +1,5 @@
 package com.group.gptua.bot;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.group.gptua.dto.DtoMessage;
 import com.group.gptua.service.GptMessageServiceInt;
 import com.group.gptua.utils.Models;
@@ -10,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
+import org.glassfish.jersey.internal.guava.Cache;
+import org.glassfish.jersey.internal.guava.CacheBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,8 +32,7 @@ public class Bot extends TelegramLongPollingBot {
   private static final String START_MESS = "Hello! Select model GPT-chat, and ask your questions!";
   private static final String WRONG_COMMAND = "<b><i>Command is wrong, try again!</i></b>";
 
-  @Value("${telegram.cache.capacity}")
-  private int cacheCapacity;
+
   @Value("${telegram.cache.minutes_after_access}")
   private int cacheMinutesAfterAccess;
   @Value("${telegram.cache.max_size}")
@@ -41,7 +40,6 @@ public class Bot extends TelegramLongPollingBot {
 
   private final Cache<String, Models> cache = CacheBuilder
       .newBuilder()
-      .initialCapacity(cacheCapacity)
       .expireAfterAccess(cacheMinutesAfterAccess, TimeUnit.MINUTES)
       .maximumSize(cacheMaxSize)
       .build();
@@ -67,6 +65,7 @@ public class Bot extends TelegramLongPollingBot {
       String text = update.getMessage().getText();
       String chatId = update.getMessage().getChatId().toString();
       if (cache.getIfPresent(chatId) == null) {
+        log.info("New user of telegram-bot");
         cache.put(chatId, Models.values()[0]);
       }
       log.info("Bot: {}: {}", update.getMessage().getChatId(), update.getMessage().getText());
