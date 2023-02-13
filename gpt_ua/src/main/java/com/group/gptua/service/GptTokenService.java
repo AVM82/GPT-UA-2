@@ -1,7 +1,10 @@
 package com.group.gptua.service;
 
+import static java.time.LocalDateTime.now;
+
 import com.group.gptua.model.GptAccount;
 import com.group.gptua.model.GptToken;
+import com.group.gptua.utils.NoFreeTokenException;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -18,7 +21,6 @@ public class GptTokenService implements GptTokenServiceInt {
 
   private final Set<GptToken> currentTokens = new LinkedHashSet<>();
   private final Queue<GptToken> poolTokens = new ArrayDeque<>();
-  private final GptToken defaultToken;
 
   /**
    * Constructor for initialisation variables.
@@ -30,7 +32,6 @@ public class GptTokenService implements GptTokenServiceInt {
     currentTokens.addAll(Arrays.stream(apiKey.split(" "))
         .map(token -> new GptToken(token, new GptAccount(""))).toList());
     poolTokens.addAll(currentTokens);
-    defaultToken = poolTokens.poll();
   }
 
   /**
@@ -38,12 +39,13 @@ public class GptTokenService implements GptTokenServiceInt {
    *
    * @return token
    */
-  public GptToken getToken() {
+  public GptToken getToken() throws NoFreeTokenException {
     if (poolTokens.isEmpty()) {
-      log.info("default token");
-      return defaultToken;
+      String message = "No free token";
+      log.info("{}", message);
+      throw new NoFreeTokenException(message);
     }
-    log.info("token from poolTokens");
+    log.info("given token from poolTokens: {}", now());
     return poolTokens.poll();
   }
 
@@ -54,15 +56,12 @@ public class GptTokenService implements GptTokenServiceInt {
    */
   public void giveBackToken(GptToken token) throws Exception {
     if (currentTokens.contains(token)) {
-      if (token != defaultToken) {
-        log.info("give back token to poolTokens");
-        poolTokens.add(token);
-      } else {
-        log.info("give back default token");
-      }
+      log.info("give back token to poolTokens: {}", now());
+      poolTokens.add(token);
     } else {
-      log.warn("This token is not present");
-      throw new Exception("This token is not present");
+      String message = "This token is not present in currentTokens";
+      log.warn(message);
+      throw new Exception(message);
     }
   }
 
