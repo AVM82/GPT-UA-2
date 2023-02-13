@@ -8,7 +8,7 @@ import {HttpClient} from "@angular/common/http";
 })
 
 export class HistoryComponent implements OnInit {
-  filteredModel: string = "BABBAGE";
+  filteredModel:  string ="";
   data: any;
   searchedText = '';
   models = []
@@ -21,6 +21,8 @@ export class HistoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.http.get(this.url)
+    .subscribe({next: (data: any) => this.requests = data})
     this.http.get('bot/basic_models').subscribe({next: (model: any) => this.models = model})
   }
 
@@ -30,7 +32,7 @@ export class HistoryComponent implements OnInit {
     console.log("Chosen {}", this.searchedText)
     console.log("Chosen {}", localStorage.getItem('user-hash'))
     this.http.get(this.url +
-      "?userHash=" +
+      "?userHash=" +localStorage.getItem('user-hash')+
       "&model=" + this.filteredModel +
       "&text=" + this.searchedText + "&date=" + this.data)
     .subscribe({next: (data: any) => this.requests = data})
