@@ -49,7 +49,7 @@ public class UserSessionService implements UserSessionServiceInt {
       } catch (NoFreeTokenException e) {
         long timeForNextAttempt = getTimeForNextAttempt();
         String message = String.format("Немає вільного місця, приходьте через %s хвилин %s секунд",
-            timeForNextAttempt/60, timeForNextAttempt%60);
+            timeForNextAttempt / 60, timeForNextAttempt % 60);
         log.info(message);
         throw new NoFreeTokenException(message);
       }
