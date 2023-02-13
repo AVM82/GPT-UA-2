@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {formatDate} from "@angular/common";
 
 @Component({
   selector: 'app-history',
@@ -9,23 +8,31 @@ import {formatDate} from "@angular/common";
 })
 
 export class HistoryComponent implements OnInit {
-
-  data:any;
+  filteredModel: string = "BABBAGE";
+  data: any;
+  searchedText = '';
+  models = []
   requests = [
     {userHash: '', model: '', request: '', response: '', createdAt: ''}
   ]
+  url: string = "archive/filter";
 
   constructor(private http: HttpClient) {
   }
 
   ngOnInit(): void {
-   // this.http.get('archive/')
-    this.http.get('archive/filter')
-    .subscribe({next:(data:any) => this.requests=data});
+    this.http.get('bot/basic_models').subscribe({next: (model: any) => this.models = model})
   }
 
-
-  getFilter():void{
-    console.log("Changed {}",this.data);
+  getFilter(): void {
+    console.log("Changed {}", this.data);
+    console.log("Changed {}", this.filteredModel)
+    console.log("Chosen {}", this.searchedText)
+    console.log("Chosen {}", localStorage.getItem('user-hash'))
+    this.http.get(this.url +
+      "?userHash=" +
+      "&model=" + this.filteredModel +
+      "&text=" + this.searchedText + "&date=" + this.data)
+    .subscribe({next: (data: any) => this.requests = data})
   }
 }

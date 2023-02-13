@@ -1,9 +1,14 @@
 <div>
-  <label for="start">Start date:</label>
-  <input type="date" id="start" [(ngModel)]="data" >
-  <button class="btn btn-primary" name="filter" (click)="getFilter()">Filter</button>
+  <input style="border: none; background: #ffe87c" type="date" id="start" [(ngModel)]="data" >
+  <select style="border: none; background: #3cb371" [(ngModel)]="filteredModel">
+    <option [ngValue]="null" disabled>Select model</option>
+    <option *ngFor="let model of models" [ngValue]="model" >{{model}}</option>
+  </select>
+  <input style="border: none; background: #ffe87c" type="text" [(ngModel)]="searchedText">
+  <button style="border: none; background: #3cb371" name="filter" (click)="getFilter()">Filter</button>
 </div>
-<div style="height: 100%; overflow: scroll">
+
+<div style="height: 400px; overflow: scroll">
   <table class="table table-hover table-striped table-bordered border-primary">
     <thead bgcolor="#3cb371">
     <th>model</th>
