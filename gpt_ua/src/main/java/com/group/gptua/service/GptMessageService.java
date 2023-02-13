@@ -42,6 +42,7 @@ public class GptMessageService implements GptMessageServiceInt {
       response = openAiClient
           .getTextMessage(userSessionService.getUserSession(userHash), model, request);
     } catch (Exception e) {
+      log.warn("Return error on getAnswer(): {}",e.getMessage());
       return new DtoMessage(e.getMessage(), model);
     }
     if (!userHash.isEmpty()) {

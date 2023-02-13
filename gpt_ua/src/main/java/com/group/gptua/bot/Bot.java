@@ -1,12 +1,14 @@
 package com.group.gptua.bot;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.group.gptua.dto.DtoMessage;
 import com.group.gptua.service.GptMessageServiceInt;
 import com.group.gptua.utils.Models;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.WeakHashMap;
+import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,9 +32,20 @@ public class Bot extends TelegramLongPollingBot {
   private static final String START_MESS = "Hello! Select model GPT-chat, and ask your questions!";
   private static final String WRONG_COMMAND = "<b><i>Command is wrong, try again!</i></b>";
 
-  private final WeakHashMap<String,  Models> modelsCash = new WeakHashMap<>();
+  @Value("${telegram.cache.capacity}")
+  private int cacheCapacity;
+  @Value("${telegram.cache.minutes_after_access}")
+  private int cacheMinutesAfterAccess;
+  @Value("${telegram.cache.max_size}")
+  private int cacheMaxSize;
 
-  public static String chatIDLast;
+  private final Cache<String, Models> cache = CacheBuilder
+      .newBuilder()
+      .initialCapacity(cacheCapacity)
+      .expireAfterAccess(cacheMinutesAfterAccess, TimeUnit.MINUTES)
+      .maximumSize(cacheMaxSize)
+      .build();
+
   @Value("${bot.token}")
   private String botToken;
   @Value("${bot.name}")
@@ -53,7 +66,9 @@ public class Bot extends TelegramLongPollingBot {
     if (update.hasMessage()) {
       String text = update.getMessage().getText();
       String chatId = update.getMessage().getChatId().toString();
-      modelsCash.computeIfAbsent(chatId, k -> Models.values()[0]);
+      if (cache.getIfPresent(chatId) == null) {
+        cache.put(chatId, Models.values()[0]);
+      }
       log.info("Bot: {}: {}", update.getMessage().getChatId(), update.getMessage().getText());
       if (text.startsWith("/")) {
         if (text.equals("/start")) {
@@ -64,12 +79,11 @@ public class Bot extends TelegramLongPollingBot {
       } else {
         userResponse(chatId,text);
       }
-      chatIDLast = update.getMessage().getChatId().toString();
     }
   }
 
   private void userResponse(String chatId, String text) {
-    Models model = modelsCash.get(chatId);
+    Models model = cache.getIfPresent(chatId);
     sendTextMessage(chatId,
         gptMessageService.getAnswer(chatId, new DtoMessage(text,model)).getMessage() + "\n<i>"
         + "used model: " + model + "</i>");
@@ -84,7 +98,7 @@ public class Bot extends TelegramLongPollingBot {
   private void changeModelOrWrongCommand(String chatId, String text) {
     try {
       log.info("Selected \'{}\' chat-model.", Models.valueOf(text.substring(1)).getModelName());
-      modelsCash.put(chatId, Models.valueOf(text.substring(1)));
+      cache.put(chatId, Models.valueOf(text.substring(1)));
     } catch (IllegalArgumentException e) {
       sendTextMessage(chatId, WRONG_COMMAND);
     }
