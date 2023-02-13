@@ -1,20 +1,31 @@
-<div>
-  <table class="table table-hover table-striped table-bordered border-primary">
-    <thead bgcolor="#3cb371">
-      <!--      <th>userHash</th>-->
+<div style="padding: 10px">
+  <div>
+   Date: <input class="marg" type="date" id="start" [(ngModel)]="data">
+   Model: <select class="marg" style="border: none; background: #3cb371" [(ngModel)]="filteredModel">
+      <option [ngValue]="null" disabled>Select model</option>
+      <option *ngFor="let model of models" [ngValue]="model">{{model}}</option>
+    </select>
+   Find: <input class="marg" type="text" [(ngModel)]="searchedText">
+    <button style="border: none; background: #3cb371" name="filter" (click)="getFilter()">Filter
+    </button>
+  </div>
+
+  <div>
+    <table class="table table-hover table-striped table-bordered border-primary">
+      <thead bgcolor="#3cb371">
       <th>model</th>
       <th>request</th>
       <th>response</th>
       <th>createdAt</th>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
       <tr bgcolor="#ffe87c" *ngFor="let request of requests">
-        <!--      <td> {{request.userHash}}</td>-->
         <td> {{request.model}}</td>
         <td> {{request.request}}</td>
         <td> {{request.response}}</td>
         <td> {{request.createdAt|date}}</td>
       </tr>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </div>

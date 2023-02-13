@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @Setter
@@ -17,5 +18,6 @@ public class FilterParamDto {
   String userHash;
   Models model;
   String text;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   LocalDate date;
 }
