@@ -32,7 +32,7 @@ export class HistoryComponent implements OnInit {
 
   sendRequest(): void {
     this.http.get("archive/filter" + encodeURIComponent(JSON.stringify
-    (new DtoFiltered(this.filteredModel,this.filteredModel,this.data,localStorage.getItem('user-hash')))))
+    (new DtoFiltered(this.filteredModel,this.filteredModel,"14.02.2023",localStorage.getItem('user-hash')))))
       .subscribe({next:(data:any) => this.requests=data})
   }
 
