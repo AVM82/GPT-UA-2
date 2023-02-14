@@ -9,6 +9,7 @@ import com.group.gptua.service.UserSessionServiceInt;
 import com.group.gptua.utils.ControllerUtils;
 import com.group.gptua.utils.Models;
 import com.group.gptua.utils.NoFreeTokenException;
+import com.group.gptua.utils.Translater;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,6 +42,8 @@ public class Controller {
   @Autowired
   Bot bot;
 
+  @Autowired
+  Translater translater;
   @Qualifier("gptMessageService")
   @Autowired
   GptMessageServiceInt gptMessageService;
@@ -81,12 +84,7 @@ public class Controller {
   @Operation(summary = "Translate-method", description = "this method for translation")
   public ResponseEntity<?> translateMessage(@RequestBody DtoMessage message,
       HttpServletRequest request) {
-    String addMessageForTranslate = "Переклади англійскою: \""
-        + message.getMessage() + "\"";
-    message.setMessage(addMessageForTranslate);
-    message.setModel(Models.CURIE);
-    log.info("Message for translate {}",message);
-    return getMessage(message,request);
+    return getMessage(translater.translateToEnglish(message),request);
   }
 
   /**

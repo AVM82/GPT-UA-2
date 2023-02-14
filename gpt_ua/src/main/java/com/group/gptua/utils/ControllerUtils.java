@@ -1,5 +1,6 @@
 package com.group.gptua.utils;
 
+import com.group.gptua.dto.DtoMessage;
 import java.time.LocalTime;
 import java.util.Base64;
 import javax.servlet.http.HttpServletRequest;
