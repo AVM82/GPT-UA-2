@@ -1,17 +1,30 @@
 <div style="background-color: #56B8DE">
-  <div style="text-align: center">
-    <h2 style="text-align: center">Enter you question!</h2>
-    <textarea name="text" style="width: 80%;" rows="5" [(ngModel)]="inMess"></textarea>
-    <br/>
+    <div class="container">
+      <div class="row">
+        <div class="col align">
+          <b>Питання Українською!</b>
+          <textarea name="text-ukr"  rows="7" [(ngModel)]="inMessUkr"></textarea>
+        </div>
+        <div class="col-md-auto mx-auto my-auto">
+          <button class="btn btn-success" style="width: auto"  name="translate" (click)="translate()">>></button>
+        </div>
+        <div class="col align">
+          <b>Question for GPT!</b>
+          <textarea name="text"  rows="7" [(ngModel)]="inMess"></textarea>
+        </div>
+      </div>
+    </div>
+
+  <div class="align">
     <label>Select model:</label>
     <select name="models" style="margin-right: 10%" [(ngModel)]="modelSelect">
       <option *ngFor="let model of models" [value]="model">{{model}}</option>
     </select>
-
     <button class="btn btn-primary" name="send" (click)="send()">Send</button>
   </div>
+
   <div class="text-center mt-auto text-lg-start">
-    <pre style="background-color: #b5d592; word-wrap: normal; text-align: center"
-         name="response">{{response}}</pre>
+    <pre  name="response">{{response}}</pre>
   </div>
+
 </div>
