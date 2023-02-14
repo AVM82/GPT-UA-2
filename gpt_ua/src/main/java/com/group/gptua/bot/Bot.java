@@ -16,8 +16,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -31,6 +34,9 @@ public class Bot extends TelegramLongPollingBot {
   GptMessageServiceInt gptMessageService;
   private static final String START_MESS = "Hello! Select model GPT-chat, and ask your questions!";
   private static final String WRONG_COMMAND = "<b><i>Command is wrong, try again!</i></b>";
+  public static final String REPLY_BUTTON = "REPLY_BUTTON_";
+  public static final String NO_FREE_TOKEN_MESSAGE = "Немає вільного місця";
+  public static final String SEND_MESSAGE_ERROR = "Send Message error";
 
 
   @Value("${telegram.cache.minutes_after_access}")
@@ -78,14 +84,26 @@ public class Bot extends TelegramLongPollingBot {
       } else {
         userResponse(chatId,text);
       }
+    } else if (update.hasCallbackQuery()) {
+      onClickButton(update);
     }
   }
 
   private void userResponse(String chatId, String text) {
     Models model = cache.getIfPresent(chatId);
-    sendTextMessage(chatId,
-        gptMessageService.getAnswer(chatId, new DtoMessage(text,model)).getMessage() + "\n<i>"
-        + "used model: " + model + "</i>");
+    String message = getAnswer(chatId, text, model);
+    if (message.contains(NO_FREE_TOKEN_MESSAGE)) {
+      sendTextMessageReplyButton(chatId,
+          message, text, model);
+    } else {
+      sendTextMessage(chatId,
+          message + "\n<i>"
+              + "used model: " + model + "</i>");
+    }
+  }
+
+  private String getAnswer(String chatId, String text, Models model) {
+    return gptMessageService.getAnswer(chatId, new DtoMessage(text, model)).getMessage();
   }
 
   private void startCommand(String chatId) {
@@ -110,17 +128,86 @@ public class Bot extends TelegramLongPollingBot {
    * @param mess   the message
    */
   public void sendTextMessage(String chatId, String mess) {
+    SendMessage sendMessage = getSendMessage(chatId,
+        mess);
+    try {
+      execute(sendMessage);
+    } catch (TelegramApiException e) {
+      log.error(SEND_MESSAGE_ERROR, e);
+    }
+  }
+
+  private SendMessage getSendMessage(String chatId, String mess) {
     SendMessage sendMessage = new SendMessage();
     sendMessage.setChatId(chatId);
     sendMessage.enableHtml(true);
     sendMessage.setText(mess);
+    return sendMessage;
+  }
+
+  private EditMessageText getEditMessageText(long chatId, String mess) {
+    EditMessageText sendMessage = new EditMessageText();
+    sendMessage.setChatId(chatId);
+    sendMessage.enableHtml(true);
+    sendMessage.setText(mess);
+    return sendMessage;
+  }
+
+  /**
+   * Sends text message with reply button.
+   */
+  public void sendTextMessageReplyButton(String chatId, String mess, String request, Models model) {
+    SendMessage sendMessage = getSendMessage(chatId,
+        mess);
+
+    InlineKeyboardButton replyButton = new InlineKeyboardButton();
+    replyButton.setText("повторити питання");
+    replyButton.setCallbackData(REPLY_BUTTON + model.name() + "_" + request);
+    InlineKeyboardMarkup inlineKeyboardMarkup =
+        new InlineKeyboardMarkup(List.of(List.of(replyButton)));
+    sendMessage.setReplyMarkup(inlineKeyboardMarkup);
     try {
       execute(sendMessage);
     } catch (TelegramApiException e) {
-      log.error("Send Message error", e);
+      log.error(SEND_MESSAGE_ERROR, e);
     }
   }
 
+  /**
+   * Event on click button.
+   */
+  private void onClickButton(Update update) {
+    String callbackData = update.getCallbackQuery().getData();
+    long messageId = update.getCallbackQuery().getMessage().getMessageId();
+    long chatId = update.getCallbackQuery().getMessage().getChatId();
+
+    if (callbackData.startsWith(REPLY_BUTTON)) {
+      onClickReplyButton(callbackData, (int) messageId, chatId);
+    }
+  }
+
+  /**
+   * Event on click reply button.
+   */
+  private void onClickReplyButton(String callbackData, int messageId, long chatId) {
+    String text = callbackData.replaceFirst(REPLY_BUTTON, "");
+    Models model = Models.valueOf(text.substring(0, callbackData.indexOf("_")));
+    text = text.replaceFirst(model.name() + "_", "");
+    String message =
+        getAnswer(String.valueOf(chatId), text, model);
+    if (!message.contains(NO_FREE_TOKEN_MESSAGE)) {
+      String mess = message + "\n<i>"
+          + "used model: " + model + "</i>";
+      EditMessageText sendMessage = getEditMessageText(
+          chatId, mess);
+      sendMessage.setMessageId(messageId);
+      try {
+        execute(sendMessage);
+      } catch (TelegramApiException e) {
+        log.error(SEND_MESSAGE_ERROR, e);
+      }
+    }
+  }
 
   private synchronized void setButtons(String chatId, String [] names, String text) {
     SendMessage sendMessage = new SendMessage();
