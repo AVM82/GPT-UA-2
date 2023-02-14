@@ -6,7 +6,7 @@
       <option *ngFor="let model of models" [ngValue]="model">{{model}}</option>
     </select>
    Find: <input class="marg" type="text" [(ngModel)]="searchedText">
-    <button style="border: none; background: #3cb371" name="filter" (click)="getFilter()">Filter
+    <button class="btn btn-success my-auto" name="filter" (click)="getFilter()">Filter
     </button>
   </div>
 

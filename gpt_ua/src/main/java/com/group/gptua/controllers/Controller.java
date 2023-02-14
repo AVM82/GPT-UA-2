@@ -6,15 +6,15 @@ import com.group.gptua.dto.DtoMessage;
 import com.group.gptua.service.GptMessageServiceInt;
 import com.group.gptua.service.OpenAiService;
 import com.group.gptua.service.UserSessionServiceInt;
+import com.group.gptua.utils.ControllerUtils;
 import com.group.gptua.utils.Models;
 import com.group.gptua.utils.NoFreeTokenException;
+import com.group.gptua.utils.Translater;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.time.LocalTime;
-import java.util.Base64;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +42,8 @@ public class Controller {
   @Autowired
   Bot bot;
 
+  @Autowired
+  Translater translater;
   @Qualifier("gptMessageService")
   @Autowired
   GptMessageServiceInt gptMessageService;
@@ -61,24 +63,28 @@ public class Controller {
    * @return string
    */
   @PostMapping
-  @Operation(summary = "getEcho-method", description = "this method tests controller")
+  @Operation(summary = "Message-method", description = "this method for messaging")
   public ResponseEntity<?> getMessage(@RequestBody DtoMessage message,
       HttpServletRequest request) {
     log.info("Message: {} ", message);
-    String userHash = request.getHeader("user-hash");
-    log.info("UserHash getting: {} ", userHash);
-    if (userHash == null || userHash.isEmpty()) {
-      userHash = Base64.getEncoder().encodeToString(
-          (LocalTime.now().getNano() + "{|}" + request.getHeader("referer")
-              + "{|}" + request.getHeader("user-agent"))
-              .replaceAll(" ", "").getBytes());
-    }
-    log.info("UserHash for response: {} ", userHash);
+    String userHash = ControllerUtils.getHash(request);
     return ResponseEntity.status(HttpStatus.OK)
         .header("user-hash",userHash)
         .body(gptMessageService.getAnswer(userHash,
             new DtoMessage(message.getMessage(), message.getModel())));
 
+  }
+
+  /**
+   * The method for Post mapping for translate messages.
+   * @param message the message
+   * @return string
+   */
+  @PostMapping("/translate")
+  @Operation(summary = "Translate-method", description = "this method for translation")
+  public ResponseEntity<?> translateMessage(@RequestBody DtoMessage message,
+      HttpServletRequest request) {
+    return getMessage(translater.translateToEnglish(message),request);
   }
 
   /**

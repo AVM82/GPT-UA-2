@@ -7,10 +7,11 @@ import {MessService} from "../../services/mess.service";
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
-  inMess = 'I\'d ....';
+  inMess :string = '';
   response: string = "Field for response";
   models: string[] = [];
   modelSelect:string = "DAVINCI";
+  inMessUkr: string = 'Що таке ';
 
   constructor(private messageServices: MessService) {
   }
@@ -22,7 +23,7 @@ export class ChatComponent implements OnInit {
     this.messageServices.getMessageResponse(this.inMess, this.modelSelect).subscribe(
       resp => {
         this.response = resp.body.message;
-        console.log(resp.headers.get('user-hash'))
+        console.log(resp.headers.get('user-hash'));
         localStorage.setItem('user-hash', resp.headers.get('user-hash'));
       });
   }
@@ -35,5 +36,13 @@ export class ChatComponent implements OnInit {
   }
 
   checkModel(): void{
+  }
+
+  translate():void {
+    this.messageServices.translateUkr(this.inMessUkr).subscribe(response => {
+      this.inMess=response.body.message.replaceAll('\n', '');
+      console.log('Get response!');
+      localStorage.setItem('user-hash', response.headers.get('user-hash'));
+    })
   }
 }
