@@ -55,13 +55,13 @@ public class RequestController {
         || filter.getText().equals("")
         || request.getRequest().contains(filter.getText());
     boolean date = (filter.getDateFrom() == null && filter.getDateTo() == null)
-        || (filter.getDateFrom() != null &&
-        request.getCreatedAt().toLocalDate().isEqual(filter.getDateFrom()))
-        || (filter.getDateTo() != null &&
-            request.getCreatedAt().toLocalDate().isEqual(filter.getDateTo()))
-        || (filter.getDateFrom() != null && filter.getDateTo() != null)&&
-        (request.getCreatedAt().toLocalDate().isAfter(filter.getDateFrom())&&
-        request.getCreatedAt().toLocalDate().isBefore(filter.getDateTo()));
+        || (filter.getDateFrom() != null
+        && request.getCreatedAt().toLocalDate().isEqual(filter.getDateFrom()))
+        || (filter.getDateTo() != null
+        && request.getCreatedAt().toLocalDate().isEqual(filter.getDateTo()))
+        || (filter.getDateFrom() != null && filter.getDateTo() != null)
+        && (request.getCreatedAt().toLocalDate().isAfter(filter.getDateFrom())
+        && request.getCreatedAt().toLocalDate().isBefore(filter.getDateTo()));
     return user && model && text && date;
   }
 
