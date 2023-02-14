@@ -1,12 +1,19 @@
 <div style="padding: 10px">
   <div>
-   Date: <input class="marg" type="date" id="start" [(ngModel)]="data">
-   Model: <select class="marg" style="border: none; background: #3cb371" [(ngModel)]="filteredModel">
-      <option [ngValue]="null" disabled>Select model</option>
-      <option *ngFor="let model of models" [ngValue]="model">{{model}}</option>
-    </select>
-   Find: <input class="marg" type="text" [(ngModel)]="searchedText">
-    <button style="border: none; background: #3cb371" name="filter" (click)="getFilter()">Filter
+    Date from: <input class="marg" type="date" max="{{data2}}" [(ngModel)]="data">
+    Date to: <input class="marg" type="date"  min="{{data}}" [(ngModel)]="data2">
+
+    Model: <select class="marg" [(ngModel)]="filteredModel">
+    <option [ngValue]="null" disabled>Select model</option>
+    <option *ngFor="let model of models" [ngValue]="model">{{model}}</option>
+  </select>
+
+    Find: <input class="marg" type="text" [(ngModel)]="searchedText">
+
+    Only my requests: <input class="marg" type=checkbox [(ngModel)]="checker">
+
+    <button style="border: none; background: #3cb371" name="filter"
+            (click)="getFilter()">Filter
     </button>
   </div>
 
