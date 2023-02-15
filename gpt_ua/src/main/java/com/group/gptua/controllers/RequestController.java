@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Tag(name = "Request controller", description = "This controller manages the archive of the GPT chat...")
+@Tag(name = "Request controller",
+    description = "This controller manages the archive of the GPT chat...")
 @RequestMapping("/archive")
 @Slf4j
 public class RequestController {
