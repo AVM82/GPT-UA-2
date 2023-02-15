@@ -8,6 +8,7 @@ import {HttpClient} from "@angular/common/http";
 })
 
 export class HistoryComponent implements OnInit {
+// fields of html file
   filteredModel: string = "";
   data: string = "";
   data2: string = "";
@@ -21,7 +22,7 @@ export class HistoryComponent implements OnInit {
 
   constructor(private http: HttpClient) {
   }
-
+// adds models and show all requests by default
   ngOnInit(): void {
     this.http.get(this.url)
     .subscribe({next: (data: any) => this.requests = data})
@@ -29,6 +30,7 @@ export class HistoryComponent implements OnInit {
   }
 
   getFilter(): void {
+    // print filter parameters
     console.log("date from", this.data);
     console.log("date to", this.data2);
     console.log("model", this.filteredModel)
@@ -36,6 +38,7 @@ export class HistoryComponent implements OnInit {
     console.log("checker", this.checker);
     console.log("hash", localStorage.getItem('user-hash'))
 
+// users requests
     if (this.checker) {
       this.http.get(this.url +
         "?userHash=" + localStorage.getItem('user-hash') +
@@ -44,6 +47,7 @@ export class HistoryComponent implements OnInit {
         "&dateFrom=" + this.data +
         "&dateTo=" + this.data2)
       .subscribe({next: (data: any) => this.requests = data})
+// all requests
     } else
       this.http.get(this.url +
         "?userHash=" +
