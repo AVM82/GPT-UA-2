@@ -3,7 +3,6 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {DtoMess} from "../../dto/dto.mess";
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -14,9 +13,7 @@ export class MessService {
 
   private defaultApi: string = "bot"
 
-
   constructor(private http:HttpClient) { }
-
 
   getMessageResponse(mess:string,model:string):Observable<any>{
     let messBody = new DtoMess(mess,model);

@@ -8,33 +8,50 @@ import {HttpClient} from "@angular/common/http";
 })
 
 export class HistoryComponent implements OnInit {
-  filteredModel:  string ="";
-  data: any;
-  searchedText = '';
+// fields of html file
+  filteredModel: string = "";
+  data: string = "";
+  data2: string = "";
+  searchedText: string = "";
   models = []
   requests = [
     {userHash: '', model: '', request: '', response: '', createdAt: ''}
   ]
-  url: string = "archive/filter";
-
+  url: string = "archive/filter"
+  checker: boolean = false;
   constructor(private http: HttpClient) {
   }
-
+// adds models and show all requests by default
   ngOnInit(): void {
     this.http.get(this.url)
     .subscribe({next: (data: any) => this.requests = data})
     this.http.get('bot/basic_models').subscribe({next: (model: any) => this.models = model})
   }
-
   getFilter(): void {
-    console.log("Changed {}", this.data);
-    console.log("Changed {}", this.filteredModel)
-    console.log("Chosen {}", this.searchedText)
-    console.log("Chosen {}", localStorage.getItem('user-hash'))
-    this.http.get(this.url +
-      "?userHash=" +localStorage.getItem('user-hash')+
-      "&model=" + this.filteredModel +
-      "&text=" + this.searchedText + "&date=" + this.data)
-    .subscribe({next: (data: any) => this.requests = data})
+    // print filter parameters
+    console.log("date from", this.data);
+    console.log("date to", this.data2);
+    console.log("model", this.filteredModel)
+    console.log("text", this.searchedText)
+    console.log("checker", this.checker);
+    console.log("hash", localStorage.getItem('user-hash'))
+// users requests
+    if (this.checker) {
+      this.http.get(this.url +
+        "?userHash=" + localStorage.getItem('user-hash') +
+        "&model=" + this.filteredModel +
+        "&text=" + this.searchedText +
+        "&dateFrom=" + this.data +
+        "&dateTo=" + this.data2)
+      .subscribe({next: (data: any) => this.requests = data})
+// all requests
+    } else
+      this.http.get(this.url +
+        "?userHash=" +
+        "&model=" + this.filteredModel +
+        "&text=" + this.searchedText +
+        "&dateFrom=" + this.data +
+        "&dateTo=" + this.data2)
+      .subscribe({next: (data: any) => this.requests = data})
   }
 }

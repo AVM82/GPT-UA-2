@@ -1,18 +1,25 @@
 <div style="padding: 10px">
-  <div>
-   Date: <input class="marg" type="date" id="start" [(ngModel)]="data">
-   Model: <select class="marg" style="border: none; background: #3cb371" [(ngModel)]="filteredModel">
-      <option [ngValue]="null" disabled>Select model</option>
-      <option *ngFor="let model of models" [ngValue]="model">{{model}}</option>
-    </select>
-   Find: <input class="marg" type="text" [(ngModel)]="searchedText">
-    <button class="btn btn-success my-auto" name="filter" (click)="getFilter()">Filter
+  <div style="padding: 10px">
+    Date from: <input class="marg" type="date" max="{{data2}}" [(ngModel)]="data">
+    Date to: <input class="marg" type="date" min="{{data}}" [(ngModel)]="data2">
+
+    Model: <select class="marg" [(ngModel)]="filteredModel">
+    <option [ngValue]="null" disabled>Select model</option>
+    <option *ngFor="let model of models" [ngValue]="model">{{model}}</option>
+  </select>
+
+    Find: <input class="marg" type="text" [(ngModel)]="searchedText">
+
+    Only my requests: <input class="marg" type=checkbox [(ngModel)]="checker">
+
+    <button class="btn btn-success" name="filter"
+            (click)="getFilter()">Filter
     </button>
   </div>
 
   <div>
-    <table class="table table-hover table-striped table-bordered border-primary">
-      <thead bgcolor="#3cb371">
+    <table class="table table-hover table-striped table-bordered border-success">
+      <thead bgcolor="#BDD041">
       <th>model</th>
       <th>request</th>
       <th>response</th>

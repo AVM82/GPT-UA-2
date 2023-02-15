@@ -19,5 +19,7 @@ public class FilterParamDto {
   Models model;
   String text;
   @DateTimeFormat(pattern = "yyyy-MM-dd")
-  LocalDate date;
+  LocalDate dateFrom;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  LocalDate dateTo;
 }
