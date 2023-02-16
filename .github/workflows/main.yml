@@ -24,7 +24,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
           name: artifact
-          path: gpt_ua/target/gpt_ua-*.jar
+          path: gpt_ua/target/gpt_ua-0.0.1.jar
 
   deploy:
     needs: build
@@ -46,6 +46,6 @@ jobs:
           environment_name: Gptua-env
           version_label: ${{ github.sha }}-test
           region: eu-central-1
-          deployment_package: gpt_ua-*.jar
+          deployment_package: gpt_ua-0.0.1.jar
         
         
