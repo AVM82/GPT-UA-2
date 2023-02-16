@@ -16,6 +16,7 @@ public class GptMessageService implements GptMessageServiceInt {
 
   private final UserRequestService userRequestService;
   private final UserSessionServiceInt userSessionService;
+  public static final String EXCEPTION_MESSAGE = "Спробуйте пізніше, або виберіть іншу модель";
 
   /**
    * Constructor.
@@ -38,7 +39,7 @@ public class GptMessageService implements GptMessageServiceInt {
   public DtoMessage getAnswer(String userHash, DtoMessage dtoMessage) {
     String request = dtoMessage.getMessage();
     Models model = dtoMessage.getModel();
-    String response = null;
+    String response;
     try {
       response = openAiClient
           .getTextMessage(userSessionService.getUserSession(userHash), model, request);
@@ -46,8 +47,8 @@ public class GptMessageService implements GptMessageServiceInt {
       log.info("no free token: {}", e.getMessage());
       return new DtoMessage(e.getMessage(), model);
     } catch (Exception e) {
-      log.warn("error on getAnswer(): {}", e.getMessage());
-      throw e;
+      log.warn("exception on getAnswer(): {} {}", e.getMessage(), e.getStackTrace());
+      return new DtoMessage(EXCEPTION_MESSAGE, model);
     }
     if (!userHash.isEmpty()) {
       saveRequest(model, userHash, request, response);
