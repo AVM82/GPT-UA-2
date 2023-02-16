@@ -13,7 +13,6 @@ import {RouterModule, Routes} from "@angular/router";
 
 const appRoutes: Routes = [
   {path: '', component: ChatComponent},
-  {path: 'chat', component: ChatComponent},
   {path: 'history', component: HistoryComponent}
 
 ]
