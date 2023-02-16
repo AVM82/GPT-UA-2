@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
@@ -29,6 +30,9 @@ public class Bot extends TelegramLongPollingBot {
   @Qualifier("gptMessageService")
   @Autowired
   GptMessageServiceInt gptMessageService;
+  @Qualifier("botButtonHandler")
+  @Autowired
+  BotButtonHandlerInt botButtonHandler;
   private static final String START_MESS = "Hello! Select model GPT-chat, and ask your questions!";
   private static final String WRONG_COMMAND = "<b><i>Command is wrong, try again!</i></b>";
 
@@ -78,13 +82,33 @@ public class Bot extends TelegramLongPollingBot {
       } else {
         userResponse(chatId,text);
       }
+    } else if (update.hasCallbackQuery()) {
+      EditMessageText sendMessage = botButtonHandler.checkButtonClick(update);
+      if (sendMessage != null) {
+        try {
+          execute(sendMessage);
+        } catch (TelegramApiException e) {
+          log.error("Send Message with answer by button click error", e);
+        }
+      }
     }
   }
 
   private void userResponse(String chatId, String text) {
     Models model = cache.getIfPresent(chatId);
+    String mess = gptMessageService.getAnswer(chatId, new DtoMessage(text, model)).getMessage();
+    SendMessage sendMessage =
+        botButtonHandler.checkResponseCondition(chatId, new DtoMessage(text, model), mess);
+    if (sendMessage != null) {
+      try {
+        execute(sendMessage);
+      } catch (TelegramApiException e) {
+        log.error("Send Message with button error", e);
+      }
+      return;
+    }
     sendTextMessage(chatId,
-        gptMessageService.getAnswer(chatId, new DtoMessage(text,model)).getMessage() + "\n<i>"
+        mess + "\n<i>"
         + "used model: " + model + "</i>");
   }
 

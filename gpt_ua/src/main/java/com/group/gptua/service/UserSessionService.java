@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserSessionService implements UserSessionServiceInt {
 
+  public static final String FORMAT = "Немає вільного місця, приходьте через %s хвилин %s секунд";
   private final Map<String, UserSession> userSessions = new HashMap<>();
 
   @Qualifier("gptTokenService")
@@ -48,7 +49,7 @@ public class UserSessionService implements UserSessionServiceInt {
         userSession = createSession(userHash);
       } catch (NoFreeTokenException e) {
         long timeForNextAttempt = getTimeForNextAttempt();
-        String message = String.format("Немає вільного місця, приходьте через %s хвилин %s секунд",
+        String message = String.format(FORMAT,
             timeForNextAttempt / 60, timeForNextAttempt % 60);
         log.info(message);
         throw new NoFreeTokenException(message);
