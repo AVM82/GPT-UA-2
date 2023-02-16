@@ -9,6 +9,7 @@ import {MessService} from "./services/mess.service";
 import { ChatComponent } from './components/chat/chat.component';
 import { HistoryComponent } from './components/history/history.component';
 import {RouterModule, Routes} from "@angular/router";
+import {NgxPaginationModule} from "ngx-pagination";
 
 
 const appRoutes: Routes = [
@@ -16,7 +17,6 @@ const appRoutes: Routes = [
   {path: 'history', component: HistoryComponent}
 
 ]
-
 
 @NgModule({
   declarations: [
@@ -29,7 +29,8 @@ const appRoutes: Routes = [
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    NgxPaginationModule
   ],
   providers: [MessService],
   bootstrap: [AppComponent]

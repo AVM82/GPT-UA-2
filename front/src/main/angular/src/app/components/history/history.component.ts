@@ -19,6 +19,8 @@ export class HistoryComponent implements OnInit {
   ]
   url: string = "archive/filter"
   checker: boolean = false;
+  p:number=1;
+  count:number=5;
 
   constructor(private http: HttpClient) {
   }
