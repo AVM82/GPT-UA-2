@@ -6,6 +6,8 @@ import com.group.gptua.service.UserRequestService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,13 +37,15 @@ public class RequestController {
   @Operation(summary = "getFilteredRequests-method",
       description = "this method filters requests by: -user; -model; -text of request; - date ")
   public List<UserRequestEntity> getFilteredRequests(FilterParamDto filter) {
-    List<UserRequestEntity> list = new ArrayList<>();
-    requestService.getAll()
+    List<UserRequestEntity> listOfRequests = requestService.getAll();
+    Collections.reverse(listOfRequests);
+    List<UserRequestEntity> filteredListOfRequests = new ArrayList<>();
+    listOfRequests
         .stream()
         .filter(x -> hasFilterParams(x, filter))
         .limit(100)
-        .forEach(list::add);
-    return list;
+        .forEach(filteredListOfRequests::add);
+    return filteredListOfRequests;
   }
 
   /**

@@ -19,6 +19,10 @@ export class HistoryComponent implements OnInit {
   ]
   url: string = "archive/filter"
   checker: boolean = false;
+
+  p:number=1;
+  count:number=5;
+
   constructor(private http: HttpClient) {
   }
 // adds models and show all requests by default
@@ -35,6 +39,7 @@ export class HistoryComponent implements OnInit {
     console.log("text", this.searchedText)
     console.log("checker", this.checker);
     console.log("hash", localStorage.getItem('user-hash'))
+
 // users requests
     if (this.checker) {
       this.http.get(this.url +

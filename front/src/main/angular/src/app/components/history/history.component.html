@@ -16,7 +16,6 @@
             (click)="getFilter()">Filter
     </button>
   </div>
-
   <div>
     <table class="table table-hover table-striped table-bordered border-success">
       <thead bgcolor="#BDD041">
@@ -26,7 +25,8 @@
       <th>createdAt</th>
       </thead>
       <tbody>
-      <tr bgcolor="#ffe87c" *ngFor="let request of requests">
+      <tr bgcolor="#ffe87c" *ngFor="let request of requests
+      | paginate:{itemsPerPage: count, currentPage: p}">
         <td> {{request.model}}</td>
         <td> {{request.request}}</td>
         <td> {{request.response}}</td>
@@ -34,5 +34,8 @@
       </tr>
       </tbody>
     </table>
+  </div>
+  <div align="right">
+    <pagination-controls (pageChange)="p=$event"></pagination-controls>
   </div>
 </div>
