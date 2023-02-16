@@ -76,15 +76,22 @@ public class Controller {
   }
 
   /**
-   * The method for Post mapping for translate messages.
+   * The method for Post mapping for translate messages to English.
    * @param message the message
    * @return string
    */
-  @PostMapping("/translate")
+  @PostMapping("/translate/en")
   @Operation(summary = "Translate-method", description = "this method for translation")
-  public ResponseEntity<?> translateMessage(@RequestBody DtoMessage message,
+  public ResponseEntity<?> translateMessageEn(@RequestBody DtoMessage message,
       HttpServletRequest request) {
     return getMessage(translater.translateToEnglish(message),request);
+  }
+
+  @PostMapping("/translate/uk")
+  @Operation(summary = "Translate-method", description = "this method for translation")
+  public ResponseEntity<?> translateMessageUk(@RequestBody DtoMessage message,
+      HttpServletRequest request) {
+    return getMessage(translater.translateToUkraine(message),request);
   }
 
   /**

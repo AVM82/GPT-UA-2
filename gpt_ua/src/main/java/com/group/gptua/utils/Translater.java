@@ -6,4 +6,6 @@ public interface Translater {
 
   DtoMessage translateToEnglish(DtoMessage message);
 
+  DtoMessage translateToUkraine(DtoMessage message);
+
 }

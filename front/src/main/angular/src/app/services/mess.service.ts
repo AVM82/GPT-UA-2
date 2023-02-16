@@ -28,9 +28,16 @@ export class MessService {
     return this.http.get<any>(this.defaultApi+'/basic_models');
   }
 
-  translateUkr(mess:string):Observable<any> {
+  translateUkrEn(mess:string):Observable<any> {
     let messBody = new DtoMess(mess,'CURIE');
-    return this.http.post<any>(this.defaultApi+'/translate', messBody, {
+    return this.http.post<any>(this.defaultApi+'/translate/en', messBody, {
+      headers: this.myHeader, observe: 'response'
+    });
+  }
+
+  translateEnUkr(mess:string):Observable<any> {
+    let messBody = new DtoMess(mess,'CURIE');
+    return this.http.post<any>(this.defaultApi+'/translate/uk', messBody, {
       headers: this.myHeader, observe: 'response'
     });
   }
