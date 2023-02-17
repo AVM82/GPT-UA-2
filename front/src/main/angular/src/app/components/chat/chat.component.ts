@@ -13,7 +13,7 @@ export class ChatComponent implements OnInit {
   models: string[] = [];
   modelSelect:string = "DAVINCI";
   inMessUkr: string = 'Що таке ';
-  responseUkr: string = 'Відповідь солов\'їною!';
+  responseUkr: string = 'Поле для відповіді!';
   hasUkrResp: boolean = false;
 
   WAIT =  'Wait...';
