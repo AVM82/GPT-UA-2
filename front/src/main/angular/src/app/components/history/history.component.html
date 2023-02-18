@@ -1,7 +1,7 @@
 <div style="padding: 10px">
   <div style="padding: 10px">
-    Date from: <input class="marg" type="date" max="{{data2}}" [(ngModel)]="data">
-    Date to: <input class="marg" type="date" min="{{data}}" [(ngModel)]="data2">
+    Date:&nbsp; from <input type="date" max="{{data2}}" [(ngModel)]="data">
+    &nbsp;to <input class="marg" type="date" min="{{data}}" [(ngModel)]="data2">
 
     Model: <select class="marg" [(ngModel)]="filteredModel">
     <option [ngValue]="null" disabled>Select model</option>
@@ -10,12 +10,22 @@
 
     Find: <input class="marg" type="text" [(ngModel)]="searchedText">
 
-    Only my requests: <input class="marg" type=checkbox [(ngModel)]="checker">
+    Only my requests:&nbsp;<!--  <input class="marg" type=checkbox [(ngModel)]="checker">-->
+    <div class="marg form-check form-switch"
+         style="display: inline-block; vertical-align: middle">
+      <input class="form-check-input"
+             style="border-color: green"
+             type="checkbox"
+             [(ngModel)]="checker">
+    </div>
 
-    <button class="btn btn-success" name="filter"
+    <button class="btn btn-success"
+            name="filter"
             (click)="getFilter()">Filter
     </button>
+
   </div>
+
   <div>
     <table class="table table-hover table-striped table-bordered border-success">
       <thead bgcolor="#BDD041">
@@ -35,7 +45,18 @@
       </tbody>
     </table>
   </div>
+
   <div align="right">
-    <pagination-controls (pageChange)="p=$event"></pagination-controls>
+    <style>
+      .my-pagination /deep/ .ngx-pagination .current {
+        background: #BDD041;
+        border: 2px solid green;
+      }
+    </style>
+    <pagination-controls
+      class="my-pagination" (pageChange)="p=$event">
+    </pagination-controls>
   </div>
 </div>
+
+
