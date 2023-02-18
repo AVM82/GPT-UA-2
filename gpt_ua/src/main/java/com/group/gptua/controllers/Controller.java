@@ -2,7 +2,9 @@ package com.group.gptua.controllers;
 
 import com.group.gptua.bot.Bot;
 import com.group.gptua.dto.ApiDto;
+import com.group.gptua.dto.ApiWithMoodDto;
 import com.group.gptua.dto.DtoMessage;
+import com.group.gptua.model.Moods;
 import com.group.gptua.service.GptMessageServiceInt;
 import com.group.gptua.service.OpenAiService;
 import com.group.gptua.service.UserSessionServiceInt;
@@ -59,6 +61,7 @@ public class Controller {
 
   /**
    * The method for Post mapping for messages.
+   *
    * @param message the message
    * @return string
    */
@@ -69,7 +72,7 @@ public class Controller {
     log.info("Message: {} ", message);
     String userHash = ControllerUtils.getHash(request);
     return ResponseEntity.status(HttpStatus.OK)
-        .header("user-hash",userHash)
+        .header("user-hash", userHash)
         .body(gptMessageService.getAnswer(userHash,
             new DtoMessage(message.getMessage(), message.getModel())));
 
@@ -77,6 +80,7 @@ public class Controller {
 
   /**
    * The method for Post mapping for translate messages to English.
+   *
    * @param message the message
    * @return string
    */
@@ -84,14 +88,14 @@ public class Controller {
   @Operation(summary = "Translate-method", description = "this method for translation")
   public ResponseEntity<?> translateMessageEn(@RequestBody DtoMessage message,
       HttpServletRequest request) {
-    return getMessage(translater.translateToEnglish(message),request);
+    return getMessage(translater.translateToEnglish(message), request);
   }
 
   @PostMapping("/translate/uk")
   @Operation(summary = "Translate-method", description = "this method for translation")
   public ResponseEntity<?> translateMessageUk(@RequestBody DtoMessage message,
       HttpServletRequest request) {
-    return getMessage(translater.translateToUkraine(message),request);
+    return getMessage(translater.translateToUkraine(message), request);
   }
 
   /**
@@ -151,7 +155,7 @@ public class Controller {
   @PostMapping("/completions")
   @Operation(summary = "get response from GPT Chat",
       description = "this method return text response from GPT Chat")
-  @RateLimiter(name = "testEndpoint",fallbackMethod = "fallBackResponse")
+  @RateLimiter(name = "testEndpoint", fallbackMethod = "fallBackResponse")
   public ResponseEntity<String> getAnswer(@RequestBody ApiDto apiDto, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       return ResponseEntity.badRequest().body("BAD REQUEST! Please input valid ApiDto");
@@ -165,8 +169,34 @@ public class Controller {
     }
   }
 
-  private ResponseEntity<String> fallBackResponse(Exception e) {
-    return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
-            .body("To many requests, please wait!");
+  /**
+   * The method returns a response modified by GPT chat depending on the given mood.
+   *
+   * @param apiWithMoodDto -
+   * @return -
+   */
+  @PostMapping("/completions/mood")
+  @RateLimiter(name = "testEndpoint", fallbackMethod = "fallBackResponse")
+  public ResponseEntity<DtoMessage> getAnswerOfMood(@RequestBody ApiWithMoodDto apiWithMoodDto) {
+    try {
+      ApiDto moodDto = openAiClient.createMoodDto(apiWithMoodDto);
+      return ResponseEntity
+          .ok(new DtoMessage(openAiClient.getTextMessage(
+              userSessionService.getUserSession("ControllerGetAnswer"),
+              moodDto.getModel(),
+              moodDto.getPrompt()), moodDto.getModel()));
+    } catch (Exception e) {
+      return ResponseEntity.ok(new DtoMessage(e.getMessage(), apiWithMoodDto.getModel()));
+    }
+  }
+
+  /**
+   * The method returns the moods for response styles.
+   *
+   * @return - moods of response style
+   */
+  @GetMapping("/moods")
+  public ResponseEntity<List<Moods>> getMoods() {
+    return ResponseEntity.ok(openAiClient.getMoods());
   }
 }
