@@ -172,8 +172,8 @@ public class Controller {
   /**
    * The method returns a response modified by GPT chat depending on the given mood.
    *
-   * @param apiWithMoodDto -
-   * @return -
+   * @param apiWithMoodDto - dto which consist mood;
+   * @return - DtoMessage
    */
   @PostMapping("/completions/mood")
   @RateLimiter(name = "testEndpoint", fallbackMethod = "fallBackResponse")

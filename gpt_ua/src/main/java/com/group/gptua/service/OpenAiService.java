@@ -118,8 +118,8 @@ public class OpenAiService implements OpenAiInt {
     Request request = createPostRequest(userSession, GptUri.URI_COMPLETIONS.getUri(), requestBody);
     String answer = createResponse(request);
     ResponseDto responseDto = getResponse(answer);
-    log.info("START GET TEXT MESSAGE !!!");
-    return getFirsAnswer(responseDto);
+    return changeAnswerFormat(getFirsAnswer(responseDto),
+        propertiesService.getNumberOfWordsInLine());
   }
 
   private RequestDto createRequestDto(Models model, String question) {
@@ -184,11 +184,11 @@ public class OpenAiService implements OpenAiInt {
   }
 
   /**
-   * The method returns the corresponding request object to the chat GPT corresponding
-   * to the mood style selected by the user.
+   * The method returns the corresponding request object to the chat GPT corresponding to the mood
+   * style selected by the user.
    *
-   * @param apiWithMoodDto - a request object containing a style-mood, a previous response,
-   *                         and a model
+   * @param apiWithMoodDto - a request object containing a style-mood, a previous response, and a
+   *                       model
    * @return - request object
    */
   public ApiDto createMoodDto(ApiWithMoodDto apiWithMoodDto) {
@@ -232,6 +232,29 @@ public class OpenAiService implements OpenAiInt {
    */
   private String createMoodQuestion(String moodName, String message) {
     return "Paraphrase this text in a " + moodName + " style : " + message;
+  }
+
+  /**
+   * The method changes the format of the string by the number of parts separated by spaces.
+   *
+   * @param answer     - response from GPT
+   * @param numOfParts - number of parts followed by "\n"
+   * @return - string with "\n" after the specified number of numOfParts
+   */
+  private String changeAnswerFormat(String answer, int numOfParts) {
+    String[] parts = answer.split(" ");
+    String result = "";
+    int count = 0;
+    for (String part : parts) {
+      if (count <= numOfParts) {
+        result += part + " ";
+        count++;
+      } else {
+        result += "\n";
+        count = 0;
+      }
+    }
+    return result;
   }
 }
 
