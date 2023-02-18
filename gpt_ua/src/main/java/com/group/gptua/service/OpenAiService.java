@@ -2,10 +2,13 @@ package com.group.gptua.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.group.gptua.dto.ApiDto;
+import com.group.gptua.dto.ApiWithMoodDto;
 import com.group.gptua.dto.RequestDto;
 import com.group.gptua.dto.responsegpt.Choice;
 import com.group.gptua.dto.responsegpt.ResponseDto;
 import com.group.gptua.model.GptUri;
+import com.group.gptua.model.Moods;
 import com.group.gptua.model.UserSession;
 import com.group.gptua.utils.Models;
 import java.io.IOException;
@@ -109,13 +112,14 @@ public class OpenAiService implements OpenAiInt {
   public String getTextMessage(UserSession userSession, Models model, String question) {
     log.info("Start getTextMessage method with {} and {} ", model, question);
     RequestDto requestDto = createRequestDto(model, question);
-    log.info("get requestDTO : {} ", requestDto);
+    log.info("get requestDTO : {} ", requestDto.getPrompt());
     String requestJson = toStringFromDto(requestDto);
     RequestBody requestBody = RequestBody.create(requestJson, json);
     Request request = createPostRequest(userSession, GptUri.URI_COMPLETIONS.getUri(), requestBody);
     String answer = createResponse(request);
     ResponseDto responseDto = getResponse(answer);
-    return getFirsAnswer(responseDto);
+    return changeAnswerFormat(getFirsAnswer(responseDto),
+        propertiesService.getNumberOfWordsInLine());
   }
 
   private RequestDto createRequestDto(Models model, String question) {
@@ -168,6 +172,89 @@ public class OpenAiService implements OpenAiInt {
   @Override
   public List<Models> getModels() {
     return Arrays.asList(Models.values());
+  }
+
+  /**
+   * The method returns a list of available moods.
+   *
+   * @return - a list of available models
+   */
+  public List<Moods> getMoods() {
+    return Arrays.asList(Moods.values());
+  }
+
+  /**
+   * The method returns the corresponding request object to the chat GPT corresponding to the mood
+   * style selected by the user.
+   *
+   * @param apiWithMoodDto - a request object containing a style-mood, a previous response, and a
+   *                       model
+   * @return - request object
+   */
+  public ApiDto createMoodDto(ApiWithMoodDto apiWithMoodDto) {
+    log.info("MOOD is : {}", apiWithMoodDto.getMood());
+    log.info("MODEL is : {}", apiWithMoodDto.getModel());
+    log.info("PROMPT is : {}", apiWithMoodDto.getMessage());
+    if (apiWithMoodDto.getMood().equals(Moods.ROUGH)) {
+      return setMessage(Moods.ROUGH, apiWithMoodDto);
+    } else if (apiWithMoodDto.getMood().equals(Moods.BUSINESS)) {
+      return setMessage(Moods.BUSINESS, apiWithMoodDto);
+    } else if (apiWithMoodDto.getMood().equals(Moods.FRIENDLY)) {
+      return setMessage(Moods.FRIENDLY, apiWithMoodDto);
+    } else if (apiWithMoodDto.getMood().equals(Moods.CHILDREN)) {
+      return setMessage(Moods.CHILDREN, apiWithMoodDto);
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * The method creates an object that contains the appropriate fields to query the GPT chat.
+   *
+   * @param mood           - response style
+   * @param apiWithMoodDto - an object containing the previous GPT chat response, model, response
+   *                       style
+   * @return - response from GPT chat
+   */
+  private ApiDto setMessage(Moods mood, ApiWithMoodDto apiWithMoodDto) {
+    String question = createMoodQuestion(mood.getMoodName(),
+        apiWithMoodDto.getMessage());
+    log.info("Question is : {}", question);
+    return ApiDto.builder().model(apiWithMoodDto.getModel()).prompt(question).build();
+  }
+
+  /**
+   * The method creates a string to change the response style.
+   *
+   * @param moodName - response style
+   * @param message  - previous reply from GPT chat
+   * @return - modified request to GPT
+   */
+  private String createMoodQuestion(String moodName, String message) {
+    return "Paraphrase this text in a " + moodName + " style : " + message;
+  }
+
+  /**
+   * The method changes the format of the string by the number of parts separated by spaces.
+   *
+   * @param answer     - response from GPT
+   * @param numOfParts - number of parts followed by "\n"
+   * @return - string with "\n" after the specified number of numOfParts
+   */
+  private String changeAnswerFormat(String answer, int numOfParts) {
+    String[] parts = answer.split(" ");
+    String result = "";
+    int count = 0;
+    for (String part : parts) {
+      if (count <= numOfParts) {
+        result += part + " ";
+        count++;
+      } else {
+        result += "\n";
+        count = 0;
+      }
+    }
+    return result;
   }
 }
 

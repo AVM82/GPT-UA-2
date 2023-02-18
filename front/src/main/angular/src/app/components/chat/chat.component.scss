@@ -25,4 +25,22 @@ pre{
   text-align: center
 }
 
+.my-button {
+  width: 100px;
+  height: 50px;
+  margin-right: 10px;
+  border-radius: 0.5em;
+  background-color: #0d7dfd;
+  border: none;
+  color: white;
+
+  &:hover {
+    background-color: #0046bf;
+  }
+
+  &:active {
+    background-color: #1900bf;
+  }
+}
+
 

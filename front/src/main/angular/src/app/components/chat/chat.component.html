@@ -1,30 +1,52 @@
 <div style="background-color: #56B8DE">
-    <div class="container">
-      <div class="row">
-        <div class="col align">
-          <b>Питання Українською!</b>
-          <textarea name="text-ukr"  rows="7" [(ngModel)]="inMessUkr"></textarea>
-        </div>
-        <div class="col-md-auto mx-auto my-auto">
-          <button class="btn btn-success" style="width: auto"  name="translate" (click)="translate()">>></button>
-        </div>
-        <div class="col align">
-          <b>Question for GPT!</b>
-          <textarea name="text"  rows="7" [(ngModel)]="inMess"></textarea>
-        </div>
+  <div class="container" style="width: 100%">
+
+    <div class="row">
+      <div class="col align">
+        <b>Питання Українською!</b>
+        <textarea name="text-ukr"  rows="7" [(ngModel)]="inMessUkr"></textarea>
+      </div>
+      <div class="col-md-auto mx-auto my-auto">
+        <button class="btn btn-success" style="width: auto"  name="translate" (click)="translateUkrEn()">>></button>
+      </div>
+      <div class="col align">
+        <b>Question for GPT!</b>
+        <textarea name="text"  rows="7" [(ngModel)]="inMess"></textarea>
       </div>
     </div>
 
-  <div class="align">
-    <label>Select model:</label>
-    <select name="models" style="margin-right: 10%" [(ngModel)]="modelSelect">
-      <option *ngFor="let model of models" [value]="model">{{model}}</option>
-    </select>
-    <button class="btn btn-primary" name="send" (click)="send()">Send</button>
-  </div>
+    <div class="row">
+      <div class="col form-check form-switch">
+        <label class="form-check-label" style="color: #ffd048" for="isUkr"><i>Отримати відповідь Українською</i></label>
+        <input class="form-check-input mx-auto"  id="isUkr" type="checkbox" [(ngModel)]="hasUkrResp" (click)="translateEnUkr()">
+      </div>
+      <div class="col align">
+        <label>Select model:</label>
+        <select name="models" style="margin-right: 10%" [(ngModel)]="modelSelect">
+          <option *ngFor="let model of models" [value]="model">{{model}}</option>
+        </select>
+      </div>
+      <div class="col align">
+        <button class="btn btn-primary" name="send" (click)="send()">Send</button>
+      </div>
+    </div>
 
-  <div class="text-center mt-auto text-lg-start">
-    <pre  name="response">{{response}}</pre>
+    <div class="row">
+      <div class="col text-center mt-auto text-lg-start" *ngIf="hasUkrResp">
+        <b>Відповідь Українською:</b>
+        <pre  name="responseUkr">{{responseUkr}}</pre>
+      </div>
+      <div class="col text-center mt-auto text-lg-start">
+        <b>English response:</b>
+        <pre  name="response">{{response}}</pre>
+      </div>
+    </div>
+
+    <button class="my-button" (click)="setMood('BUSINESS')">business😎</button>
+    <button class="my-button" (click)="setMood('FRIENDLY')">friendly😉</button>
+    <button class="my-button" (click)="setMood('CHILDREN')">childern😇</button>
+    <button class="my-button" (click)="setMood('ROUGH')">rough😡</button>
+
   </div>
 
 </div>

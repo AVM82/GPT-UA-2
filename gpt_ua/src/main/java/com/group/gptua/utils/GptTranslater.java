@@ -10,10 +10,20 @@ public class GptTranslater implements Translater {
 
   @Override
   public  DtoMessage translateToEnglish(DtoMessage message) {
-    String addMessageForTranslate = "Translate to English: "
-        + message.getMessage();
+    String addMessageForTranslate = "Переклади на Англійську мову:{"
+        + message.getMessage() + "}";
     message.setMessage(addMessageForTranslate);
-    message.setModel(Models.CURIE);
+    message.setModel(Models.DAVINCI);
+    log.info("Message for translate {}",message);
+    return message;
+  }
+
+  @Override
+  public DtoMessage translateToUkraine(DtoMessage message) {
+    String addMessageForTranslate = "Переклади на Українську мову:{"
+        + message.getMessage() + "}";
+    message.setMessage(addMessageForTranslate);
+    message.setModel(Models.DAVINCI);
     log.info("Message for translate {}",message);
     return message;
   }

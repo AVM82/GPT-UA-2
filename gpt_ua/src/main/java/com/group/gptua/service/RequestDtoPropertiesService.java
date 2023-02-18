@@ -40,4 +40,9 @@ public class RequestDtoPropertiesService {
   public String[] getStop() {
     return new String[]{Objects.requireNonNull(environment.getProperty("gpt.stop"))};
   }
+
+  public int getNumberOfWordsInLine() {
+    return Integer.parseInt(
+        Objects.requireNonNull(environment.getProperty("answer.numberOfWorld")));
+  }
 }

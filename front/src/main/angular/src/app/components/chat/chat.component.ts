@@ -7,42 +7,69 @@ import {MessService} from "../../services/mess.service";
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
-  inMess :string = '';
-  response: string = "Field for response";
+  DEFAULT = "Field for response";
+  inMess: string = '';
+  response: string = this.DEFAULT;
   models: string[] = [];
-  modelSelect:string = "DAVINCI";
+  modelSelect: string = "DAVINCI";
   inMessUkr: string = 'Що таке ';
+  responseUkr: string = 'Поле для відповіді!';
+  hasUkrResp: boolean = false;
+  tempResponse: string = "";
+
+  WAIT = 'Wait...';
 
   constructor(private messageServices: MessService) {
   }
 
   send() {
+    console.log(this.hasUkrResp)
     console.log(this.inMess);
     console.log("MODEL {}", this.modelSelect);
-    this.response = 'Wait...'
+    this.response = this.WAIT
+
     this.messageServices.getMessageResponse(this.inMess, this.modelSelect).subscribe(
       resp => {
         this.response = resp.body.message;
+        this.tempResponse=resp.body.message;
         console.log(resp.headers.get('user-hash'));
+        localStorage.setItem('user-hash', resp.headers.get('user-hash'));
+        this.translateEnUkr();
+      });
+  }
+
+  setMood(mood: string) {
+    console.log('MOOD = {}', mood);
+    console.log('TEMP MESSAGE = {}', this.tempResponse);
+    this.messageServices.getMoodMessageResponse(this.tempResponse, this.modelSelect, mood).subscribe(
+      resp => {
+        this.response = resp.body.message.replaceAll('\n', '');
         localStorage.setItem('user-hash', resp.headers.get('user-hash'));
       });
   }
 
   ngOnInit(): void {
     this.messageServices.getModels().subscribe(response => {
-      this.models=response;
+      this.models = response;
       console.log('get response {}', this.models);
     })
   }
 
-  checkModel(): void{
-  }
-
-  translate():void {
-    this.messageServices.translateUkr(this.inMessUkr).subscribe(response => {
-      this.inMess=response.body.message.replaceAll('\n', '');
+  translateUkrEn(): void {
+    this.messageServices.translateUkrEn(this.inMessUkr).subscribe(response => {
+      this.inMess = response.body.message.replaceAll('\n', '');
       console.log('Get response!');
       localStorage.setItem('user-hash', response.headers.get('user-hash'));
     })
+  }
+
+  translateEnUkr(): void {
+    if (this.hasUkrResp && this.inMess !== ''
+      && this.response !== this.WAIT && this.response !== this.DEFAULT) {
+      this.messageServices.translateEnUkr(this.response).subscribe(response => {
+        this.responseUkr = response.body.message.replaceAll('\n', '');
+        console.log('Отримав відповідь Українською!!');
+      });
+    }
   }
 }

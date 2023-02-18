@@ -13,7 +13,7 @@ import {NgxPaginationModule} from "ngx-pagination";
 
 
 const appRoutes: Routes = [
-  {path: 'chat', component: ChatComponent},
+  {path: '', component: ChatComponent},
   {path: 'history', component: HistoryComponent}
 
 ]
