@@ -19,6 +19,7 @@ export class HistoryComponent implements OnInit {
   ]
   url: string = "archive/filter"
   checker: boolean = false;
+
   p:number=1;
   count:number=5;
 
@@ -30,7 +31,6 @@ export class HistoryComponent implements OnInit {
     .subscribe({next: (data: any) => this.requests = data})
     this.http.get('bot/basic_models').subscribe({next: (model: any) => this.models = model})
   }
-
   getFilter(): void {
     // print filter parameters
     console.log("date from", this.data);
