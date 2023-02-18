@@ -32,14 +32,14 @@ export class MessService {
   }
 
   translateUkrEn(mess: string): Observable<any> {
-    let messBody = new DtoMess(mess, 'CURIE');
+    let messBody = new DtoMess(mess, 'DAVINCI');
     return this.http.post<any>(this.defaultApi + '/translate/en', messBody, {
       headers: this.myHeader, observe: 'response'
     });
   }
 
   translateEnUkr(mess: string): Observable<any> {
-    let messBody = new DtoMess(mess, 'CURIE');
+    let messBody = new DtoMess(mess, 'DAVINCI');
     return this.http.post<any>(this.defaultApi + '/translate/uk', messBody, {
       headers: this.myHeader, observe: 'response'
     });
