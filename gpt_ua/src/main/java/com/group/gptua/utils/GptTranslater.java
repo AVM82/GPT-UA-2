@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 public class GptTranslater implements Translater {
 
   @Override
-  public  DtoMessage translateToEnglish(DtoMessage message) {
+  public DtoMessage translateToEnglish(DtoMessage message) {
     String addMessageForTranslate = "Переклади на Англійську мову:{"
         + message.getMessage() + "}";
     message.setMessage(addMessageForTranslate);
     message.setModel(Models.DAVINCI);
-    log.info("Message for translate {}",message);
+    log.info("Message for translate {}", message);
     return message;
   }
 
@@ -24,7 +24,7 @@ public class GptTranslater implements Translater {
         + message.getMessage() + "}";
     message.setMessage(addMessageForTranslate);
     message.setModel(Models.DAVINCI);
-    log.info("Message for translate {}",message);
+    log.info("Message for translate {}", message);
     return message;
   }
 }
