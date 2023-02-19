@@ -177,11 +177,15 @@ public class Controller {
    */
   @PostMapping("/completions/mood")
   @RateLimiter(name = "testEndpoint", fallbackMethod = "fallBackResponse")
-  public ResponseEntity<DtoMessage> getAnswerOfMood(@RequestBody ApiWithMoodDto apiWithMoodDto) {
+  public ResponseEntity<DtoMessage> getAnswerOfMood(@RequestBody ApiWithMoodDto apiWithMoodDto,
+      HttpServletRequest request) {
     try {
       ApiDto moodDto = openAiClient.createMoodDto(apiWithMoodDto);
+      String userHash = ControllerUtils.getHash(request);
       return ResponseEntity
-          .ok(new DtoMessage(openAiClient.getTextMessage(
+          .status(HttpStatus.CREATED)
+          .header("user-hash", userHash)
+          .body(new DtoMessage(openAiClient.getTextMessage(
               userSessionService.getUserSession("ControllerGetAnswer"),
               moodDto.getModel(),
               moodDto.getPrompt()), moodDto.getModel()));
