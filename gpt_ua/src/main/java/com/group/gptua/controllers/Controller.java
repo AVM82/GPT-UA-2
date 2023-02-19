@@ -99,43 +99,6 @@ public class Controller {
   }
 
   /**
-   * Lists the currently available models, and provides basic information about each one such as the
-   * owner and availability.
-   *
-   * @return - list of all available models
-   */
-
-  @GetMapping("/models")
-  @Operation(summary = "getAllModels method", description = "this method return all models")
-  public ResponseEntity<String> getAllModels() {
-    try {
-      return ResponseEntity.ok(openAiClient.getAllModels(userSessionService
-          .getUserSession("ControllerGetAllModels")));
-    } catch (NoFreeTokenException e) {
-      return ResponseEntity.ok(e.getMessage());
-    }
-  }
-
-  /**
-   * Retrieves a model instance, providing basic information about the model such as the owner and
-   * permissioning. The list of available models can be obtained from the following endpoint:
-   * /models
-   *
-   * @param model - available model
-   * @return - string
-   */
-  @GetMapping("/models/{model}")
-  @Operation(summary = "getModel method", description = "this method return available model")
-  public ResponseEntity<String> getModel(@PathVariable String model) {
-    try {
-      return ResponseEntity.ok(openAiClient.getModel(userSessionService
-          .getUserSession("ControllerGetModel"), model));
-    } catch (NoFreeTokenException e) {
-      return ResponseEntity.ok(e.getMessage());
-    }
-  }
-
-  /**
    * The method returns the base models for the user.
    *
    * @return - base models for the user
@@ -146,38 +109,14 @@ public class Controller {
   }
 
   /**
-   * The method sends a request to GPT Chat from the API and returns a response.
-   *
-   * @param apiDto        - DTO that includes a request model and a question
-   * @param bindingResult - object containing validation errors
-   * @return - response from GPT Chat
-   */
-  @PostMapping("/completions")
-  @Operation(summary = "get response from GPT Chat",
-      description = "this method return text response from GPT Chat")
-  @RateLimiter(name = "testEndpoint", fallbackMethod = "fallBackResponse")
-  public ResponseEntity<String> getAnswer(@RequestBody ApiDto apiDto, BindingResult bindingResult) {
-    if (bindingResult.hasErrors()) {
-      return ResponseEntity.badRequest().body("BAD REQUEST! Please input valid ApiDto");
-    }
-    try {
-      return ResponseEntity.ok(openAiClient.getTextMessage(
-          userSessionService.getUserSession("ControllerGetAnswer"), apiDto.getModel(),
-          apiDto.getPrompt()));
-    } catch (Exception e) {
-      return ResponseEntity.ok(e.getMessage());
-    }
-  }
-
-  /**
    * The method returns a response modified by GPT chat depending on the given mood.
    *
    * @param apiWithMoodDto - dto which consist mood;
    * @return - DtoMessage
    */
   @PostMapping("/completions/mood")
-  @RateLimiter(name = "testEndpoint", fallbackMethod = "fallBackResponse")
-  public ResponseEntity<DtoMessage> getAnswerOfMood(@RequestBody ApiWithMoodDto apiWithMoodDto,
+  @RateLimiter(name = "mood message endpoint", fallbackMethod = "fallBackResponse")
+  public ResponseEntity<?> getAnswerOfMood(@RequestBody ApiWithMoodDto apiWithMoodDto,
       HttpServletRequest request) {
     try {
       ApiDto moodDto = openAiClient.createMoodDto(apiWithMoodDto);
@@ -185,22 +124,10 @@ public class Controller {
       return ResponseEntity
           .status(HttpStatus.CREATED)
           .header("user-hash", userHash)
-          .body(new DtoMessage(openAiClient.getTextMessage(
-              userSessionService.getUserSession("ControllerGetAnswer"),
-              moodDto.getModel(),
-              moodDto.getPrompt()), moodDto.getModel()));
+          .body(gptMessageService.getAnswer(userHash,
+              new DtoMessage(moodDto.getPrompt(), moodDto.getModel())));
     } catch (Exception e) {
-      return ResponseEntity.ok(new DtoMessage(e.getMessage(), apiWithMoodDto.getModel()));
+      return ResponseEntity.ok(e.getMessage());
     }
-  }
-
-  /**
-   * The method returns the moods for response styles.
-   *
-   * @return - moods of response style
-   */
-  @GetMapping("/moods")
-  public ResponseEntity<List<Moods>> getMoods() {
-    return ResponseEntity.ok(openAiClient.getMoods());
   }
 }

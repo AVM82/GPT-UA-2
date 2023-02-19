@@ -43,7 +43,7 @@ export class ChatComponent implements OnInit {
     console.log('TEMP MESSAGE = {}', this.tempResponse);
     this.messageServices.getMoodMessageResponse(this.tempResponse, this.modelSelect, mood).subscribe(
       resp => {
-        this.response = resp.body.message.replaceAll('\n', '');
+        this.response = resp.body.message;
         localStorage.setItem('user-hash', resp.headers.get('user-hash'));
       });
   }
