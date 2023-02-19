@@ -10,7 +10,6 @@ import com.group.gptua.service.OpenAiService;
 import com.group.gptua.service.UserSessionServiceInt;
 import com.group.gptua.utils.ControllerUtils;
 import com.group.gptua.utils.Models;
-import com.group.gptua.utils.NoFreeTokenException;
 import com.group.gptua.utils.Translater;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -24,9 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,7 +72,6 @@ public class Controller {
         .header("user-hash", userHash)
         .body(gptMessageService.getAnswer(userHash,
             new DtoMessage(message.getMessage(), message.getModel())));
-
   }
 
   /**
@@ -109,6 +105,16 @@ public class Controller {
   }
 
   /**
+   * The method returns the available mood styles.
+   *
+   * @return -
+   */
+  @GetMapping("/moods")
+  public ResponseEntity<List<Moods>> getMoods() {
+    return ResponseEntity.ok(openAiClient.getMoods());
+  }
+
+  /**
    * The method returns a response modified by GPT chat depending on the given mood.
    *
    * @param apiWithMoodDto - dto which consist mood;
@@ -119,7 +125,7 @@ public class Controller {
   public ResponseEntity<?> getAnswerOfMood(@RequestBody ApiWithMoodDto apiWithMoodDto,
       HttpServletRequest request) {
     try {
-      ApiDto moodDto = openAiClient.createMoodDto(apiWithMoodDto);
+      ApiDto moodDto = openAiClient.setMessage(apiWithMoodDto);
       String userHash = ControllerUtils.getHash(request);
       return ResponseEntity
           .status(HttpStatus.CREATED)

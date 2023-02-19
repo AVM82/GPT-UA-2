@@ -1,4 +1,4 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {DtoMess} from "../../dto/dto.mess";
@@ -29,6 +29,10 @@ export class MessService {
 
   getModels(): Observable<any> {
     return this.http.get<any>(this.defaultApi + '/basic_models');
+  }
+
+  getMoods(): Observable<any> {
+    return this.http.get<any>(this.defaultApi + '/moods');
   }
 
   translateUkrEn(mess: string): Observable<any> {

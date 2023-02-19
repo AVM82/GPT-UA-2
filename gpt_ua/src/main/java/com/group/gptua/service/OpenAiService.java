@@ -184,40 +184,14 @@ public class OpenAiService implements OpenAiInt {
   }
 
   /**
-   * The method returns the corresponding request object to the chat GPT corresponding to the mood
-   * style selected by the user.
-   *
-   * @param apiWithMoodDto - a request object containing a style-mood, a previous response, and a
-   *                       model
-   * @return - request object
-   */
-  public ApiDto createMoodDto(ApiWithMoodDto apiWithMoodDto) {
-    log.info("MOOD is : {}", apiWithMoodDto.getMood());
-    log.info("MODEL is : {}", apiWithMoodDto.getModel());
-    log.info("PROMPT is : {}", apiWithMoodDto.getMessage());
-    if (apiWithMoodDto.getMood().equals(Moods.ROUGH)) {
-      return setMessage(Moods.ROUGH, apiWithMoodDto);
-    } else if (apiWithMoodDto.getMood().equals(Moods.BUSINESS)) {
-      return setMessage(Moods.BUSINESS, apiWithMoodDto);
-    } else if (apiWithMoodDto.getMood().equals(Moods.FRIENDLY)) {
-      return setMessage(Moods.FRIENDLY, apiWithMoodDto);
-    } else if (apiWithMoodDto.getMood().equals(Moods.CHILDREN)) {
-      return setMessage(Moods.CHILDREN, apiWithMoodDto);
-    } else {
-      return null;
-    }
-  }
-
-  /**
    * The method creates an object that contains the appropriate fields to query the GPT chat.
    *
-   * @param mood           - response style
    * @param apiWithMoodDto - an object containing the previous GPT chat response, model, response
    *                       style
    * @return - response from GPT chat
    */
-  private ApiDto setMessage(Moods mood, ApiWithMoodDto apiWithMoodDto) {
-    String question = createMoodQuestion(mood.getMoodName(),
+  public ApiDto setMessage(ApiWithMoodDto apiWithMoodDto) {
+    String question = createMoodQuestion(apiWithMoodDto.getMood().getMoodName(),
         apiWithMoodDto.getMessage());
     log.info("Question is : {}", question);
     return ApiDto.builder().model(apiWithMoodDto.getModel()).prompt(question).build();
