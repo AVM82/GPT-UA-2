@@ -21,7 +21,7 @@ export class HistoryComponent implements OnInit {
   checker: boolean = false;
 
   p:number=1;
-  count:number=5;
+  count:number=10;
 
   constructor(private http: HttpClient) {
   }
