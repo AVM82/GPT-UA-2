@@ -1,18 +1,18 @@
-<div style="background-color: #56B8DE">
+<div class="main-block">
   <div class="container" style="width: 100%">
 
     <div class="row">
       <div class="col align">
-        <b>Питання Українською!</b>
+        <span>Питання Українською!</span>
         <textarea name="text-ukr" rows="7" [(ngModel)]="inMessUkr"></textarea>
       </div>
       <div class="col-md-auto mx-auto my-auto">
-        <button class="btn btn-success" style="width: auto" name="translate"
+        <button class="btn btn-dark" style="width: auto" name="translate"
                 (click)="translateUkrEn()">>>
         </button>
       </div>
       <div class="col align">
-        <b>Question for GPT!</b>
+        <span>Question for GPT!</span>
         <textarea name="text" rows="7" [(ngModel)]="inMess"></textarea>
       </div>
     </div>
@@ -21,7 +21,7 @@
       <div class="col form-check form-switch">
         <label class="form-check-label" style="color: #ffd048" for="isUkr"><i>Отримати відповідь
           Українською</i></label>
-        <input class="form-check-input mx-auto" id="isUkr" type="checkbox" [(ngModel)]="hasUkrResp"
+        <input class="form-check-input btn-outline mx-auto" id="isUkr" type="checkbox" [(ngModel)]="hasUkrResp"
                (click)="translateEnUkr()">
       </div>
       <div class="col align">
@@ -31,21 +31,21 @@
         </select>
       </div>
       <div class="col align">
-        <button class="btn btn-primary" name="send" (click)="send()">Send</button>
+        <button class="btn btn-dark" name="send" (click)="send()">Send</button>
       </div>
     </div>
 
     <div class="row">
       <div class="col text-center mt-auto text-lg-start" *ngIf="hasUkrResp">
-        <b>Відповідь Українською:</b>
+        <span>Відповідь Українською:</span>
         <pre name="responseUkr">{{responseUkr}}</pre>
       </div>
       <div class="col text-center mt-auto text-lg-start">
-        <b>English response:</b>
+        <span>English response:</span>
         <pre name="response">{{response}}</pre>
       </div>
     </div>
-    <button class="my-button" *ngFor="let mood of moods" (click)="setMood(mood)">{{ mood }}</button>
+    <button class="my-button " *ngFor="let mood of moods" (click)="setMood(mood)">{{ mood }}</button>
   </div>
 
 </div>

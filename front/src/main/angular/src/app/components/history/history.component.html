@@ -1,4 +1,4 @@
-<div style="padding: 10px">
+<div class="main-block" style="padding-left: 10%;">
   <div style="padding: 10px">
     Date:&nbsp; from <input type="date" max="{{data2}}" [(ngModel)]="data">
     &nbsp;to <input class="marg" type="date" min="{{data}}" [(ngModel)]="data2">
@@ -13,28 +13,27 @@
     Only my requests:&nbsp;<!--  <input class="marg" type=checkbox [(ngModel)]="checker">-->
     <div class="marg form-check form-switch"
          style="display: inline-block; vertical-align: middle">
-      <input class="form-check-input"
-             style="border-color: green"
+      <input class="form-check-input btn-outline"
              type="checkbox"
              [(ngModel)]="checker">
     </div>
 
-    <button class="btn btn-success"
+    <button class="btn btn-dark"
             name="filter"
             (click)="getFilter()">Filter
     </button>
 
   </div>
   <div>
-    <table class="table table-hover table-striped table-bordered border-success">
-      <thead bgcolor="#BDD041">
+    <table class="table table-bordered border-dark">
+      <thead >
       <th>model</th>
       <th>request</th>
       <th>response</th>
       <th>createdAt</th>
       </thead>
       <tbody>
-      <tr bgcolor="#ffe87c" *ngFor="let request of requests
+      <tr  *ngFor="let request of requests
       | paginate:{itemsPerPage: count, currentPage: p}">
         <td> {{request.model}}</td>
         <td> {{request.request}}</td>
@@ -48,8 +47,8 @@
   <div align="right">
     <style>
       .my-pagination /deep/ .ngx-pagination .current {
-        background: #BDD041;
-        border: 2px solid green;
+
+        border: 2px solid #5f605f;
       }
     </style>
     <pagination-controls

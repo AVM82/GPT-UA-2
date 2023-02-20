@@ -1,13 +1,19 @@
 TH {
   text-align: center;
 }
+table{
+  color: rgba(236,236,241,1);
+}
+tbody tr:nth-child(odd) {
+  background-color:  rgba(68,70,84,1);
+}
+
+tbody tr:nth-child(even) {
+  background-color: rgb(33, 34, 29,1);
+}
+
 
 .marg {
   margin-right: 5%;
 }
 
-.form-check-input:checked {
-  background-color: #BDD041;
-  //background-image:
-  //  url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='green'/%3e%3c/svg%3e");
-}

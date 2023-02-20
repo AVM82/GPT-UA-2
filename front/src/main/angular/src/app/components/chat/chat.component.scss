@@ -1,24 +1,25 @@
 button{
-  width: 30%;
+  width: auto;
   margin-bottom: 10px;
 }
 
-b{
-  font-family: Calibri;
+span{
   font-size: 24px;
 }
 
 textarea{
+  background-color:  rgba(68,70,84,1);
   width: 100%;
+  color: rgba(236,236,241,1);
 }
 
 pre{
-  background-color: #b5d592;
+  background-color:  rgba(68,70,84,1);
   word-wrap: normal;
   text-align: center;
   height: 300px;
   font-size: 16px;
-  font-family: "Comic Sans MS";
+  color: rgba(236,236,241,1);
 }
 
 .align{
@@ -30,17 +31,16 @@ pre{
   height: 50px;
   margin-right: 10px;
   border-radius: 0.5em;
-  background-color: #0d7dfd;
+  background-color: #21221d;
   border: none;
   color: white;
 
   &:hover {
-    background-color: #0046bf;
+    background-color: #35383d;
   }
 
   &:active {
-    background-color: #1900bf;
+    background-color: #5f605f;
   }
 }
-
 
