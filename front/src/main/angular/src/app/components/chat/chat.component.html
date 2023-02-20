@@ -4,21 +4,25 @@
     <div class="row">
       <div class="col align">
         <b>Питання Українською!</b>
-        <textarea name="text-ukr"  rows="7" [(ngModel)]="inMessUkr"></textarea>
+        <textarea name="text-ukr" rows="7" [(ngModel)]="inMessUkr"></textarea>
       </div>
       <div class="col-md-auto mx-auto my-auto">
-        <button class="btn btn-success" style="width: auto"  name="translate" (click)="translateUkrEn()">>></button>
+        <button class="btn btn-success" style="width: auto" name="translate"
+                (click)="translateUkrEn()">>>
+        </button>
       </div>
       <div class="col align">
         <b>Question for GPT!</b>
-        <textarea name="text"  rows="7" [(ngModel)]="inMess"></textarea>
+        <textarea name="text" rows="7" [(ngModel)]="inMess"></textarea>
       </div>
     </div>
 
     <div class="row">
       <div class="col form-check form-switch">
-        <label class="form-check-label" style="color: #ffd048" for="isUkr"><i>Отримати відповідь Українською</i></label>
-        <input class="form-check-input mx-auto"  id="isUkr" type="checkbox" [(ngModel)]="hasUkrResp" (click)="translateEnUkr()">
+        <label class="form-check-label" style="color: #ffd048" for="isUkr"><i>Отримати відповідь
+          Українською</i></label>
+        <input class="form-check-input mx-auto" id="isUkr" type="checkbox" [(ngModel)]="hasUkrResp"
+               (click)="translateEnUkr()">
       </div>
       <div class="col align">
         <label>Select model:</label>
@@ -34,19 +38,14 @@
     <div class="row">
       <div class="col text-center mt-auto text-lg-start" *ngIf="hasUkrResp">
         <b>Відповідь Українською:</b>
-        <pre  name="responseUkr">{{responseUkr}}</pre>
+        <pre name="responseUkr">{{responseUkr}}</pre>
       </div>
       <div class="col text-center mt-auto text-lg-start">
         <b>English response:</b>
-        <pre  name="response">{{response}}</pre>
+        <pre name="response">{{response}}</pre>
       </div>
     </div>
-
-    <button class="my-button" (click)="setMood('BUSINESS')">business😎</button>
-    <button class="my-button" (click)="setMood('FRIENDLY')">friendly😉</button>
-    <button class="my-button" (click)="setMood('CHILDREN')">childern😇</button>
-    <button class="my-button" (click)="setMood('ROUGH')">rough😡</button>
-
+    <button class="my-button" *ngFor="let mood of moods" (click)="setMood(mood)">{{ mood }}</button>
   </div>
 
 </div>

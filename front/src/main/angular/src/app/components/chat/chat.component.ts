@@ -16,6 +16,7 @@ export class ChatComponent implements OnInit {
   responseUkr: string = 'Поле для відповіді!';
   hasUkrResp: boolean = false;
   tempResponse: string = "";
+  moods: string[] = [];
 
   WAIT = 'Wait...';
 
@@ -31,7 +32,7 @@ export class ChatComponent implements OnInit {
     this.messageServices.getMessageResponse(this.inMess, this.modelSelect).subscribe(
       resp => {
         this.response = resp.body.message;
-        this.tempResponse=resp.body.message;
+        this.tempResponse = resp.body.message;
         console.log(resp.headers.get('user-hash'));
         localStorage.setItem('user-hash', resp.headers.get('user-hash'));
         this.translateEnUkr();
@@ -53,6 +54,14 @@ export class ChatComponent implements OnInit {
       this.models = response;
       console.log('get response {}', this.models);
     })
+    this.setMoods();
+  }
+
+  setMoods(): void {
+    this.messageServices.getMoods().subscribe(
+      data => {
+        this.moods = data;
+      })
   }
 
   translateUkrEn(): void {
