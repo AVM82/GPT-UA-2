@@ -1,51 +1,83 @@
-<div class="main-block">
+<div class="main-block" xmlns="http://www.w3.org/1999/html">
   <div class="container" style="width: 100%">
 
     <div class="row">
-      <div class="col align">
-        <span>Питання Українською!</span>
-        <textarea name="text-ukr" rows="7" [(ngModel)]="inMessUkr"></textarea>
-      </div>
-      <div class="col-md-auto mx-auto my-auto">
-        <button class="btn btn-dark" style="width: auto" name="translate"
-                (click)="translateUkrEn()">>>
-        </button>
-      </div>
+        <a href="#layout-collapse" class="dropdown-toggle"  data-bs-toggle="collapse" aria-expanded="true">
+          <span style="color: rgba(236,236,241,1);">Питання Українською!</span>
+        </a>
+        <div class="collapse" id="layout-collapse">
+          <ul class="list-unstyled">
+            <li>
+              <textarea name="text-ukr" rows="2" [(ngModel)]="inMessUkr"></textarea>
+            </li>
+            <li class="align">
+              <button class="btn btn-dark" style="width: 30%" name="translate"
+                      (click)="translateUkrEn()">Перекласти Англійською
+              </button>
+            </li>
+          </ul>
+        </div>
+    </div>
+
+    <div class="row">
       <div class="col align">
         <span>Question for GPT!</span>
-        <textarea name="text" rows="7" [(ngModel)]="inMess"></textarea>
+        <textarea name="text" rows="3" [(ngModel)]="inMess"></textarea>
       </div>
     </div>
 
     <div class="row">
-      <div class="col form-check form-switch">
-        <label class="form-check-label" style="color: #ffd048" for="isUkr"><i>Отримати відповідь
-          Українською</i></label>
-        <input class="form-check-input btn-outline mx-auto" id="isUkr" type="checkbox" [(ngModel)]="hasUkrResp"
-               (click)="translateEnUkr()">
+      <a href="#other-collapse" class="dropdown-toggle"  data-bs-toggle="collapse" aria-expanded="true">
+        <span style="color: rgba(236,236,241,1);">Other options!</span>
+      </a>
+      <div class="collapse" id="other-collapse">
+        <ul class="list-unstyled">
+          <li>
+            <div class="row">
+              <div class="col form-check form-switch">
+                <label class="form-check-label" style="color: #ffd048" for="isUkr"><i>Отримати відповідь
+                  Українською</i></label>
+                <input class="form-check-input btn-outline mx-auto" id="isUkr" type="checkbox" [(ngModel)]="hasUkrResp"
+                       (click)="translateEnUkr()">
+              </div>
+
+              <div class="col align">
+                <label>Select model:</label>
+                <select name="models" style="margin-right: 10%" [(ngModel)]="modelSelect">
+                  <option *ngFor="let model of models" [value]="model">{{model}}</option>
+                </select>
+              </div>
+            </div>
+
+          </li>
+          <li>
+            <div class="col align">
+              <button class="my-button " *ngFor="let mood of moods" (click)="setMood(mood)">{{ mood }}</button>
+            </div>
+          </li>
+        </ul>
       </div>
+    </div>
+
+    <div class="row ">
       <div class="col align">
-        <label>Select model:</label>
-        <select name="models" style="margin-right: 10%" [(ngModel)]="modelSelect">
-          <option *ngFor="let model of models" [value]="model">{{model}}</option>
-        </select>
-      </div>
-      <div class="col align">
-        <button class="btn btn-dark" name="send" (click)="send()">Send</button>
-      </div>
+          <button class="btn btn-dark" style="width: 30%" name="send" (click)="send()">Send</button>
+       </div>
     </div>
 
     <div class="row">
       <div class="col text-center mt-auto text-lg-start" *ngIf="hasUkrResp">
         <span>Відповідь Українською:</span>
-        <pre name="responseUkr">{{responseUkr}}</pre>
-      </div>
-      <div class="col text-center mt-auto text-lg-start">
-        <span>English response:</span>
-        <pre name="response">{{response}}</pre>
+        <p name="responseUkr">{{responseUkr}}</p>
       </div>
     </div>
-    <button class="my-button " *ngFor="let mood of moods" (click)="setMood(mood)">{{ mood }}</button>
+    <div class="row">
+      <div class="col text-center mt-auto text-lg-start">
+        <span>English response:</span>
+        <p name="response">{{response}}</p>
+      </div>
+    </div>
+
   </div>
 
 </div>
