@@ -37,7 +37,7 @@ export class ChatComponent implements OnInit {
     console.log(this.inMess);
     console.log("MODEL {}", this.modelSelect);
     this.response = this.WAIT
-    this.addResp('YOU:' + this.inMess);
+    this.addResp('YOU: ' + this.inMess);
     this.addResp('GPT: ' + this.WAIT);
     this.messageServices.getMessageResponse(this.inMess, this.modelSelect).subscribe(
       resp => {
