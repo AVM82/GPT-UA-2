@@ -10,6 +10,7 @@ import { ChatComponent } from './components/chat/chat.component';
 import { HistoryComponent } from './components/history/history.component';
 import {RouterModule, Routes} from "@angular/router";
 import {NgxPaginationModule} from "ngx-pagination";
+import { RespComponent } from './components/resp/resp.component';
 
 
 const appRoutes: Routes = [
@@ -22,7 +23,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     ChatComponent,
-    HistoryComponent
+    HistoryComponent,
+    RespComponent
   ],
   imports: [
     BrowserModule,

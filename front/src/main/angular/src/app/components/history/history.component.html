@@ -1,16 +1,16 @@
-<div class="main-block" >
+<div class="main-block" style="height: 100vh">
   <div style="padding: 10px">
-    Date:&nbsp; from <input type="date" max="{{data2}}" [(ngModel)]="data">
-    &nbsp;to <input class="marg" type="date" min="{{data}}" [(ngModel)]="data2">
+    Дата:&nbsp; від <input type="date" max="{{data2}}" [(ngModel)]="data">
+    &nbsp;до <input class="marg" type="date" min="{{data}}" [(ngModel)]="data2">
 
-    Model: <select class="marg" [(ngModel)]="filteredModel">
+    Модель: <select class="marg" [(ngModel)]="filteredModel">
     <option [ngValue]="null" disabled>Select model</option>
     <option *ngFor="let model of models" [ngValue]="model">{{model}}</option>
   </select>
 
-    Find: <input class="marg" type="text" [(ngModel)]="searchedText">
+    Шукати: <input class="marg" type="text" [(ngModel)]="searchedText">
 
-    Only my requests:&nbsp;<!--  <input class="marg" type=checkbox [(ngModel)]="checker">-->
+    Тільки мої запити:&nbsp;<!--  <input class="marg" type=checkbox [(ngModel)]="checker">-->
     <div class="marg form-check form-switch"
          style="display: inline-block; vertical-align: middle">
       <input class="form-check-input btn-outline"
@@ -20,17 +20,17 @@
 
     <button class="btn btn-dark"
             name="filter"
-            (click)="getFilter()">Filter
+            (click)="getFilter()">Фільтрувати
     </button>
 
   </div>
   <div>
     <table class="table table-bordered border-dark">
       <thead >
-      <th>model</th>
-      <th>request</th>
-      <th>response</th>
-      <th>createdAt</th>
+      <th>Модель</th>
+      <th>Запит</th>
+      <th>Відповідь</th>
+      <th>Створено</th>
       </thead>
       <tbody>
       <tr  *ngFor="let request of requests

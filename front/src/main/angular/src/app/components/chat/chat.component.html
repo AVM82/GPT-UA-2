@@ -1,5 +1,11 @@
-<div class="main-block" xmlns="http://www.w3.org/1999/html">
-  <div class="container" style="width: 100%">
+<div class="main-block" xmlns="http://www.w3.org/1999/html" style="height: 100vh">
+  <div class="container" style="width: 100%; height: 100%">
+
+    <div class="row" style="height: 50%; overflow-y: auto;  transform: scaleY(-1)">
+      <div class="col d-flex flex-column-reverse ">
+        <div class="bd-highlight" #resp ></div>
+      </div>
+    </div>
 
     <div class="row">
         <a href="#layout-collapse" class="dropdown-toggle"  data-bs-toggle="collapse" aria-expanded="true">
@@ -21,14 +27,14 @@
 
     <div class="row">
       <div class="col align">
-        <span>Question for GPT!</span>
+        <span>Питання до GPT!</span>
         <textarea name="text" rows="3" [(ngModel)]="inMess"></textarea>
       </div>
     </div>
 
     <div class="row">
       <a href="#other-collapse" class="dropdown-toggle"  data-bs-toggle="collapse" aria-expanded="true">
-        <span style="color: rgba(236,236,241,1);">Other options!</span>
+        <span style="color: rgba(236,236,241,1);">Інші можливості</span>
       </a>
       <div class="collapse" id="other-collapse">
         <ul class="list-unstyled">
@@ -42,7 +48,7 @@
               </div>
 
               <div class="col align">
-                <label>Select model:</label>
+                <label>Обрати модель:</label>
                 <select name="models" style="margin-right: 10%" [(ngModel)]="modelSelect">
                   <option *ngFor="let model of models" [value]="model">{{model}}</option>
                 </select>
@@ -61,21 +67,8 @@
 
     <div class="row ">
       <div class="col align">
-          <button class="btn btn-dark" style="width: 30%" name="send" (click)="send()">Send</button>
+          <button class="btn btn-dark" style="width: 30%" name="send" (click)="send()">Відправити запит!</button>
        </div>
-    </div>
-
-    <div class="row">
-      <div class="col text-center mt-auto text-lg-start" *ngIf="hasUkrResp">
-        <span>Відповідь Українською:</span>
-        <p name="responseUkr">{{responseUkr}}</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col text-center mt-auto text-lg-start">
-        <span>English response:</span>
-        <p name="response">{{response}}</p>
-      </div>
     </div>
 
   </div>
