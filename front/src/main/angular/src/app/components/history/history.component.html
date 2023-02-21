@@ -1,39 +1,61 @@
-<div class="main-block" >
-  <div style="padding: 10px">
-    Date:&nbsp; from <input type="date" max="{{data2}}" [(ngModel)]="data">
-    &nbsp;to <input class="marg" type="date" min="{{data}}" [(ngModel)]="data2">
-
-    Model: <select class="marg" [(ngModel)]="filteredModel">
-    <option [ngValue]="null" disabled>Select model</option>
-    <option *ngFor="let model of models" [ngValue]="model">{{model}}</option>
-  </select>
-
-    Find: <input class="marg" type="text" [(ngModel)]="searchedText">
-
-    Only my requests:&nbsp;<!--  <input class="marg" type=checkbox [(ngModel)]="checker">-->
-    <div class="marg form-check form-switch"
-         style="display: inline-block; vertical-align: middle">
-      <input class="form-check-input btn-outline"
-             type="checkbox"
-             [(ngModel)]="checker">
-    </div>
-
-    <button class="btn btn-dark"
-            name="filter"
-            (click)="getFilter()">Filter
-    </button>
-
+<div class="row" style="background-color: #343541;margin-left: 0px">
+  <a href="#other-collapse"
+     style="background:#6C757D;margin-bottom: 0px; margin-left: 13px; width: 15%; color: whitesmoke"
+     class="btn btn-secondary dropdown-toggle" data-bs-toggle="collapse" aria-expanded="true">
+    <span style=" font-size: 16px; color: rgba(236,236,241,1);">Фільтр</span>
+  </a>
+  <div class="collapse" id="other-collapse">
+    <ul class="list-unstyled">
+      <li>
+        <div class="row">
+          <div style="color: whitesmoke;margin-top: 20px;margin-bottom: 20px; padding: 10px">
+            Дата:&nbsp; з <input type="date"
+                                 style="color: whitesmoke; background: #999999;margin-right:10px; border-radius: 4px"
+                                 max="{{data2}}" [(ngModel)]="data">
+            &nbsp;по <input class="marg" type="date"
+                            style="color: whitesmoke; background: #999999;border-radius: 4px"
+                            min="{{data}}" [(ngModel)]="data2">
+            Модель: <select class="marg"
+                            style="color: whitesmoke; background: #999999;width: 90px; border-radius: 4px"
+                            [(ngModel)]="filteredModel">
+            <option [ngValue]="null" disabled>модель</option>
+            <option *ngFor="let model of models" [ngValue]="model">{{model}}</option>
+          </select>
+            Шукати: <input class="marg"
+                           style="color: whitesmoke; background: #999999;border-radius: 4px"
+                           type="text" [(ngModel)]="searchedText">
+            Мої запити:
+            <div class="marg form-check "
+                 style="display: inline-block; vertical-align: middle">
+              <input class="form-check-input btn-outline"
+                     style="border-color: rgba(236,236,241,1);background-color: #999999"
+                     type="checkbox"
+                     [(ngModel)]="checker">
+            </div>
+            <button class="btn"
+                    name="filter" style="color: whitesmoke; background:#6C757D;border-radius: 4px"
+                    (click)="getFilter()">Застосувать
+            </button>
+          </div>
+        </div>
+      </li>
+    </ul>
   </div>
+</div>
+
+
+<div class="main-block" style="height: 100vh">
+
   <div>
     <table class="table table-bordered border-dark">
-      <thead >
-      <th>model</th>
-      <th>request</th>
-      <th>response</th>
-      <th>createdAt</th>
+      <thead>
+      <th>Модель</th>
+      <th>Запит</th>
+      <th>Відповідь</th>
+      <th>Дата</th>
       </thead>
       <tbody>
-      <tr  *ngFor="let request of requests
+      <tr *ngFor="let request of requests
       | paginate:{itemsPerPage: count, currentPage: p}">
         <td> {{request.model}}</td>
         <td> {{request.request}}</td>
@@ -47,13 +69,13 @@
   <div align="right">
     <style>
       .my-pagination /deep/ .ngx-pagination .current {
-
         border: 2px solid #5f605f;
+        background: #777777;
+
       }
     </style>
     <pagination-controls
-      class="my-pagination" (pageChange)="p=$event">
+      class="my-pagination" nextLabel="Наступна" previousLabel="Попередня" (pageChange)="p=$event">
     </pagination-controls>
-
   </div>
 </div>
