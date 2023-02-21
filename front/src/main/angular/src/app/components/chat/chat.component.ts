@@ -1,5 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {
+  Component, ComponentRef,
+  OnInit,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import {MessService} from "../../services/mess.service";
+import {RespComponent} from "../resp/resp.component";
 
 @Component({
   selector: 'app-chat',
@@ -20,6 +26,9 @@ export class ChatComponent implements OnInit {
 
   WAIT = 'Wait...';
 
+  @ViewChild('resp', { read: ViewContainerRef }) respNew?: ViewContainerRef ;
+  componentRef?: ComponentRef<RespComponent>;
+
   constructor(private messageServices: MessService) {
   }
 
@@ -28,10 +37,12 @@ export class ChatComponent implements OnInit {
     console.log(this.inMess);
     console.log("MODEL {}", this.modelSelect);
     this.response = this.WAIT
-
+    this.addResp('YOU:' + this.inMess);
+    this.addResp('GPT: ' + this.WAIT);
     this.messageServices.getMessageResponse(this.inMess, this.modelSelect).subscribe(
       resp => {
         this.response = resp.body.message;
+        (<RespComponent>(this.componentRef?.instance)).respMess = 'GPT: '+this.response;
         this.tempResponse = resp.body.message;
         console.log(resp.headers.get('user-hash'));
         localStorage.setItem('user-hash', resp.headers.get('user-hash'));
@@ -75,10 +86,19 @@ export class ChatComponent implements OnInit {
   translateEnUkr(): void {
     if (this.hasUkrResp && this.inMess !== ''
       && this.response !== this.WAIT && this.response !== this.DEFAULT) {
+      this.addResp('GPT (Ukrainian): ' + this.WAIT);
       this.messageServices.translateEnUkr(this.response).subscribe(response => {
         this.responseUkr = response.body.message.replaceAll('\n', '');
         console.log('Отримав відповідь Українською!!');
+        (<RespComponent>(this.componentRef?.instance)).respMess = 'GPT (Ukrainian): ' + this.responseUkr;
       });
     }
   }
+
+  addResp(message:string) {
+    this.componentRef = this.respNew?.createComponent(RespComponent);
+    (<RespComponent>(this.componentRef?.instance)).respMess = message;
+  }
+
+
 }
