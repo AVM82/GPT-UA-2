@@ -19,12 +19,12 @@ jobs:
           java-version: 17
     - name: Build with Maven
       run: mvn clean install
-      
+    - run: mkdir staging && cp gpt_ua/target/gpt_ua-*.jar staging
     - name: Upload JAR
       uses: actions/upload-artifact@v2
       with:
-          name: artifact
-          path: gpt_ua/target/gpt_ua-0.0.1.jar
+        name: artifact
+        path: staging
 
   deploy:
     needs: build
@@ -46,6 +46,6 @@ jobs:
           environment_name: Gptua-env
           version_label: ${{ github.sha }}-test
           region: eu-central-1
-          deployment_package: gpt_ua-0.0.1.jar
+          deployment_package: gpt_ua-*.jar
         
         
