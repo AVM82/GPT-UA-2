@@ -1,0 +1,135 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## Project team
+
+[@AVM82](https://github.com/AVM82)
+[@Maksimus3615] (https://github.com/Maksimus3615)
+[@OleksandrHrabovets] (https://github.com/OleksandrHrabovets)
+[@Shurick2211] (https://github.com/Shurick2211)
+[@technolog2007](https://github.com/technolog2007)
+[@VolodymyrShevchukUa] (https://github.com/VolodymyrShevchukUa)
+[@sergaandd] (https://github.com/sergaandd)
+[@SorryAFK] (https://github.com/SorryAFK)
+
+## [Unreleased]
+
+Доданий моніторинг роботи (підключення метрик і графану для відображення jvm-numbers) на AWS
+і в SPRINGBOOT із зазначенням кількості запитів із розбивкою по моделям GPT from [@SorryAFK] and [@Maksimus3615]
+
+Тестування перевірки скільки сайт може витримати одночасно юзерів (максимальну кількість запитів від 5-ти юзерів) from [@SorryAFK]
+
+- Покращення UX-UI #кольори +fonts from [@sergaandd] and [@Shurick2211]
+- Покращення UX-UI #layout-chat from [@sergaandd] and [@Shurick2211]
+- Покращення UX-UI #layout-history from [@sergaandd]
+- Перевести всі назви елементів сторінки в браузері українською from [@sergaandd]
+
+## [version: gpt_ua-0.0.4] - 2023-02-26
+
+### Added
+
+- Додана залежність spring-boot-starter-actuator, prometheus endpoint ("/actuator/prometheus" and "/health"), 
+metrics for request by model (request_by_model_${model_name}) from [@OleksandrHrabovets]
+- Доданий change.log до проекту from [@technolog2007]
+- Змінений стиль відображення сторінки в браузері (змінені: розмітка, кольори, шрифти і 
+стиль UX-UI) from [@Shurick2211]
+
+### Changed
+
+- Змінена логіка для отримання стилей настроїв із backend із послідуючим рендерингом їх 
+на frontend from [@technolog2007]
+
+### Removed
+
+- Видалені застарілі методи із сервіса OpenAiService і контроллера, через те що вони втратили актуальність
+і не задіяні в логіці додатку from [@technolog2007]
+
+### Fixed
+
+- Пофіксені помилки в OpenAiService і контроллері from [@technolog2007]
+
+## [version: gpt_ua-0.0.3] - 2023-02-19
+
+### Added
+
+- Додано тестування логіки фільтрації запитів на бекенді from [@Maksimus3615]
+- Доданий метод changeAnswerFormat() для додавання у отриману відповідь знаків переносу,
+для більш презентабельного вигляду в браузері from [@technolog2007]
+- Додана логіка зміни стилю відповіді в залежності від заданого настрою. Додана логіка в
+сервайс і контролер на бекенд + логіка в сервайс і chat компонент на фронтенд from [@technolog2007]
+- Додано тестування логіки сервайса із отримання UserSession from [@OleksandrHrabovets]
+- Доданий інтерфейс BotButtonHandlerInt, його ініціалізація для телеграм-бота, і додана відповідна
+логіка в телеграм бот для перехоплення і повернення відповіді о відсутності вільного місця from [@OleksandrHrabovets]
+- Додані методи в контроллер, mess.service.ts, chat.component.ts, chat.component.html,
+chat.component.scss, що до перекладу мови запиту з української на англійську from [@Shurick2211]
+- Зміна стилю панелі history для браузера from [@Maksimus3615]
+- Додана логіка по фільтрації данних по періоду (що задається двома датами) на beckend і додаткові
+елементи для компонента history на frontend from [@Maksimus3615]
+- Доданий інтерфейс Translater, сервіс GptTranslater і контроллер ControllerUtils для перекладу
+запиту і відповіді з української на англійську і навпаки from [@Shurick2211]
+- Доданий NoFreeTokenException для GptMessageService. Додане обмеження підключення до API 
+за наявними токенами із виводом відповідного повідомлення як для юзерів браузера, так і для 
+юзерів телеграм-бота from [@OleksandrHrabovets]
+
+### Changed
+
+- Змінений стайл компонента history на фронті from [@Maksimus3615]
+- Змінена DTO для фільтрації даних from [@Maksimus3615]
+- Змінений cache телеграм-бота в залежності від обраної моделі. Данні для налаштування виведені в 
+application.properties from [@Shurick2211]
+
+## [version: gpt_ua-0.0.2] - 2023-02-12
+
+### Removed
+
+- Видалені застарілі класи, які відповідали за створення user через введення логіну і паролю from [@Shurick2211]
+
+### Added
+
+- Додане обмеження кількості запитів до чату, налаштування винесені в application.properties
+from [@VolodymyrShevchukUa]
+- Додані кнопки та можливість вибору моделі в телеграм-боті. Також, при отриманні відповіді
+вказується модель за допомогою якої отримана відповідь from [@Shurick2211]
+- Створений RequestController який передає данні для архіву запитів із бекенда на фронтенд from [@Maksimus3615]
+- Створений history компонент на фронтенді. Створена логіка в chat.component.ts, яка приймає з
+бекенду на фронт данні запитів і виводить їх на html сторінку компонента в табличну частину from [@Maksimus3615]
+- Доданий user session і тести до сервайсів from [@OleksandrHrabovets]
+- Створена панель фільтрації запитів в history.component.html на front from [@Maksimus3615]
+- Додана логіка на backend і frontend, щодо отримання і зберігання userHash from [@Shurick2211]
+- Доданий GptTokenServiceInt і GptTokenService для контролю токенів (отримання, зберігання, видача) from [@OleksandrHrabovets]
+- Додана можливість вибора моделі для відправки запросів і отримання відповідей від API GPT CHAT from [@technolog2007]
+- Додане відправленян текстового запиту і отримання відповіді через інтерфейс OpenAiInt за допомогою телеграм-бота
+і браузера from [@Shurick2211]
+- Доданий інтерфейс OpenAiInt для отримання відповіді с API GPT CHAT і телеграм-бота from [@technolog2007]
+- Додані кнопки з назвою моделі, і можливість відсилати запити та отримувати текстові відповіді через телеграм-бота
+from [@Shurick2211]
+
+### Changed
+
+- Оновлений angular from 13 to 15 version from [@Shurick2211]
+- Змінений стиль web-ui для відображення в браузері from [@Shurick2211]
+- Змінений сервайс OpenAiService і доданий RequestDtoPropertiesService, для виносу захордкоджених параметрів 
+запиту для API GPT CHAT в application.properties from [@technolog2007];
+- Змінена DB H2 на mongoDB. Відповідно змінені UserEntity і UserRequestEntity із відповідними репозиторіями і сервіс для 
+підключення до mongoDB. Налаштування виведені в environment variables from [@OleksandrHrabovets]
+
+## [version: gpt_ua-0.0.1] - 2023-02-05
+
+### Added
+
+- Проект задеплоїний на AWS BEANSTALK (http://gptua-env.eba-kmwv8wpt.eu-central-1.elasticbeanstalk.com/)
+from [@OleksandrHrabovets] and [@VolodymyrShevchukUa];
+- Підключений API до GPT CHAT за допомогою OkHttpClient from [@technolog2007];
+- Створена перша лолгіка авторизації на frontend from [@Shurick2211];
+- Створені UserEntity і UserRequestEntity із відповідними репозиторіями і сервайс, підключена H2DB from [@OleksandrHrabovets];
+- Створений ехо-контроллер для базового ендпоінту "echo" + підключений swager from [@Maksimus3615];
+- Налаштовані правила checkstyle (GoogleStyle.xml) from [@Shurick2211];
+- Створений перший графічний інтерфейс продукту, що складається із трьох компонентів chat, auth, history на front from [@Shurick2211];
+- Створений телеграм-бот із функцєю ехо from [@Shurick2211];
+- Доданий опис проекту у файлі readme.md5 from [@Shurick2211];
+- Створений проект GPT-UA-2 https://github.com/AVM82/GPT-UA-2 на базі Spring boot API + Angular from [@Shurick2211];
+
