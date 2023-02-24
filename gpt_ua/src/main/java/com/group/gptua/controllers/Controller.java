@@ -68,10 +68,28 @@ public class Controller {
       HttpServletRequest request) {
     log.info("Message: {} ", message);
     String userHash = ControllerUtils.getHash(request);
-    return ResponseEntity.status(HttpStatus.OK)
+
+    DtoMessage dtoMessage = gptMessageService.getAnswer(userHash,
+        new DtoMessage(message.getMessage(), message.getModel()));
+
+    /*
+    In situation when we have "Немає вільного місця, приходьте через" we will send the 202 status,
+    because our application in the situation when we send the 429 status code
+    will do anything for 3 minutes.
+    But if the status code started at 200, it's working correctly.
+     */
+
+    HttpStatus status;
+
+    if (dtoMessage.toString().contains("Немає вільного місця, приходьте через")) {
+      status = HttpStatus.ACCEPTED;
+    } else {
+      status = HttpStatus.OK;
+    }
+
+    return ResponseEntity.status(status)
         .header("user-hash", userHash)
-        .body(gptMessageService.getAnswer(userHash,
-            new DtoMessage(message.getMessage(), message.getModel())));
+        .body(dtoMessage);
   }
 
   /**
