@@ -18,13 +18,13 @@ export class ChatComponent implements OnInit {
   response: string = this.DEFAULT;
   models: string[] = [];
   modelSelect: string = "DAVINCI";
-  inMessUkr: string = 'Що таке ';
+  inMessUkr: string = '';
   responseUkr: string = 'Поле для відповіді!';
   hasUkrResp: boolean = false;
   tempResponse: string = "";
   moods: string[] = [];
 
-  WAIT = 'Wait...';
+  WAIT = 'Чекайте...';
 
   @ViewChild('resp', { read: ViewContainerRef }) respNew?: ViewContainerRef ;
   componentRef?: ComponentRef<RespComponent>;
@@ -37,16 +37,17 @@ export class ChatComponent implements OnInit {
     console.log(this.inMess);
     console.log("MODEL {}", this.modelSelect);
     this.response = this.WAIT
-    this.addResp('YOU: ' + this.inMess);
-    this.addResp('GPT: ' + this.WAIT);
+    this.addResp('Ви  : ' + this.inMess);
+    this.addResp('֎   : ' + this.WAIT);
     this.messageServices.getMessageResponse(this.inMess, this.modelSelect).subscribe(
       resp => {
         this.response = resp.body.message;
-        (<RespComponent>(this.componentRef?.instance)).respMess = 'GPT: '+this.response;
+        (<RespComponent>(this.componentRef?.instance)).respMess = '֎   : '+this.response;
         this.tempResponse = resp.body.message;
         console.log(resp.headers.get('user-hash'));
         localStorage.setItem('user-hash', resp.headers.get('user-hash'));
         this.translateEnUkr();
+        this.inMess='';
       });
   }
 
@@ -86,11 +87,11 @@ export class ChatComponent implements OnInit {
   translateEnUkr(): void {
     if (this.hasUkrResp && this.inMess !== ''
       && this.response !== this.WAIT && this.response !== this.DEFAULT) {
-      this.addResp('GPT (Ukrainian): ' + this.WAIT);
+      this.addResp('֎ (Ukrainian): ' + this.WAIT);
       this.messageServices.translateEnUkr(this.response).subscribe(response => {
         this.responseUkr = response.body.message.replaceAll('\n', '');
         console.log('Отримав відповідь Українською!!');
-        (<RespComponent>(this.componentRef?.instance)).respMess = 'GPT (Ukrainian): ' + this.responseUkr;
+        (<RespComponent>(this.componentRef?.instance)).respMess = '֎ (Ukrainian): ' + this.responseUkr;
       });
     }
   }
