@@ -29,6 +29,9 @@ export class ChatComponent implements OnInit {
   @ViewChild('resp', { read: ViewContainerRef }) respNew?: ViewContainerRef ;
   componentRef?: ComponentRef<RespComponent>;
 
+  @ViewChild('resp', { read: ViewContainerRef }) respNew?: ViewContainerRef ;
+  componentRef?: ComponentRef<RespComponent>;
+
   constructor(private messageServices: MessService) {
   }
 
