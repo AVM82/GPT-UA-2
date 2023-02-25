@@ -1,55 +1,77 @@
 <div class="main-block" xmlns="http://www.w3.org/1999/html" style="height: 100vh">
-  <div class="container" style="width: 100%; height: 100%">
+  <div class="container" style="text-align: left;width: 100%; height: 100%">
 
-    <div class="row" style="height: 50%; overflow-y: auto;  transform: scaleY(-1)">
-      <div class="col d-flex flex-column-reverse ">
-        <div class="bd-highlight" #resp ></div>
+    <div class="row"
+         style="margin-bottom: 10px; height: 50%; overflow-y: auto;  transform: scaleY(-1)">
+      <div
+        class="align-self-start d-flex align-items-start d-flex align-content-start flex-wrap flex-row d-flex flex-column-reverse ">
+        <div class="p-1" #resp></div>
       </div>
     </div>
 
     <div class="row">
-        <a href="#layout-collapse" class="dropdown-toggle"  data-bs-toggle="collapse" aria-expanded="true">
-          <span style="color: rgba(236,236,241,1);">Питання Українською!</span>
-        </a>
-        <div class="collapse" id="layout-collapse">
-          <ul class="list-unstyled">
-            <li>
-              <textarea name="text-ukr" rows="2" [(ngModel)]="inMessUkr"></textarea>
-            </li>
-            <li class="align">
-              <button class="btn btn-dark" style="width: 30%" name="translate"
-                      (click)="translateUkrEn()">Перекласти Англійською
-              </button>
-            </li>
-          </ul>
-        </div>
+      <a href="#layout-collapse" style="margin-left: 15px; width: 15%; color: whitesmoke"
+         class="btn btn-secondary dropdown-toggle" data-bs-toggle="collapse" aria-expanded="true">
+        <span style="font-size: 16px;color: rgba(236,236,241,1);">Питання украінською</span>
+      </a>
+      <div class="collapse" id="layout-collapse">
+        <ul class="list-unstyled">
+          <li>
+            <textarea placeholder="Введіть запит українською мовою" style="margin-top: 15px"
+                      name="text-ukr" rows="3" [(ngModel)]="inMessUkr"></textarea>
+          </li>
+          <li class="align">
+            <button class="btn btn-dark" style="margin-top: 15px ;width: 15%" name="translate"
+                    (click)="translateUkrEn()">Перекласти
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <div class="row">
       <div class="col align">
-        <span>Питання до GPT!</span>
-        <textarea name="text" rows="3" [(ngModel)]="inMess"></textarea>
+        <span>
+          <b>Питання до GPT</b>
+        </span>
+        <textarea placeholder="Введіть запит англійською мовою" name="text" style="margin-top: 10px"
+                  rows="3" [(ngModel)]="inMess"></textarea>
       </div>
     </div>
 
+
+    <div class="row ">
+      <div class="col align">
+        <button class="btn btn-dark" style="margin-top: 15px; width: 15%" name="send"
+                (click)="send()">Відправити запит
+        </button>
+      </div>
+    </div>
     <div class="row">
-      <a href="#other-collapse" class="dropdown-toggle"  data-bs-toggle="collapse" aria-expanded="true">
-        <span style="color: rgba(236,236,241,1);">Інші можливості</span>
+      <a href="#other-collapse"
+         style="margin-bottom: 10px; margin-left: 13px; width: 15%; color: whitesmoke"
+         class="btn btn-secondary dropdown-toggle" data-bs-toggle="collapse" aria-expanded="true">
+        <span style=" font-size: 16px; color: rgba(236,236,241,1);">Інші можливості</span>
       </a>
       <div class="collapse" id="other-collapse">
         <ul class="list-unstyled">
           <li>
             <div class="row">
-              <div class="col form-check form-switch">
-                <label class="form-check-label" style="color: #ffd048" for="isUkr"><i>Отримати відповідь
-                  Українською</i></label>
-                <input class="form-check-input btn-outline mx-auto" id="isUkr" type="checkbox" [(ngModel)]="hasUkrResp"
+              <div class="col form-check">
+                <label class="form-check-label"
+                       style="margin-left: 10px; color: rgba(236,236,241,1)" for="isUkr">Отримати
+                  відповідь
+                  Українською</label>
+                <input class="form-check-input btn-outline mx-auto"
+                       style="border-color:  rgba(236,236,241,1);background-color: #999999;"
+                       id="isUkr" type="checkbox" [(ngModel)]="hasUkrResp"
                        (click)="translateEnUkr()">
               </div>
-
-              <div class="col align">
+              <div class="col align-center">
                 <label>Обрати модель:</label>
-                <select name="models" style="margin-right: 10%" [(ngModel)]="modelSelect">
+                <select name="models"
+                        style="background-color: #999999;border-radius: 5px;margin-left: 10px"
+                        [(ngModel)]="modelSelect">
                   <option *ngFor="let model of models" [value]="model">{{model}}</option>
                 </select>
               </div>
@@ -57,20 +79,11 @@
 
           </li>
           <li>
-            <div class="col align">
-              <button class="my-button " *ngFor="let mood of moods" (click)="setMood(mood)">{{ mood }}</button>
-            </div>
+            <button class="my-button " *ngFor="let mood of moods"
+                    (click)="setMood(mood)">{{ mood }}</button>
           </li>
         </ul>
       </div>
     </div>
-
-    <div class="row ">
-      <div class="col align">
-          <button class="btn btn-dark" style="width: 30%" name="send" (click)="send()">Відправити запит!</button>
-       </div>
-    </div>
-
   </div>
-
 </div>
