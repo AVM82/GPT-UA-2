@@ -50,10 +50,10 @@
   <div>
     <table class="table table-bordered border-dark">
       <thead>
-      <th>Модель</th>
-      <th>Запит</th>
+      <th style="width: 100px">Модель</th>
+      <th style="width: 350px">Запит</th>
       <th>Відповідь</th>
-      <th>Дата</th>
+      <th style="width: 150px">Дата</th>
       </thead>
       <tbody>
       <tr *ngFor="let request of requests
@@ -72,11 +72,11 @@
       .my-pagination /deep/ .ngx-pagination .current {
         border: 2px solid #5f605f;
         background: #777777;
-
       }
     </style>
     <pagination-controls
-      class="my-pagination" nextLabel="Наступна" previousLabel="Попередня" (pageChange)="p=$event">
+      class="my-pagination"
+      nextLabel="Наступна" previousLabel="Попередня" (pageChange)="p=$event">
     </pagination-controls>
   </div>
 </div>

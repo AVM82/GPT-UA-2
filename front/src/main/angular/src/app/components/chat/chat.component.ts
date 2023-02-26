@@ -79,6 +79,7 @@ export class ChatComponent implements OnInit {
   translateUkrEn(): void {
     this.messageServices.translateUkrEn(this.inMessUkr).subscribe(response => {
       this.inMess = response.body.message.replaceAll('\n', '');
+      this.inMessUkr='';
       console.log('Get response!');
       localStorage.setItem('user-hash', response.headers.get('user-hash'));
     })
