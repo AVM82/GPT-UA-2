@@ -74,7 +74,8 @@ public class OpenAiService implements OpenAiInt {
         .build();
   }
 
-  private Request createPostRequest(UserSession userSession, String uri, RequestBody requestBody) {
+  protected Request createPostRequest(UserSession userSession, String uri,
+      RequestBody requestBody) {
     return new Request.Builder()
         .url(uri)
         .header("Authorization", "Bearer " + userSession.getToken().getValue())
@@ -82,7 +83,7 @@ public class OpenAiService implements OpenAiInt {
         .build();
   }
 
-  private String createResponse(Request request) {
+  protected String createResponse(Request request) {
     try (
         Response response = httpClient.newCall(request).execute()) {
       if (!response.isSuccessful()) {
@@ -116,13 +117,14 @@ public class OpenAiService implements OpenAiInt {
     String requestJson = toStringFromDto(requestDto);
     RequestBody requestBody = RequestBody.create(requestJson, json);
     Request request = createPostRequest(userSession, GptUri.URI_COMPLETIONS.getUri(), requestBody);
+    log.info("request is : {}", request);
     String answer = createResponse(request);
     ResponseDto responseDto = getResponse(answer);
-    return changeAnswerFormat(getFirsAnswer(responseDto),
+    return changeAnswerFormat(getFirstAnswer(responseDto),
         propertiesService.getNumberOfWordsInLine());
   }
 
-  private RequestDto createRequestDto(Models model, String question) {
+  protected RequestDto createRequestDto(Models model, String question) {
     return RequestDto.builder()
         .model(model.getModelName())
         .prompt(question)
@@ -160,7 +162,7 @@ public class OpenAiService implements OpenAiInt {
     return answers;
   }
 
-  private String getFirsAnswer(ResponseDto responseDto) {
+  private String getFirstAnswer(ResponseDto responseDto) {
     return getAnswers(responseDto).get(0);
   }
 
