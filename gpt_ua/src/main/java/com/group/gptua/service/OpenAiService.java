@@ -74,7 +74,8 @@ public class OpenAiService implements OpenAiInt {
         .build();
   }
 
-  private Request createPostRequest(UserSession userSession, String uri, RequestBody requestBody) {
+  protected Request createPostRequest(UserSession userSession, String uri,
+      RequestBody requestBody) {
     return new Request.Builder()
         .url(uri)
         .header("Authorization", "Bearer " + userSession.getToken().getValue())
