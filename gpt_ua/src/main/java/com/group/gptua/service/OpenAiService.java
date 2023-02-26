@@ -40,6 +40,12 @@ public class OpenAiService implements OpenAiInt {
   private RequestDtoPropertiesService propertiesService;
   private OkHttpClient httpClient;
 
+  /**
+   * Constructor that initializes propertiesService and OkHttpClient.
+   *
+   * @param propertiesService - service properties from application.properties
+   * @param timeout           - time value for http client
+   */
   @Autowired
   public OpenAiService(RequestDtoPropertiesService propertiesService,
       @Value("${httpClient.readTimeout:60}") Long timeout) {

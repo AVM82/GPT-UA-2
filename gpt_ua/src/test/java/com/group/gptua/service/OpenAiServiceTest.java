@@ -25,8 +25,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.annotation.DirtiesContext;
@@ -39,7 +39,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class OpenAiServiceTest {
 
-  @InjectMocks
+
   public OpenAiService openAiService;
 
   @Mock
@@ -59,6 +59,8 @@ class OpenAiServiceTest {
 
   @BeforeEach
   public void init() {
+    RequestDtoPropertiesService propertiesService = Mockito.mock(RequestDtoPropertiesService.class);
+    this.openAiService = new OpenAiService(propertiesService, 60L);
     this.response = new MockResponse()
         .addHeader("Content-Type", "application/json; charset=utf-8")
         .setBody("test");
