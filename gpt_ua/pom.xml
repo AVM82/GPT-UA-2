@@ -7,7 +7,7 @@
   <parent>
     <groupId>com.group</groupId>
     <artifactId>GPT-UA2</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.4</version>
   </parent>
 
 
