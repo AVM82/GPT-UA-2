@@ -46,8 +46,8 @@ public class RequestDtoPropertiesService {
         Objects.requireNonNull(environment.getProperty("answer.numberOfWorld")));
   }
 
-  public int getReadTimeOut() {
-    return Integer.parseInt(
+  public Long getReadTimeOut() {
+    return Long.parseLong(
         Objects.requireNonNull(environment.getProperty("httpClient.readTimeout")));
   }
 }
