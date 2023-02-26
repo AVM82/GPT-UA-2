@@ -16,6 +16,7 @@ import java.rmi.UnexpectedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
@@ -35,11 +36,13 @@ import org.springframework.stereotype.Service;
 @NoArgsConstructor
 public class OpenAiService implements OpenAiInt {
 
-  private final OkHttpClient httpClient = new OkHttpClient();
-  private final MediaType json = MediaType.get("application/json; charset=utf-8");
-
   @Autowired
   RequestDtoPropertiesService propertiesService;
+  private final OkHttpClient httpClient = new OkHttpClient.Builder()
+      .readTimeout(60, TimeUnit.SECONDS)
+      .build();
+
+  private final MediaType json = MediaType.get("application/json; charset=utf-8");
 
   /**
    * Lists the currently available models, and provides basic information about each one such as the
@@ -113,7 +116,6 @@ public class OpenAiService implements OpenAiInt {
   public String getTextMessage(UserSession userSession, Models model, String question) {
     log.info("Start getTextMessage method with {} and {} ", model, question);
     RequestDto requestDto = createRequestDto(model, question);
-    log.info("get requestDTO : {} ", requestDto.getPrompt());
     String requestJson = toStringFromDto(requestDto);
     RequestBody requestBody = RequestBody.create(requestJson, json);
     Request request = createPostRequest(userSession, GptUri.URI_COMPLETIONS.getUri(), requestBody);
