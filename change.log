@@ -18,35 +18,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Доданий моніторинг роботи (підключення метрик і графану для відображення jvm-numbers) на AWS
-і в SPRINGBOOT із зазначенням кількості запитів із розбивкою по моделям GPT from [@SorryAFK] and [@Maksimus3615]
-
-Тестування перевірки скільки сайт може витримати одночасно юзерів (максимальну кількість запитів від 5-ти юзерів) from [@SorryAFK]
-
-- Покращення UX-UI #кольори +fonts from [@sergaandd] and [@Shurick2211]
-- Покращення UX-UI #layout-chat from [@sergaandd] and [@Shurick2211]
-- Покращення UX-UI #layout-history from [@sergaandd]
-- Перевести всі назви елементів сторінки в браузері українською from [@sergaandd]
-
 ## [version: gpt_ua-0.0.4] - 2023-02-26
 
 ### Added
 
-- Додана залежність spring-boot-starter-actuator, prometheus endpoint ("/actuator/prometheus" and "/health"), 
-metrics for request by model (request_by_model_${model_name}) from [@OleksandrHrabovets]
+- Доданий моніторинг роботи (підключення метрик і графану для відображення jvm-numbers) на AWS
+і в SPRINGBOOT із зазначенням кількості запитів із розбивкою по моделям GPT from [@Maksimus3615]
+- Перекладені назви елементів сторінок chat and history в браузері українською from [@sergaandd]
+- Покращені UX-UI #layout-chat. Заміна слайдерів на кнопки. Додані слайдери в history 
+from [@sergaandd]
+- Покращені UX-UI #кольори + fonts кнопок, чекерів, полів from [@sergaandd] and [@Shurick2211]
+- Додане тестування за допомогою Gatling і сценарію перевірки, скільки сайт може витримати одно-
+часно юзерів from [@SorryAFK]
+- для того щоб можно було тестувати це все через Gatling from [@SorryAFK]
+- Додана залежність spring-boot-starter-actuator, prometheus endpoint ("/actuator/prometheus"
+and "/health"), metrics for request by model (request_by_model_${model_name}) from [@OleksandrHrabovets]
 - Доданий change.log до проекту from [@technolog2007]
 - Змінений стиль відображення сторінки в браузері (змінені: розмітка, кольори, шрифти і 
 стиль UX-UI) from [@Shurick2211]
 
 ### Changed
 
+- Змінена логіка в Controller.java в методі getMessage, замість того коли в нас є "Немає вільного місця, 
+приходьте через" ми відправляємо 202 статус "ACCEPTED", а не 200 "OK" from [@SorryAFK]
 - Змінена логіка для отримання стилей настроїв із backend із послідуючим рендерингом їх 
 на frontend from [@technolog2007]
 
 ### Removed
 
-- Видалені застарілі методи із сервіса OpenAiService і контроллера, через те що вони втратили актуальність
-і не задіяні в логіці додатку from [@technolog2007]
+- Видалені застарілі методи із сервіса OpenAiService і контроллера, через те що вони
+втратили актуальність і не задіяні в логіці додатку from [@technolog2007]
 
 ### Fixed
 
@@ -63,7 +64,8 @@ metrics for request by model (request_by_model_${model_name}) from [@OleksandrHr
 сервайс і контролер на бекенд + логіка в сервайс і chat компонент на фронтенд from [@technolog2007]
 - Додано тестування логіки сервайса із отримання UserSession from [@OleksandrHrabovets]
 - Доданий інтерфейс BotButtonHandlerInt, його ініціалізація для телеграм-бота, і додана відповідна
-логіка в телеграм бот для перехоплення і повернення відповіді о відсутності вільного місця from [@OleksandrHrabovets]
+логіка в телеграм бот для перехоплення і повернення відповіді о відсутності вільного місця
+from [@OleksandrHrabovets]
 - Додані методи в контроллер, mess.service.ts, chat.component.ts, chat.component.html,
 chat.component.scss, що до перекладу мови запиту з української на англійську from [@Shurick2211]
 - Зміна стилю панелі history для браузера from [@Maksimus3615]
@@ -86,7 +88,8 @@ application.properties from [@Shurick2211]
 
 ### Removed
 
-- Видалені застарілі класи, які відповідали за створення user через введення логіну і паролю from [@Shurick2211]
+- Видалені застарілі класи, які відповідали за створення user через введення логіну
+і паролю from [@Shurick2211]
 
 ### Added
 
@@ -94,28 +97,33 @@ application.properties from [@Shurick2211]
 from [@VolodymyrShevchukUa]
 - Додані кнопки та можливість вибору моделі в телеграм-боті. Також, при отриманні відповіді
 вказується модель за допомогою якої отримана відповідь from [@Shurick2211]
-- Створений RequestController який передає данні для архіву запитів із бекенда на фронтенд from [@Maksimus3615]
+- Створений RequestController який передає данні для архіву запитів із бекенда на фронтенд
+from [@Maksimus3615]
 - Створений history компонент на фронтенді. Створена логіка в chat.component.ts, яка приймає з
-бекенду на фронт данні запитів і виводить їх на html сторінку компонента в табличну частину from [@Maksimus3615]
+бекенду на фронт данні запитів і виводить їх на html сторінку компонента в табличну частину
+from [@Maksimus3615]
 - Доданий user session і тести до сервайсів from [@OleksandrHrabovets]
 - Створена панель фільтрації запитів в history.component.html на front from [@Maksimus3615]
 - Додана логіка на backend і frontend, щодо отримання і зберігання userHash from [@Shurick2211]
-- Доданий GptTokenServiceInt і GptTokenService для контролю токенів (отримання, зберігання, видача) from [@OleksandrHrabovets]
-- Додана можливість вибора моделі для відправки запросів і отримання відповідей від API GPT CHAT from [@technolog2007]
-- Додане відправленян текстового запиту і отримання відповіді через інтерфейс OpenAiInt за допомогою телеграм-бота
-і браузера from [@Shurick2211]
+- Доданий GptTokenServiceInt і GptTokenService для контролю токенів (отримання, зберігання, видача)
+from [@OleksandrHrabovets]
+- Додана можливість вибора моделі для відправки запросів і отримання відповідей від API GPT CHAT
+from [@technolog2007]
+- Додане відправленян текстового запиту і отримання відповіді через інтерфейс OpenAiInt
+за допомогою телеграм-бота і браузера from [@Shurick2211]
 - Доданий інтерфейс OpenAiInt для отримання відповіді с API GPT CHAT і телеграм-бота from [@technolog2007]
-- Додані кнопки з назвою моделі, і можливість відсилати запити та отримувати текстові відповіді через телеграм-бота
-from [@Shurick2211]
+- Додані кнопки з назвою моделі, і можливість відсилати запити та отримувати текстові відповіді
+через телеграм-бота from [@Shurick2211]
 
 ### Changed
 
 - Оновлений angular from 13 to 15 version from [@Shurick2211]
 - Змінений стиль web-ui для відображення в браузері from [@Shurick2211]
-- Змінений сервайс OpenAiService і доданий RequestDtoPropertiesService, для виносу захордкоджених параметрів 
-запиту для API GPT CHAT в application.properties from [@technolog2007];
-- Змінена DB H2 на mongoDB. Відповідно змінені UserEntity і UserRequestEntity із відповідними репозиторіями і сервіс для 
-підключення до mongoDB. Налаштування виведені в environment variables from [@OleksandrHrabovets]
+- Змінений сервайс OpenAiService і доданий RequestDtoPropertiesService, для виносу захордкоджених
+параметрів запиту для API GPT CHAT в application.properties from [@technolog2007];
+- Змінена DB H2 на mongoDB. Відповідно змінені UserEntity і UserRequestEntity із відповідними
+репозиторіями і сервіс для підключення до mongoDB. Налаштування виведені в
+environment variables from [@OleksandrHrabovets]
 
 ## [version: gpt_ua-0.0.1] - 2023-02-05
 
