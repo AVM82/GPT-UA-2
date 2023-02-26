@@ -25,6 +25,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -36,11 +37,24 @@ import org.springframework.stereotype.Service;
 @NoArgsConstructor
 public class OpenAiService implements OpenAiInt {
 
+  private RequestDtoPropertiesService propertiesService;
+  private OkHttpClient httpClient;
+
+  /**
+   * Constructor that initializes propertiesService and OkHttpClient.
+   *
+   * @param propertiesService - service properties from application.properties
+   * @param timeout           - time value for http client
+   */
   @Autowired
-  RequestDtoPropertiesService propertiesService;
-  private final OkHttpClient httpClient = new OkHttpClient.Builder()
-      .readTimeout(60, TimeUnit.SECONDS)
-      .build();
+  public OpenAiService(RequestDtoPropertiesService propertiesService,
+      @Value("${httpClient.readTimeout:60}") Long timeout) {
+    this.propertiesService = propertiesService;
+    this.httpClient = new OkHttpClient.Builder()
+        .readTimeout(timeout, TimeUnit.SECONDS)
+        .build();
+  }
+
 
   private final MediaType json = MediaType.get("application/json; charset=utf-8");
 
