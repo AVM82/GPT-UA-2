@@ -33,22 +33,24 @@ export class ChatComponent implements OnInit {
   }
 
   send() {
-    console.log(this.hasUkrResp)
-    console.log(this.inMess);
-    console.log("MODEL {}", this.modelSelect);
-    this.response = this.WAIT
-    this.addResp('Ви  : ' + this.inMess);
-    this.addResp('֎   : ' + this.WAIT);
-    this.messageServices.getMessageResponse(this.inMess, this.modelSelect).subscribe(
-      resp => {
-        this.response = resp.body.message;
-        (<RespComponent>(this.componentRef?.instance)).respMess = '֎   : '+this.response;
-        this.tempResponse = resp.body.message;
-        console.log(resp.headers.get('user-hash'));
-        localStorage.setItem('user-hash', resp.headers.get('user-hash'));
-        this.translateEnUkr();
-        this.inMess='';
-      });
+    if (this.inMess.trim().length!=0 ) {
+      console.log(this.hasUkrResp)
+      console.log(this.inMess);
+      console.log("MODEL {}", this.modelSelect);
+      this.response = this.WAIT
+      this.addResp('Ви  : ' + this.inMess);
+      this.addResp('֎   : ' + this.WAIT);
+      this.messageServices.getMessageResponse(this.inMess, this.modelSelect).subscribe(
+        resp => {
+          this.response = resp.body.message;
+          (<RespComponent>(this.componentRef?.instance)).respMess = '֎   : ' + this.response;
+          this.tempResponse = resp.body.message;
+          console.log(resp.headers.get('user-hash'));
+          localStorage.setItem('user-hash', resp.headers.get('user-hash'));
+          this.translateEnUkr();
+          this.inMess = '';
+        });
+    }
   }
 
   setMood(mood: string) {
@@ -77,22 +79,24 @@ export class ChatComponent implements OnInit {
   }
 
   translateUkrEn(): void {
-    this.messageServices.translateUkrEn(this.inMessUkr).subscribe(response => {
-      this.inMess = response.body.message.replaceAll('\n', '');
-      this.inMessUkr='';
-      console.log('Get response!');
-      localStorage.setItem('user-hash', response.headers.get('user-hash'));
-    })
+    if (this.inMessUkr.trim().length!=0 ) {
+      this.messageServices.translateUkrEn(this.inMessUkr).subscribe(response => {
+        this.inMess = response.body.message.replaceAll('\n', '');
+        this.inMessUkr = '';
+        console.log('Get response!');
+        localStorage.setItem('user-hash', response.headers.get('user-hash'));
+      })
+    }
   }
 
   translateEnUkr(): void {
     if (this.hasUkrResp && this.inMess !== ''
       && this.response !== this.WAIT && this.response !== this.DEFAULT) {
-      this.addResp('֎ (Ukrainian): ' + this.WAIT);
+      this.addResp('֎ (Переклад): ' + this.WAIT);
       this.messageServices.translateEnUkr(this.response).subscribe(response => {
         this.responseUkr = response.body.message.replaceAll('\n', '');
         console.log('Отримав відповідь Українською!!');
-        (<RespComponent>(this.componentRef?.instance)).respMess = '֎ (Ukrainian): ' + this.responseUkr;
+        (<RespComponent>(this.componentRef?.instance)).respMess = '֎ (Переклад): ' + this.responseUkr;
       });
     }
   }

@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Додано додатковий верхній pegination, підкореговані кольори[@sergaandd]
 - Доданий моніторинг роботи (підключення метрик і графану для відображення jvm-numbers) на AWS
 і в SPRINGBOOT із зазначенням кількості запитів із розбивкою по моделям GPT from [@Maksimus3615]
 - Перекладені назви елементів сторінок chat and history в браузері українською from [@sergaandd]
